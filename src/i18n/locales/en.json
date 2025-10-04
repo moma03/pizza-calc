@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "title": "Pizza Calculator",
+    "subtitle": "Calculate perfect pizza dough ingredients with 32-bit precision"
+  },
+  "calculator": {
+    "recipeSettings": "Recipe Settings",
+    "numberOfPizzas": "Number of Pizzas",
+    "pizzaStyle": "Pizza Style",
+    "doughBallWeight": "Dough Ball Weight",
+    "doughBallWeightTooltip": "Weight of dough per pizza",
+    "waterPercent": "Water %",
+    "waterPercentTooltip": "Hydration percentage based on flour weight",
+    "saltPercent": "Salt %",
+    "fermentationSettings": "Fermentation Settings",
+    "autoCalculateYeast": "Auto-calculate yeast based on fermentation time",
+    "fermentation": {
+      "cold": "Cold Fermentation",
+      "roomTemperature": "Room Temperature Fermentation",
+      "temperature": "Temperature",
+      "time": "Time (hours)"
+    },
+    "yeastType": "Yeast Type",
+    "yeastPercent": "Yeast %",
+    "yeastPercentTooltip": "Percentage relative to flour weight",
+    "optionalIngredients": "Optional Ingredients",
+    "oilPercent": "Oil %",
+    "oilPercentTooltip": "Percentage relative to flour weight (0 = no oil)",
+    "sugarPercent": "Sugar %",
+    "sugarPercentTooltip": "Percentage relative to flour weight (0 = no sugar)",
+    "calculateRecipe": "Calculate Recipe",
+    "pizzaStyles": {
+      "neapolitan": "Neapolitan",
+      "newyork": "New York",
+      "roman": "Roman",
+      "custom": "Custom"
+    },
+    "yeastTypes": {
+      "instant": "Instant Dry Yeast",
+      "active": "Active Dry Yeast",
+      "fresh": "Fresh Yeast"
+    }
+  },
+  "results": {
+    "title": "Your Recipe",
+    "ingredient": "Ingredient",
+    "amount": "Amount",
+    "flour": "Flour",
+    "water": "Water",
+    "salt": "Salt",
+    "yeast": "Yeast",
+    "oil": "Oil",
+    "sugar": "Sugar",
+    "totalDough": "Total Dough",
+    "coldFermentation": "Cold Fermentation",
+    "roomFermentation": "Room Temperature Fermentation",
+    "totalFermentationTime": "Total Fermentation Time",
+    "cold": "cold",
+    "room": "room",
+    "fermentationTime": "{{time}}h at {{temp}}",
+    "instructions": "Instructions",
+    "step1": "Mix flour and water until no dry flour remains. Rest for 30 minutes (autolyse).",
+    "step2": "Add salt and yeast. Mix until fully incorporated.",
+    "step3": "Knead for 10-15 minutes until smooth and elastic.",
+    "step4Cold": "Cold ferment at {{temp}} for {{time}}h",
+    "step4Room": "let rise at {{temp}} for {{time}}h",
+    "step4Both": ", then ",
+    "step4Prefix": "Bulk fermentation: ",
+    "step6": "Shape into tight balls and let rest for 2-4 hours at room temperature before using.",
+    "divideInstructions": "Divide into {{portions}} equal portions of {{weight}} {{unit}} each.",
+    "total": "Total Dough Weight",
+    "perPizza": "Per Pizza",
+    "totalRecipe": "Total Recipe"
+  },
+  "placeholders": {
+    "pizzas": "4",
+    "doughWeight": "250",
+    "hydration": "65",
+    "salt": "2.5",
+    "coldTemp": "4",
+    "coldTime": "24",
+    "roomTemp": "20",
+    "roomTime": "2",
+    "oil": "2",
+    "sugar": "1"
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "nav": {
+    "title": "Calculadora de Pizza",
+    "subtitle": "Calcula ingredientes perfectos para masa de pizza con precisión"
+  },
+  "calculator": {
+    "recipeSettings": "Configuración de Receta",
+    "numberOfPizzas": "Número de Pizzas",
+    "pizzaStyle": "Estilo de Pizza",
+    "doughBallWeight": "Peso de Masa",
+    "doughBallWeightTooltip": "Peso de masa por pizza",
+    "waterPercent": "Agua %",
+    "waterPercentTooltip": "Porcentaje de hidratación basado en peso de harina",
+    "saltPercent": "Sal %",
+    "fermentationSettings": "Configuración de Fermentación",
+    "autoCalculateYeast": "Calcular levadura automáticamente basado en tiempo de fermentación",
+    "fermentation": {
+      "cold": "Fermentación Fría",
+      "roomTemperature": "Fermentación a Temperatura Ambiente",
+      "temperature": "Temperatura",
+      "time": "Tiempo (horas)"
+    },
+    "yeastType": "Tipo de Levadura",
+    "yeastPercent": "Levadura %",
+    "yeastPercentTooltip": "Porcentaje relativo al peso de harina",
+    "optionalIngredients": "Ingredientes Opcionales",
+    "oilPercent": "Aceite %",
+    "oilPercentTooltip": "Porcentaje relativo al peso de harina (0 = sin aceite)",
+    "sugarPercent": "Azúcar %",
+    "sugarPercentTooltip": "Porcentaje relativo al peso de harina (0 = sin azúcar)",
+    "calculateRecipe": "Calcular Receta",
+    "pizzaStyles": {
+      "neapolitan": "Napolitana",
+      "newyork": "Nueva York",
+      "roman": "Romana",
+      "custom": "Personalizada"
+    },
+    "yeastTypes": {
+      "instant": "Levadura Seca Instantánea",
+      "active": "Levadura Seca Activa",
+      "fresh": "Levadura Fresca"
+    }
+  },
+  "results": {
+    "title": "Tu Receta",
+    "ingredient": "Ingrediente",
+    "amount": "Cantidad",
+    "flour": "Harina",
+    "water": "Agua",
+    "salt": "Sal",
+    "yeast": "Levadura",
+    "oil": "Aceite",
+    "sugar": "Azúcar",
+    "totalDough": "Masa Total",
+    "coldFermentation": "Fermentación Fría",
+    "roomFermentation": "Fermentación a Temperatura Ambiente",
+    "totalFermentationTime": "Tiempo Total de Fermentación",
+    "cold": "frío",
+    "room": "ambiente",
+    "fermentationTime": "{{time}}h a {{temp}}",
+    "instructions": "Instrucciones",
+    "step1": "Mezclar harina y agua hasta que no quede harina seca. Reposar 30 minutos (autólisis).",
+    "step2": "Agregar sal y levadura. Mezclar hasta incorporar completamente.",
+    "step3": "Amasar durante 10-15 minutos hasta que esté suave y elástica.",
+    "step4Cold": "Fermentar en frío a {{temp}} durante {{time}}h",
+    "step4Room": "dejar levar a {{temp}} durante {{time}}h",
+    "step4Both": ", luego ",
+    "step4Prefix": "Fermentación en masa: ",
+    "step6": "Formar bolas apretadas y dejar reposar 2-4 horas a temperatura ambiente antes de usar.",
+    "divideInstructions": "Dividir en {{portions}} porciones iguales de {{weight}} {{unit}} cada una.",
+    "total": "Peso Total de Masa",
+    "perPizza": "Por Pizza",
+    "totalRecipe": "Receta Total"
+  },
+  "placeholders": {
+    "pizzas": "4",
+    "doughWeight": "250",
+    "hydration": "65",
+    "salt": "2.5",
+    "coldTemp": "4",
+    "coldTime": "24",
+    "roomTemp": "20",
+    "roomTime": "2",
+    "oil": "2",
+    "sugar": "1"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "nav": {
+    "title": "Calcolatore Pizza",
+    "subtitle": "Calcola ingredienti perfetti per impasto pizza con precisione"
+  },
+  "results": {
+    "totalDough": "Impasto Totale",
+    "coldFermentation": "Fermentazione Fredda",
+    "roomFermentation": "Fermentazione a Temperatura Ambiente",
+    "totalFermentationTime": "Tempo Totale di Fermentazione",
+    "cold": "freddo",
+    "room": "ambiente",
+    "fermentationTime": "{{time}}h a {{temp}}"
+  },
+  "calculator": {
+    "recipeSettings": "Impostazioni Ricetta",
+    "numberOfPizzas": "Numero di Pizze",
+    "pizzaStyle": "Stile Pizza",
+    "doughBallWeight": "Peso Impasto",
+    "doughBallWeightTooltip": "Peso impasto per pizza",
+    "waterPercent": "Acqua %",
+    "waterPercentTooltip": "Percentuale di idratazione basata sul peso della farina",
+    "saltPercent": "Sale %",
+    "fermentationSettings": "Impostazioni Fermentazione",
+    "autoCalculateYeast": "Calcola automaticamente il lievito in base al tempo di fermentazione",
+    "manualYeastPercent": "Lievito Manuale %",
+    "manualYeastPercentTooltip": "Percentuale di lievito rispetto al peso della farina",
+    "coldFermentTime": "Tempo di Fermentazione Freddo (ore)",
+    "coldFermentTemp": "Temperatura di Fermentazione Fredda",
+    "roomFermentTime": "Tempo di Fermentazione a Temperatura Ambiente (ore)",
+    "roomFermentTemp": "Temperatura di Fermentazione",
+    "flourProperties": "Proprietà Farina",
+    "flourPercent": "Farina %",
+    "flourPercentTooltip": "Regola per tipi di farina speciali (predefinito 100%)",
+    "oilPercent": "Olio %",
+    "oilPercentTooltip": "Percentuale rispetto al peso della farina (0 = senza olio)",
+    "sugarPercent": "Zucchero %",
+    "sugarPercentTooltip": "Percentuale rispetto al peso della farina (0 = senza zucchero)",
+    "calculateButton": "Calcola Ricetta",
+    "settings": "Impostazioni",
+    "unitSystem": "Sistema di Unità",
+    "temperature": "Temperatura",
+    "pizzaTypes": {
+      "neapolitan": "Napoletana",
+      "newYork": "New York",
+      "roman": "Romana",
+      "sicilian": "Siciliana"
+    }
+  },
+  "ingredients": {
+    "flour": "Farina",
+    "water": "Acqua",
+    "salt": "Sale",
+    "yeast": "Lievito",
+    "oil": "Olio",
+    "sugar": "Zucchero",
+    "yeastTypes": {
+      "fresh": "Lievito Fresco",
+      "instant": "Lievito Istantaneo",
+      "active": "Lievito Attivo"
+    }
+  }
+}
