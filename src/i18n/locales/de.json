@@ -1,12 +1,18 @@
 {
   "nav": {
     "title": "Pizza Rechner",
-    "subtitle": "Berechne perfekte Pizza-Teig Zutaten mit Präzision"
+    "subtitle": "Berechne perfekte Pizza-Teig Zutaten mit 32-bit Präzision"
   },
   "calculator": {
     "recipeSettings": "Rezept Einstellungen",
+    "pizzaStyle": "Pizza Art",
+    "pizzaStyles": {
+      "neapolitan": "Neapolitanisch",
+      "newYork": "New York",
+      "roman": "Römisch",
+      "sicilian": "Sizilianisch"
+    },
     "numberOfPizzas": "Anzahl Pizzas",
-    "pizzaStyle": "Pizza Stil",
     "doughBallWeight": "Teigkugel Gewicht",
     "doughBallWeightTooltip": "Gewicht des Teigs pro Pizza",
     "waterPercent": "Wasser %",
@@ -16,29 +22,27 @@
     "autoCalculateYeast": "Hefe automatisch basierend auf Gärzeit berechnen",
     "manualYeastPercent": "Manuelle Hefe %",
     "manualYeastPercentTooltip": "Hefeprozentsatz basierend auf Mehlgewicht",
-    "coldFermentTime": "Kaltgärung Zeit (Stunden)",
-    "coldFermentTemp": "Kaltgärung Temperatur",
-    "roomFermentTime": "Raumtemperatur Gärung Zeit (Stunden)",
-    "roomFermentTemp": "Raumtemperatur",
-    "flourProperties": "Mehl Eigenschaften",
-    "flourPercent": "Mehl %",
-    "flourPercentTooltip": "Anpassen für spezielle Mehlsorten (Standard 100%)",
+    "fermentation": {
+      "cold": "Kaltgärung",
+      "roomTemperature": "Raumtemperatur Gärung",
+      "temperature": "Temperatur",
+      "time": "Zeit (Stunden)"
+    },
+    "optionalIngredients": "Optionale Zutaten",
     "oilPercent": "Öl %",
     "oilPercentTooltip": "Prozentsatz basierend auf Mehlgewicht (0 = kein Öl)",
     "sugarPercent": "Zucker %",
     "sugarPercentTooltip": "Prozentsatz basierend auf Mehlgewicht (0 = kein Zucker)",
-    "calculateButton": "Rezept Berechnen",
-    "settings": "Einstellungen",
-    "unitSystem": "Einheitensystem",
-    "temperature": "Temperatur",
-    "pizzaTypes": {
-      "neapolitan": "Neapolitanisch",
-      "newYork": "New York",
-      "roman": "Römisch",
-      "sicilian": "Sizilianisch"
+    "yeastType": "Hefe Art",
+    "yeastPercent": "Hefe %",
+    "yeastPercentTooltip": "Hefeprozentsatz basierend auf Mehlgewicht",
+    "yeastTypes": {
+      "fresh": "Frischhefe",
+      "instant": "Trockenhefe",
+      "active": "Aktive Trockenhefe"
     }
   },
-  "ingredients": {
+  "results": {
     "title": "Dein Rezept",
     "ingredient": "Zutat",
     "amount": "Menge",
@@ -49,11 +53,10 @@
     "oil": "Öl",
     "sugar": "Zucker",
     "totalDough": "Gesamter Teig",
+    "perPizza": "Pro Pizza",
     "coldFermentation": "Kaltgärung",
     "roomFermentation": "Raumtemperatur Gärung",
     "totalFermentationTime": "Gesamt Gärzeit",
-    "cold": "kalt",
-    "room": "raum",
     "fermentationTime": "{{time}}h bei {{temp}}",
     "instructions": "Anleitung",
     "step1": "Mehl und Wasser mischen bis kein trockenes Mehl übrig ist. 30 Minuten ruhen lassen (Autolyse).",
@@ -61,11 +64,6 @@
     "step3": "In Teigkugeln teilen und in geölte Behälter geben.",
     "step4": "Bei kalter Gärung: Im Kühlschrank für angegebene Zeit lagern.",
     "step5": "Bei Raumtemperatur fermentieren lassen bis sich das Volumen verdoppelt hat.",
-    "step6": "Vor dem Formen 1-2 Stunden bei Raumtemperatur ruhen lassen.",
-    "yeastTypes": {
-      "fresh": "Frischhefe",
-      "instant": "Trockenhefe",
-      "active": "Aktive Trockenhefe"
-    }
+    "step6": "Vor dem Formen 1-2 Stunden bei Raumtemperatur ruhen lassen."
   }
 }

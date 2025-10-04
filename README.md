@@ -1,4 +1,4 @@
-# pizza-clalc
+# pizza-calculator
 
 A simple pizza ingredient calculator built with React.
 

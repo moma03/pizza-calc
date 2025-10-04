@@ -193,22 +193,6 @@ export function Calculator({ onRecipeCalculate, unitSystem }: CalculatorProps) {
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            {t('calculator.numberOfPizzas')}
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="50"
-            value={numberOfPizzas}
-            onChange={(e) => handleNumericInput(e.target.value, setNumberOfPizzas, 1, 50)}
-            onBlur={() => handleInputBlur(numberOfPizzas, setNumberOfPizzas, 4, 1, 50)}
-            placeholder="4"
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
             {t('calculator.pizzaStyle')}
           </label>
           <select
@@ -222,6 +206,22 @@ export function Calculator({ onRecipeCalculate, unitSystem }: CalculatorProps) {
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+            {t('calculator.numberOfPizzas')}
+          </label>
+          <input
+            type="number"
+            min="1"
+            max="50"
+            value={numberOfPizzas}
+            onChange={(e) => handleNumericInput(e.target.value, setNumberOfPizzas, 1, 50)}
+            onBlur={() => handleInputBlur(numberOfPizzas, setNumberOfPizzas, 4, 1, 50)}
+            placeholder="4"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          />
         </div>
 
         <div>
@@ -295,6 +295,21 @@ export function Calculator({ onRecipeCalculate, unitSystem }: CalculatorProps) {
             <label htmlFor="autoCalculateYeast" className="flex-1 text-sm font-medium text-gray-700 dark:text-gray-300">
               {t('calculator.autoCalculateYeast')}
             </label>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              {t('calculator.yeastType')}
+            </label>
+            <select
+              value={yeastType}
+              onChange={(e) => setYeastType(e.target.value as YeastType)}
+              className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="instant">{t('calculator.yeastTypes.instant')}</option>
+              <option value="active">{t('calculator.yeastTypes.active')}</option>
+              <option value="fresh">{t('calculator.yeastTypes.fresh')}</option>
+            </select>
           </div>
 
           {autoCalculateYeast && (
@@ -380,21 +395,6 @@ export function Calculator({ onRecipeCalculate, unitSystem }: CalculatorProps) {
               </div>
             </div>
           </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            {t('calculator.yeastType')}
-          </label>
-          <select
-            value={yeastType}
-            onChange={(e) => setYeastType(e.target.value as YeastType)}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-          >
-            <option value="instant">{t('calculator.yeastTypes.instant')}</option>
-            <option value="active">{t('calculator.yeastTypes.active')}</option>
-            <option value="fresh">{t('calculator.yeastTypes.fresh')}</option>
-          </select>
-        </div>
             </>
           )}
 

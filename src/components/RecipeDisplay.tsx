@@ -83,7 +83,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
             </span>
           </div>
           <div className="flex flex-col p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">Per Pizza</span>
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">{t('results.perPizza')}</span>
             <span className="text-2xl font-bold text-amber-600 dark:text-amber-400">
               {formatWeight(recipe.doughBallWeight, 0).value} {formatWeight(recipe.doughBallWeight, 0).unit}
             </span>
@@ -109,7 +109,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
                   style={{ width: `${(recipe.coldFermentTime / (recipe.coldFermentTime + recipe.roomFermentTime)) * 100}%` }}
                 >
                   <span className="px-2">
-                    {recipe.coldFermentTime}h {t('results.cold')}
+                    {recipe.coldFermentTime}h
                   </span>
                 </div>
               )}
@@ -122,7 +122,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
                   }}
                 >
                   <span className="px-2">
-                    {recipe.roomFermentTime}h {t('results.room')}
+                    {recipe.roomFermentTime}h
                   </span>
                 </div>
               )}

@@ -55,8 +55,6 @@
     "coldFermentation": "Cold Fermentation",
     "roomFermentation": "Room Temperature Fermentation",
     "totalFermentationTime": "Total Fermentation Time",
-    "cold": "cold",
-    "room": "room",
     "fermentationTime": "{{time}}h at {{temp}}",
     "instructions": "Instructions",
     "step1": "Mix flour and water until no dry flour remains. Rest for 30 minutes (autolyse).",
