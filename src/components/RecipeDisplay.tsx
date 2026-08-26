@@ -30,10 +30,10 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
   const temperature = (celsius: number) => formatQuantity(celsius, 'temperature', unitSystem);
 
   const ingredients: IngredientRow[] = [
-    { key: 'flour', amount: weight(recipe.flour), icon: ChefHat, color: 'text-amber-600' },
-    { key: 'water', amount: weight(recipe.water), icon: Droplets, color: 'text-blue-600' },
-    { key: 'salt', amount: weight(recipe.salt, 1), icon: Scale, color: 'text-gray-600' },
-    { key: 'yeast', amount: weight(recipe.yeast, 2), icon: Flame, color: 'text-orange-600' },
+    { key: 'flour', amount: weight(recipe.flour), icon: ChefHat, color: 'text-amber-600 dark:text-amber-400' },
+    { key: 'water', amount: weight(recipe.water), icon: Droplets, color: 'text-blue-600 dark:text-blue-400' },
+    { key: 'salt', amount: weight(recipe.salt, 1), icon: Scale, color: 'text-gray-600 dark:text-gray-300' },
+    { key: 'yeast', amount: weight(recipe.yeast, 2), icon: Flame, color: 'text-orange-600 dark:text-orange-400' },
   ];
 
   if (recipe.oil !== undefined) {
@@ -41,7 +41,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
       key: 'oil',
       amount: weight(recipe.oil, 1),
       icon: Droplets,
-      color: 'text-yellow-600',
+      color: 'text-yellow-600 dark:text-yellow-400',
     });
   }
   if (recipe.sugar !== undefined) {
@@ -49,7 +49,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
       key: 'sugar',
       amount: weight(recipe.sugar, 1),
       icon: Scale,
-      color: 'text-pink-600',
+      color: 'text-pink-600 dark:text-pink-400',
     });
   }
 
