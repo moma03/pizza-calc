@@ -1,0 +1,239 @@
+name: Build & Deploy to IONOS
+
+# Re-running an old run redeploys exactly that commit, cleanly:
+#
+#   * `actions/checkout` pins to the SHA the run was created for, so a re-run
+#     rebuilds the same source, never the current tip of main.
+#   * `npm ci` installs strictly from that commit's package-lock.json.
+#   * The upload uses `mirror --delete --transfer-all`, which makes the remote
+#     directory byte-for-byte identical to the build output: every file is
+#     re-uploaded and anything left behind by a newer deploy is removed.
+#
+# So "Re-run all jobs" on any past run is a rollback. Use that rather than
+# "Re-run failed jobs" on a run older than the artifact retention window
+# (ARTIFACT_RETENTION_DAYS below), which would have nothing left to download.
+#
+# WARNING: REMOTE_PATH is emptied of anything that is not part of the build.
+# Point it at a directory this site owns exclusively.
+#
+# Required secrets:  SSH_HOST, SSH_USER, and either SSH_PRIVATE_KEY (preferred)
+#                    or SSH_PASSWORD.
+# Optional secrets:  SSH_KNOWN_HOSTS, AUTH_USER, AUTH_PASSWORD.
+# Required config:   vars.REMOTE_PATH (or secret SSH_REMOTE_PATH).
+# Optional config:   vars.SSH_PORT, vars.BASE_PATH, vars.SITE_URL,
+#                    vars.HTPASSWD_PATH.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview the file changes without touching the server'
+        type: boolean
+        default: false
+
+concurrency:
+  group: deploy-ionos
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '22'
+  ARTIFACT_RETENTION_DAYS: '90'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the commit this run was created for
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        env:
+          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
+        run: npm run build
+
+      - name: Write release manifest
+        run: |
+          cat > dist/release.json <<EOF
+          {
+            "commit": "${{ github.sha }}",
+            "ref": "${{ github.ref_name }}",
+            "runId": "${{ github.run_id }}",
+            "runAttempt": "${{ github.run_attempt }}",
+            "builtAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+          cat dist/release.json
+
+      - name: Upload build output
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-${{ github.sha }}
+          path: dist/
+          retention-days: ${{ env.ARTIFACT_RETENTION_DAYS }}
+          if-no-files-found: error
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      SSH_HOST: ${{ secrets.SSH_HOST }}
+      SSH_USER: ${{ secrets.SSH_USER }}
+      SSH_PORT: ${{ vars.SSH_PORT || secrets.SSH_PORT || '22' }}
+      REMOTE_PATH: ${{ vars.REMOTE_PATH || secrets.SSH_REMOTE_PATH }}
+    steps:
+      - name: Download build output
+        uses: actions/download-artifact@v4
+        with:
+          name: site-${{ github.sha }}
+          path: dist
+
+      # The `secrets` context is not available in step-level `if`, so which
+      # optional secrets are configured has to be resolved into outputs first.
+      - name: Resolve optional configuration
+        id: config
+        env:
+          AUTH_USER: ${{ secrets.AUTH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          { [ -n "${AUTH_USER:-}" ] && echo "has_auth=true" || echo "has_auth=false"; } >> "$GITHUB_OUTPUT"
+          { [ -n "${SSH_PRIVATE_KEY:-}" ] && echo "has_key=true" || echo "has_key=false"; } >> "$GITHUB_OUTPUT"
+
+      - name: Add HTTP basic auth
+        if: steps.config.outputs.has_auth == 'true'
+        env:
+          AUTH_USER: ${{ secrets.AUTH_USER }}
+          AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+          HTPASSWD_PATH: ${{ vars.HTPASSWD_PATH }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq apache2-utils
+          # Generated here rather than in the build job so the password hash
+          # never lands in a downloadable artifact.
+          htpasswd -cbB dist/.htpasswd "$AUTH_USER" "$AUTH_PASSWORD"
+          cat > dist/.htaccess <<EOF
+          AuthType Basic
+          AuthName "Restricted Area"
+          AuthUserFile ${HTPASSWD_PATH:-$REMOTE_PATH/.htpasswd}
+          Require valid-user
+          EOF
+
+      - name: Install lftp
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp sshpass
+
+      - name: Trust the host key
+        env:
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          if [ -n "$SSH_KNOWN_HOSTS" ]; then
+            printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            echo "::warning::SSH_KNOWN_HOSTS is not set; trusting the key ssh-keyscan returns now."
+            ssh-keyscan -p "$SSH_PORT" -H "$SSH_HOST" > ~/.ssh/known_hosts 2>/dev/null
+          fi
+          chmod 600 ~/.ssh/known_hosts
+          test -s ~/.ssh/known_hosts
+
+      - name: Install the deploy key
+        if: steps.config.outputs.has_key == 'true'
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Upload to IONOS over SFTP
+        env:
+          # sshpass reads this; it is only used when there is no deploy key, and
+          # it keeps the password out of the lftp script and the process list.
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          HAS_KEY: ${{ steps.config.outputs.has_key }}
+          DRY_RUN: ${{ inputs.dry_run == true }}
+        run: |
+          set -euo pipefail
+
+          : "${SSH_HOST:?SSH_HOST secret is not set}"
+          : "${SSH_USER:?SSH_USER secret is not set}"
+          : "${REMOTE_PATH:?Set the REMOTE_PATH variable (or SSH_REMOTE_PATH secret)}"
+
+          SSH_OPTS="-a -x -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts -p $SSH_PORT"
+          if [ "$HAS_KEY" = "true" ]; then
+            CONNECT="ssh $SSH_OPTS -i $HOME/.ssh/deploy_key -o IdentitiesOnly=yes -o BatchMode=yes"
+          else
+            : "${SSHPASS:?Set either SSH_PRIVATE_KEY or SSH_PASSWORD}"
+            CONNECT="sshpass -e ssh $SSH_OPTS"
+          fi
+
+          # --delete       remove remote files the build no longer produces
+          # --transfer-all re-upload every file even if size and mtime match, so
+          #                the remote state is defined solely by this build
+          MIRROR_FLAGS="--delete --transfer-all --no-perms --parallel=4 --verbose"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "::notice::Dry run - no files will be written to the server."
+            MIRROR_FLAGS="$MIRROR_FLAGS --dry-run"
+          fi
+
+          lftp <<LFTP
+          set cmd:fail-exit yes
+          set net:max-retries 3
+          set net:timeout 30
+          set net:reconnect-interval-base 5
+          set sftp:auto-confirm no
+          set sftp:connect-program "$CONNECT"
+          open -u "$SSH_USER",dummy sftp://$SSH_HOST
+          mirror -R $MIRROR_FLAGS dist/ "$REMOTE_PATH"
+          bye
+          LFTP
+
+      - name: Verify the live site
+        if: ${{ vars.SITE_URL != '' && inputs.dry_run != true }}
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          AUTH_USER: ${{ secrets.AUTH_USER }}
+          AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
+        run: |
+          set -euo pipefail
+          CURL=(curl --fail --silent --show-error --location --retry 3 --retry-delay 5)
+          if [ -n "${AUTH_USER:-}" ]; then
+            CURL+=(--user "$AUTH_USER:$AUTH_PASSWORD")
+          fi
+
+          "${CURL[@]}" -o /dev/null "${SITE_URL%/}/"
+
+          LIVE=$("${CURL[@]}" "${SITE_URL%/}/release.json")
+          echo "$LIVE"
+          LIVE_SHA=$(echo "$LIVE" | grep -o '"commit": *"[^"]*"' | cut -d'"' -f4)
+          if [ "$LIVE_SHA" != "${{ github.sha }}" ]; then
+            echo "::error::Live commit is $LIVE_SHA but this run deployed ${{ github.sha }}."
+            exit 1
+          fi
+          echo "::notice::${SITE_URL} is serving ${{ github.sha }}."

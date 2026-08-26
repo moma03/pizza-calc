@@ -1,69 +1,127 @@
 {
   "nav": {
-    "title": "Pizza Rechner",
-    "subtitle": "Berechne perfekte Pizza-Teig Zutaten mit 32-bit Präzision"
+    "title": "Pizza-Rechner",
+    "subtitle": "Teig, Hefe und Zeiten für die perfekte Pizza berechnen"
+  },
+  "controls": {
+    "language": "Sprache",
+    "unitSystem": "Einheiten",
+    "metric": "g / °C",
+    "imperial": "oz / °F"
   },
   "calculator": {
-    "recipeSettings": "Rezept Einstellungen",
-    "pizzaStyle": "Pizza Art",
+    "recipeSettings": "Rezept-Einstellungen",
+    "pizzaStyle": "Pizza-Art",
     "pizzaStyles": {
       "neapolitan": "Neapolitanisch",
-      "newYork": "New York",
+      "newyork": "New York",
       "roman": "Römisch",
-      "sicilian": "Sizilianisch"
+      "custom": "Eigenes Rezept"
     },
-    "numberOfPizzas": "Anzahl Pizzas",
-    "doughBallWeight": "Teigkugel Gewicht",
-    "doughBallWeightTooltip": "Gewicht des Teigs pro Pizza",
-    "waterPercent": "Wasser %",
-    "waterPercentTooltip": "Hydratation basierend auf Mehlgewicht",
-    "saltPercent": "Salz %",
-    "fermentationSettings": "Gärung Einstellungen",
-    "autoCalculateYeast": "Hefe automatisch basierend auf Gärzeit berechnen",
-    "manualYeastPercent": "Manuelle Hefe %",
-    "manualYeastPercentTooltip": "Hefeprozentsatz basierend auf Mehlgewicht",
+    "pizzaStyleHints": {
+      "neapolitan": "65 % Hydration, kleine weiche Teigkugeln, kurzer Backvorgang bei sehr hoher Hitze.",
+      "newyork": "Etwas festerer Teig mit Öl und Zucker, lange Kaltgare, knuspriger Boden.",
+      "roman": "Sehr nasser Teig für dünne, krosse Pizza – meist im Blech oder auf dem Stein gebacken.",
+      "custom": "Neutraler Ausgangspunkt – alle Werte frei nach eigenem Rezept anpassen."
+    },
+    "numberOfPizzas": "Anzahl Pizzen",
+    "doughBallWeight": "Gewicht pro Teigkugel",
+    "doughBallWeightTooltip": "Teiggewicht für eine einzelne Pizza.",
+    "waterPercent": "Wasser",
+    "waterPercentTooltip": "Hydration in Prozent des Mehlgewichts.",
+    "saltPercent": "Salz",
+    "saltPercentTooltip": "Prozent des Mehlgewichts. Üblich sind 2–3 %.",
+    "fermentationSettings": "Gärung",
+    "autoCalculateYeast": "Hefe automatisch aus Zeit und Temperatur berechnen",
     "fermentation": {
-      "cold": "Kaltgärung",
-      "roomTemperature": "Raumtemperatur Gärung",
+      "room": "Raumtemperatur",
+      "cold": "Kalt (Kühlschrank)",
       "temperature": "Temperatur",
-      "time": "Zeit (Stunden)"
+      "time": "Zeit",
+      "roomTimeTooltip": "Gesamtzeit bei Raumtemperatur, aufgeteilt auf Stockgare und Stückgare. Mindestens {{minimum}} h sind nötig.",
+      "coldTimeTooltip": "Zeit im Kühlschrank zwischen Stockgare und Rundwirken. 0 eingeben, um die Kaltgare zu überspringen.",
+      "split": {
+        "label": "Aufteilung der Raumtemperatur-Zeit",
+        "tooltip": "Wohin die Stunden bei Raumtemperatur gehen: Gehen am Stück vor dem Kühlschrank oder als Kugeln danach. Eine längere Stockgare bringt mehr Aroma und Glutenstruktur, eine längere Stückgare leichtere Kugeln, die sich besser ausziehen lassen.",
+        "bulk": "Vor dem Kühlschrank",
+        "proof": "Vor dem Backen",
+        "noSlack": "Erhöhe die Raumtemperatur-Zeit über {{minimum}} h, um Stunden zwischen den beiden Phasen zu verschieben."
+      }
     },
-    "optionalIngredients": "Optionale Zutaten",
-    "oilPercent": "Öl %",
-    "oilPercentTooltip": "Prozentsatz basierend auf Mehlgewicht (0 = kein Öl)",
-    "sugarPercent": "Zucker %",
-    "sugarPercentTooltip": "Prozentsatz basierend auf Mehlgewicht (0 = kein Zucker)",
-    "yeastType": "Hefe Art",
-    "yeastPercent": "Hefe %",
-    "yeastPercentTooltip": "Hefeprozentsatz basierend auf Mehlgewicht",
+    "yeastType": "Hefe-Art",
     "yeastTypes": {
-      "fresh": "Frischhefe",
-      "instant": "Trockenhefe",
-      "active": "Aktive Trockenhefe"
+      "fresh": {
+        "label": "Frischhefe (Würfelhefe)",
+        "hint": "Der feuchte Würfel aus dem Kühlregal. Direkt in den Teig bröseln oder in einem Teil des Wassers auflösen. Sie ist der Bezugswert, aus dem alle anderen Hefearten umgerechnet werden."
+      },
+      "instant": {
+        "label": "Trockenhefe (Instanthefe)",
+        "hint": "Feines Granulat, das direkt unter das Mehl gemischt wird – kein Einweichen nötig. Du brauchst etwa 40 % der Frischhefe-Menge."
+      },
+      "active": {
+        "label": "Aktivtrockenhefe (muss aktiviert werden)",
+        "hint": "Gröberes Granulat, das erst geweckt werden muss: in lauwarmem Wasser (ca. {{temp}}) mit einer Prise Zucker verrühren, 10 Minuten warten, bis es schäumt, und dann in den Teig geben. Du brauchst etwa 50 % der Frischhefe-Menge."
+      }
+    },
+    "yeastPercent": "Hefe",
+    "yeastPercentTooltip": "Prozent des Mehlgewichts, für die oben gewählte Hefe-Art.",
+    "oilPercent": "Öl",
+    "oilPercentTooltip": "Prozent des Mehlgewichts (0 = kein Öl). Macht den Boden weicher und bräunt stärker.",
+    "sugarPercent": "Zucker",
+    "sugarPercentTooltip": "Prozent des Mehlgewichts (0 = kein Zucker). Hilft dem Rand im Haushaltsofen beim Bräunen.",
+    "ballingPoint": "Wann die Teigkugeln geformt werden",
+    "ballingPoints": {
+      "afterCold": {
+        "label": "Nach der Kaltgare",
+        "hint": "Der ganze Teig kommt am Stück in den Kühlschrank und wird erst danach geteilt. Die große Masse kühlt langsam ab und gärt auf dem Weg nach unten noch stundenlang weiter – es wird weniger Hefe gebraucht."
+      },
+      "beforeCold": {
+        "label": "Vor der Kaltgare",
+        "hint": "Der Teig wird vor dem Kühlschrank geteilt und rund gewirkt. Einzelne Kugeln kühlen viel schneller aus als eine große Masse und gären beim Abkühlen weniger – es wird etwas mehr Hefe gebraucht. Dafür lässt sich der Teig besser lagern und die Kugeln sind direkt einsatzbereit."
+      }
+    },
+    "thermalModel": {
+      "label": "Abkühlzeit des Teigs berücksichtigen",
+      "onHint": "Die Kaltgare wird danach gewichtet, wie lange der Teig tatsächlich zum Auskühlen braucht – das hängt von der Teigmenge ab und davon, ob am Stück oder als Kugeln gekühlt wird.",
+      "offHint": "Die ursprüngliche Schätzung: Die Kaltgare zählt als reine Uhrzeit, unabhängig von Menge und Form des Teigs."
     }
   },
   "results": {
     "title": "Dein Rezept",
-    "ingredient": "Zutat",
-    "amount": "Menge",
-    "flour": "Mehl",
-    "water": "Wasser",
-    "salt": "Salz",
-    "yeast": "Hefe",
-    "oil": "Öl",
-    "sugar": "Zucker",
-    "totalDough": "Gesamter Teig",
+    "ingredients": {
+      "flour": "Mehl",
+      "water": "Wasser",
+      "salt": "Salz",
+      "yeast": "Hefe",
+      "oil": "Öl",
+      "sugar": "Zucker"
+    },
+    "yeastNote": "Hefe: {{percent}} % {{yeast}} bezogen auf das Mehlgewicht.",
+    "totalDough": "Teig gesamt",
     "perPizza": "Pro Pizza",
-    "coldFermentation": "Kaltgärung",
-    "roomFermentation": "Raumtemperatur Gärung",
-    "totalFermentationTime": "Gesamt Gärzeit",
-    "fermentationTime": "{{time}}h bei {{temp}}",
+    "totalFermentationTime": "Gesamte Gärzeit",
     "instructions": "Anleitung",
-    "step1": "Mehl und Wasser mischen bis kein trockenes Mehl übrig ist. 30 Minuten ruhen lassen (Autolyse).",
-    "step2": "Salz und Hefe hinzufügen. Kneten bis ein glatter Teig entsteht.",
-    "step3": "In Teigkugeln teilen und in geölte Behälter geben.",
-    "step4": "Bei kalter Gärung: Im Kühlschrank für angegebene Zeit lagern.",
-    "step5": "Bei Raumtemperatur fermentieren lassen bis sich das Volumen verdoppelt hat.",
-    "step6": "Vor dem Formen 1-2 Stunden bei Raumtemperatur ruhen lassen."
+    "steps": {
+      "knead": "Kneten: Mehl und Wasser mischen, bis kein trockenes Mehl mehr übrig ist, dann Salz und Hefe einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist und sich von der Schüssel löst.",
+      "bulk": "Stockgare: Den Teig abgedeckt am Stück bei {{temp}} mindestens {{hours}} h gehen lassen.{{extra}}",
+      "cold": "Kaltgare: {{what}} für {{hours}} h bei {{temp}} in den Kühlschrank stellen.",
+      "ball": "Teigkugeln formen: Den Teig in {{portions}} gleich große Stücke à {{weight}} teilen und jedes straff rund wirken. Mit Abstand in eine leicht geölte, abgedeckte Box legen.",
+      "proof": "Stückgare: Die Kugeln bei {{temp}} mindestens {{hours}} h akklimatisieren und gehen lassen, bis sie sichtbar aufgegangen sind und auf Fingerdruck nur langsam zurückfedern.{{extra}}",
+      "bake": "Backen: Jede Kugel von Hand ausziehen, belegen und so heiß wie möglich backen – 60–90 Sekunden bei {{pizzaOven}} im Pizzaofen oder 5–8 Minuten bei {{homeOven}} auf vorgeheiztem Stahl oder Stein.",
+      "extraNote": "(Du hast insgesamt {{total}} h bei Raumtemperatur, bis zu {{extra}} h davon kannst du hier verwenden.)",
+      "coldSubject": {
+        "afterCold": "den abgedeckten Teig am Stück",
+        "beforeCold": "die abgedeckten Teigkugeln"
+      }
+    },
+    "phases": {
+      "bulk": "Stockgare",
+      "cold": "Kaltgare",
+      "proof": "Stückgare",
+      "room": "Raumtemperatur"
+    },
+    "effectiveCold": "Mit Abkühlzeit gerechnet verhalten sich die {{nominal}} h im Kühlschrank wie {{hours}} h – etwa {{percent}} % {{direction}} Gärung.",
+    "effectiveColdMore": "mehr",
+    "effectiveColdLess": "weniger"
   }
 }

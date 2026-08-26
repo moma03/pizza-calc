@@ -1,85 +1,127 @@
 {
   "nav": {
     "title": "Pizza Calculator",
-    "subtitle": "Calculate perfect pizza dough ingredients with 32-bit precision"
+    "subtitle": "Work out dough, yeast and timings for the perfect pizza"
+  },
+  "controls": {
+    "language": "Language",
+    "unitSystem": "Unit system",
+    "metric": "g / °C",
+    "imperial": "oz / °F"
   },
   "calculator": {
-    "recipeSettings": "Recipe Settings",
-    "numberOfPizzas": "Number of Pizzas",
-    "pizzaStyle": "Pizza Style",
-    "doughBallWeight": "Dough Ball Weight",
-    "doughBallWeightTooltip": "Weight of dough per pizza",
-    "waterPercent": "Water %",
-    "waterPercentTooltip": "Hydration percentage based on flour weight",
-    "saltPercent": "Salt %",
-    "fermentationSettings": "Fermentation Settings",
-    "autoCalculateYeast": "Auto-calculate yeast based on fermentation time",
-    "fermentation": {
-      "cold": "Cold Fermentation",
-      "roomTemperature": "Room Temperature Fermentation",
-      "temperature": "Temperature",
-      "time": "Time (hours)"
-    },
-    "yeastType": "Yeast Type",
-    "yeastPercent": "Yeast %",
-    "yeastPercentTooltip": "Percentage relative to flour weight",
-    "optionalIngredients": "Optional Ingredients",
-    "oilPercent": "Oil %",
-    "oilPercentTooltip": "Percentage relative to flour weight (0 = no oil)",
-    "sugarPercent": "Sugar %",
-    "sugarPercentTooltip": "Percentage relative to flour weight (0 = no sugar)",
-    "calculateRecipe": "Calculate Recipe",
+    "recipeSettings": "Recipe settings",
+    "pizzaStyle": "Pizza style",
     "pizzaStyles": {
       "neapolitan": "Neapolitan",
       "newyork": "New York",
       "roman": "Roman",
       "custom": "Custom"
     },
+    "pizzaStyleHints": {
+      "neapolitan": "65 % hydration, small soft dough balls, short bake at very high heat.",
+      "newyork": "Slightly drier dough with oil and sugar, long cold fermentation, crisp base.",
+      "roman": "Very wet dough for thin, crunchy pizza — usually baked in a tray or on a stone.",
+      "custom": "Neutral starting point — change every value to your own recipe."
+    },
+    "numberOfPizzas": "Number of pizzas",
+    "doughBallWeight": "Dough ball weight",
+    "doughBallWeightTooltip": "Weight of the dough for a single pizza.",
+    "waterPercent": "Water",
+    "waterPercentTooltip": "Hydration as a percentage of the flour weight.",
+    "saltPercent": "Salt",
+    "saltPercentTooltip": "Percentage of the flour weight. 2–3 % is typical.",
+    "fermentationSettings": "Fermentation",
+    "autoCalculateYeast": "Calculate yeast automatically from time and temperature",
+    "fermentation": {
+      "room": "Room temperature",
+      "cold": "Cold (fridge)",
+      "temperature": "Temperature",
+      "time": "Time",
+      "roomTimeTooltip": "Total time at room temperature, split over the bulk rise and the final proof. At least {{minimum}} h are needed.",
+      "coldTimeTooltip": "Time in the fridge between the bulk rise and balling. Set 0 to skip the cold fermentation.",
+      "split": {
+        "label": "Split of the room-temperature time",
+        "tooltip": "Where the room-temperature hours go: rising as one piece before the fridge, or proving as balls after it. Longer bulk builds flavour and gluten; longer final proof gives lighter balls that are easier to stretch.",
+        "bulk": "Before the fridge",
+        "proof": "Before baking",
+        "noSlack": "Raise the room-temperature time above {{minimum}} h to shift hours between the two phases."
+      }
+    },
+    "yeastType": "Yeast type",
     "yeastTypes": {
-      "instant": "Instant Dry Yeast",
-      "active": "Active Dry Yeast",
-      "fresh": "Fresh Yeast"
+      "fresh": {
+        "label": "Fresh yeast (cake yeast)",
+        "hint": "The moist block from the fridge. Crumble it straight into the dough or dissolve it in part of the water. This is the reference amount all other types are converted from."
+      },
+      "instant": {
+        "label": "Instant dry yeast",
+        "hint": "Fine granules that are stirred straight into the flour — no soaking needed. You need about 40 % of the fresh-yeast amount."
+      },
+      "active": {
+        "label": "Active dry yeast (needs rehydrating)",
+        "hint": "Coarser granules that must first be woken up: stir into lukewarm water (about {{temp}}) with a pinch of sugar and wait 10 minutes until it foams, then add it to the dough. You need about 50 % of the fresh-yeast amount."
+      }
+    },
+    "yeastPercent": "Yeast",
+    "yeastPercentTooltip": "Percentage of the flour weight, for the yeast type selected above.",
+    "oilPercent": "Oil",
+    "oilPercentTooltip": "Percentage of the flour weight (0 = no oil). Makes the base softer and browner.",
+    "sugarPercent": "Sugar",
+    "sugarPercentTooltip": "Percentage of the flour weight (0 = no sugar). Helps the crust colour in a home oven.",
+    "ballingPoint": "When to shape the balls",
+    "ballingPoints": {
+      "afterCold": {
+        "label": "After the cold fermentation",
+        "hint": "The whole batch goes into the fridge as one mass and is divided when it comes out. The mass cools slowly, so it keeps fermenting for hours on the way down — less yeast is needed."
+      },
+      "beforeCold": {
+        "label": "Before the cold fermentation",
+        "hint": "The dough is divided and balled before it goes into the fridge. Balls chill much faster than a single mass, so they bank less fermentation while cooling — slightly more yeast is needed. Easier to store, and the balls are ready to use straight from the fridge."
+      }
+    },
+    "thermalModel": {
+      "label": "Account for the dough cooling down",
+      "onHint": "The fridge phase is weighted by how long the dough actually takes to get cold, which depends on the batch size and on whether it is retarded in bulk or as balls.",
+      "offHint": "The original estimate: the fridge phase counts as plain wall-clock hours, whatever the size or shape of the dough."
     }
   },
   "results": {
-    "title": "Your Recipe",
-    "ingredient": "Ingredient",
-    "amount": "Amount",
-    "flour": "Flour",
-    "water": "Water",
-    "salt": "Salt",
-    "yeast": "Yeast",
-    "oil": "Oil",
-    "sugar": "Sugar",
-    "totalDough": "Total Dough",
-    "coldFermentation": "Cold Fermentation",
-    "roomFermentation": "Room Temperature Fermentation",
-    "totalFermentationTime": "Total Fermentation Time",
-    "fermentationTime": "{{time}}h at {{temp}}",
+    "title": "Your recipe",
+    "ingredients": {
+      "flour": "Flour",
+      "water": "Water",
+      "salt": "Salt",
+      "yeast": "Yeast",
+      "oil": "Oil",
+      "sugar": "Sugar"
+    },
+    "yeastNote": "Yeast: {{percent}} % {{yeast}} relative to the flour weight.",
+    "totalDough": "Total dough",
+    "perPizza": "Per pizza",
+    "totalFermentationTime": "Total fermentation time",
     "instructions": "Instructions",
-    "step1": "Mix flour and water until no dry flour remains. Rest for 30 minutes (autolyse).",
-    "step2": "Add salt and yeast. Mix until fully incorporated.",
-    "step3": "Knead for 10-15 minutes until smooth and elastic.",
-    "step4Cold": "Cold ferment at {{temp}} for {{time}}h",
-    "step4Room": "let rise at {{temp}} for {{time}}h",
-    "step4Both": ", then ",
-    "step4Prefix": "Bulk fermentation: ",
-    "step6": "Shape into tight balls and let rest for 2-4 hours at room temperature before using.",
-    "divideInstructions": "Divide into {{portions}} equal portions of {{weight}} {{unit}} each.",
-    "total": "Total Dough Weight",
-    "perPizza": "Per Pizza",
-    "totalRecipe": "Total Recipe"
-  },
-  "placeholders": {
-    "pizzas": "4",
-    "doughWeight": "250",
-    "hydration": "65",
-    "salt": "2.5",
-    "coldTemp": "4",
-    "coldTime": "24",
-    "roomTemp": "20",
-    "roomTime": "2",
-    "oil": "2",
-    "sugar": "1"
+    "steps": {
+      "knead": "Knead: mix the flour with the water until no dry flour is left, then work in the salt and the yeast. Knead for 10–15 minutes until the dough is smooth, elastic and pulls away from the bowl.",
+      "bulk": "Bulk fermentation: cover the dough and let it rise as one piece at {{temp}} for at least {{hours}} h.{{extra}}",
+      "cold": "Cold fermentation: put {{what}} in the fridge at {{temp}} for {{hours}} h.",
+      "ball": "Shape the balls: divide the dough into {{portions}} equal pieces of {{weight}} and shape each one into a tight ball. Place them in a lightly oiled, covered container, well apart.",
+      "proof": "Final proof: let the balls warm up and prove at {{temp}} for at least {{hours}} h, until they are visibly puffed and spring back slowly when poked.{{extra}}",
+      "bake": "Bake: stretch each ball by hand, top it, and bake as hot as your setup allows — 60–90 seconds at {{pizzaOven}} in a pizza oven, or 5–8 minutes at {{homeOven}} on a preheated steel or stone.",
+      "extraNote": "(You have {{total}} h at room temperature in total, so up to {{extra}} h more can go here.)",
+      "coldSubject": {
+        "afterCold": "the covered dough in one piece",
+        "beforeCold": "the covered dough balls"
+      }
+    },
+    "phases": {
+      "bulk": "Bulk fermentation",
+      "cold": "Cold fermentation",
+      "proof": "Final proof",
+      "room": "Room temperature"
+    },
+    "effectiveCold": "Cooling time included, the {{nominal}} h in the fridge behave like {{hours}} h — about {{percent}} % {{direction}} fermentation.",
+    "effectiveColdMore": "more",
+    "effectiveColdLess": "less"
   }
 }
