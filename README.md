@@ -8,8 +8,8 @@ Most dough calculators ask how much yeast you want to use.<br>
 This one asks **when you want to eat** — and works the yeast out from there.
 
 [![Deploy](https://github.com/moma03/pizza-calc/actions/workflows/deploy.yml/badge.svg)](https://github.com/moma03/pizza-calc/actions/workflows/deploy.yml)
-![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.5-3178C6?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/Tailwind-3.4-06B6D4?logo=tailwindcss&logoColor=white)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
