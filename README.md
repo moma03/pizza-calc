@@ -139,6 +139,17 @@ build artifact and expires after 90 days.
 `workflow_dispatch` also takes a `dry_run` input that runs the mirror with
 `--dry-run`, so you can preview which files would change.
 
+### Apache configuration
+
+The deploy writes an `.htaccess` alongside the build. It sets long-lived
+`immutable` caching on Vite's fingerprinted assets, `no-cache` on `index.html`
+and `release.json` — without which a stale entry point could survive a rollback
+and point at asset files `--delete` has already removed — plus gzip, UTF-8 and a
+deny rule for `.ht*`. Every directive is wrapped in an `<IfModule>` guard, so it
+degrades safely on a server missing any of them.
+
+The app has no client-side router, so no rewrite rules are needed.
+
 > [!WARNING]
 > `--delete` removes anything in `REMOTE_PATH` that is not part of the build.
 > Point it at a directory this site owns exclusively.
