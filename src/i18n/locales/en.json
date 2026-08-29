@@ -127,5 +127,10 @@
     "effectiveColdMore": "more",
     "effectiveColdLess": "less",
     "iceNote": "Water and ice together make up the {{total}} of hydration — about {{percent}} % is weighed as ice so the dough stays cool while you knead it."
+  },
+  "footer": {
+    "source": "Source on GitHub",
+    "license": "MIT licence",
+    "privacy": "No cookies, no tracking, no analytics, and no external fonts or scripts. The calculator runs entirely in your browser — nothing you enter is ever sent to a server. The only thing kept is your chosen language and unit system, saved in this browser so the page remembers them; clearing your site data removes them again."
   }
 }

@@ -127,5 +127,10 @@
     "effectiveColdMore": "mehr",
     "effectiveColdLess": "weniger",
     "iceNote": "Wasser und Eis ergeben zusammen die {{total}} Schüttflüssigkeit – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt."
+  },
+  "footer": {
+    "source": "Quellcode auf GitHub",
+    "license": "MIT-Lizenz",
+    "privacy": "Keine Cookies, kein Tracking, keine Analyse und keine externen Schriften oder Skripte. Der Rechner läuft vollständig in deinem Browser – nichts, was du eingibst, wird an einen Server gesendet. Gespeichert wird ausschließlich deine gewählte Sprache und das Einheitensystem, lokal in diesem Browser, damit die Seite sie sich merkt; beim Löschen der Website-Daten verschwinden sie wieder."
   }
 }
