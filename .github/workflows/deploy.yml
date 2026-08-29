@@ -16,12 +16,13 @@ name: Build & Deploy
 # WARNING: REMOTE_PATH is emptied of anything that is not part of the build.
 # Point it at a directory this site owns exclusively.
 #
+# The site is public - there is no HTTP auth, so it can be indexed.
+#
 # Required secrets:  SSH_HOST, SSH_USER, and either SSH_PRIVATE_KEY (preferred)
 #                    or SSH_PASSWORD.
-# Optional secrets:  SSH_KNOWN_HOSTS, AUTH_USER, AUTH_PASSWORD.
+# Optional secrets:  SSH_KNOWN_HOSTS.
 # Required config:   vars.REMOTE_PATH (or secret SSH_REMOTE_PATH).
-# Optional config:   vars.SSH_PORT, vars.BASE_PATH, vars.SITE_URL,
-#                    vars.HTPASSWD_PATH.
+# Optional config:   vars.SSH_PORT, vars.BASE_PATH, vars.SITE_URL.
 
 on:
   push:
@@ -109,22 +110,67 @@ jobs:
           name: site-${{ github.sha }}
           path: dist
 
-      # The `secrets` context is not available in step-level `if`, so which
-      # optional secrets are configured has to be resolved into outputs first.
+      # The `secrets` context is not available in step-level `if`, so whether a
+      # deploy key is configured has to be resolved into an output first.
       - name: Resolve optional configuration
         id: config
         env:
-          AUTH_USER: ${{ secrets.AUTH_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           set -euo pipefail
-          { [ -n "${AUTH_USER:-}" ] && echo "has_auth=true" || echo "has_auth=false"; } >> "$GITHUB_OUTPUT"
           { [ -n "${SSH_PRIVATE_KEY:-}" ] && echo "has_key=true" || echo "has_key=false"; } >> "$GITHUB_OUTPUT"
 
-      # Written on every deploy, auth or not. Without this Apache sends no
-      # Cache-Control at all and browsers fall back to heuristic caching — which
-      # would let a stale index.html survive a deploy or a rollback, pointing at
-      # asset filenames that `mirror --delete` has already removed.
+      # Search engines need an absolute URL, which only exists once the site has
+      # a domain — so these are generated here rather than committed.
+      - name: Write sitemap and canonical URL
+        if: vars.SITE_URL != ''
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          set -euo pipefail
+          BASE="${SITE_URL%/}"
+          TODAY="$(date -u +%Y-%m-%d)"
+
+          cat > dist/sitemap.xml <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+                  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+            <url>
+              <loc>${BASE}/</loc>
+              <lastmod>${TODAY}</lastmod>
+              <xhtml:link rel="alternate" hreflang="en" href="${BASE}/?lng=en"/>
+              <xhtml:link rel="alternate" hreflang="de" href="${BASE}/?lng=de"/>
+              <xhtml:link rel="alternate" hreflang="x-default" href="${BASE}/"/>
+            </url>
+          </urlset>
+          EOF
+
+          printf '\nSitemap: %s/sitemap.xml\n' "$BASE" >> dist/robots.txt
+
+          # A canonical URL stops ?lng= variants being treated as duplicates.
+          python3 - "$BASE" <<'PY'
+          import sys, io
+          base = sys.argv[1]
+          path = 'dist/index.html'
+          html = io.open(path, encoding='utf-8').read()
+          tags = (
+              f'<link rel="canonical" href="{base}/" />\n'
+              f'    <link rel="alternate" hreflang="en" href="{base}/?lng=en" />\n'
+              f'    <link rel="alternate" hreflang="de" href="{base}/?lng=de" />\n'
+              f'    <link rel="alternate" hreflang="x-default" href="{base}/" />\n'
+              '    <meta property="og:url" content="' + base + '/" />\n    </head>'
+          )
+          assert '</head>' in html, 'no </head> in built index.html'
+          io.open(path, 'w', encoding='utf-8').write(html.replace('</head>', tags, 1))
+          PY
+
+          echo "--- sitemap.xml ---"; cat dist/sitemap.xml
+          echo "--- robots.txt ---";  cat dist/robots.txt
+
+      # Without this Apache sends no Cache-Control at all and browsers fall back
+      # to heuristic caching — which would let a stale index.html survive a
+      # deploy or a rollback, pointing at asset filenames that `mirror --delete`
+      # has already removed.
       - name: Write Apache configuration
         run: |
           set -euo pipefail
@@ -173,8 +219,8 @@ jobs:
             </IfModule>
           </IfModule>
 
-          # .htpasswd lives in the web root; Apache normally blocks .ht* already,
-          # but say so explicitly in case the vhost does not.
+          # Apache normally blocks .ht* already, but say so explicitly in case
+          # the vhost does not.
           <FilesMatch "^\.ht">
             <IfModule mod_authz_core.c>
               Require all denied
@@ -184,28 +230,6 @@ jobs:
               Deny from all
             </IfModule>
           </FilesMatch>
-          EOF
-
-      - name: Add HTTP basic auth
-        if: steps.config.outputs.has_auth == 'true'
-        env:
-          AUTH_USER: ${{ secrets.AUTH_USER }}
-          AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
-          HTPASSWD_PATH: ${{ vars.HTPASSWD_PATH }}
-        run: |
-          set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq apache2-utils
-          # Generated here rather than in the build job so the password hash
-          # never lands in a downloadable artifact.
-          htpasswd -cbB dist/.htpasswd "$AUTH_USER" "$AUTH_PASSWORD"
-          # Appended, so the caching and hardening rules above are kept.
-          cat >> dist/.htaccess <<EOF
-
-          AuthType Basic
-          AuthName "Restricted Area"
-          AuthUserFile ${HTPASSWD_PATH:-$REMOTE_PATH/.htpasswd}
-          Require valid-user
           EOF
 
       - name: Install lftp
@@ -285,14 +309,9 @@ jobs:
         if: ${{ vars.SITE_URL != '' && inputs.dry_run != true }}
         env:
           SITE_URL: ${{ vars.SITE_URL }}
-          AUTH_USER: ${{ secrets.AUTH_USER }}
-          AUTH_PASSWORD: ${{ secrets.AUTH_PASSWORD }}
         run: |
           set -euo pipefail
           CURL=(curl --fail --silent --show-error --location --retry 3 --retry-delay 5)
-          if [ -n "${AUTH_USER:-}" ]; then
-            CURL+=(--user "$AUTH_USER:$AUTH_PASSWORD")
-          fi
 
           "${CURL[@]}" -o /dev/null "${SITE_URL%/}/"
 

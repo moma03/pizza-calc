@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { ChefHat, Clock, Droplets, Flame, Scale, type LucideIcon } from 'lucide-react';
+import { ChefHat, Clock, Droplets, Flame, Scale, Snowflake, type LucideIcon } from 'lucide-react';
 import { splitRoomFermentation } from '../lib/fermentation';
 import {
   formatHours,
@@ -36,6 +36,14 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
     { key: 'yeast', amount: weight(recipe.yeast, 2), icon: Flame, color: 'text-orange-600 dark:text-orange-400' },
   ];
 
+  if (recipe.icePercent > 0) {
+    ingredients.splice(2, 0, {
+      key: 'ice',
+      amount: weight(recipe.ice),
+      icon: Snowflake,
+      color: 'text-cyan-600 dark:text-cyan-400',
+    });
+  }
   if (recipe.oil !== undefined) {
     ingredients.push({
       key: 'oil',
@@ -145,6 +153,15 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
           </div>
         ))}
       </div>
+
+      {recipe.icePercent > 0 && (
+      <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
+        {t('results.iceNote', {
+          percent: round(recipe.icePercent, 1),
+          total: weight(recipe.totalWater),
+        })}
+      </p>
+      )}
 
       <p className="mb-6 text-xs text-gray-500 dark:text-gray-400">
         {t('results.yeastNote', {

@@ -38,4 +38,16 @@ i18n
     },
   });
 
+/**
+ * Keep `<html lang>` in step with the active language. i18next does not touch
+ * the document, so without this screen readers and browser translation are told
+ * the page is English even while it renders German.
+ */
+const applyDocumentLanguage = (language: string) => {
+  document.documentElement.lang = language.split('-')[0];
+};
+
+applyDocumentLanguage(i18n.language ?? 'en');
+i18n.on('languageChanged', applyDocumentLanguage);
+
 export default i18n;

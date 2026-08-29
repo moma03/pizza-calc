@@ -29,6 +29,8 @@
     "doughBallWeightTooltip": "Teiggewicht für eine einzelne Pizza.",
     "waterPercent": "Wasser",
     "waterPercentTooltip": "Hydration in Prozent des Mehlgewichts.",
+    "icePercent": "Eis (% vom Wasser)",
+    "icePercentTooltip": "Wie viel der Schüttflüssigkeit als Eis abgewogen wird – Prozent vom Wasser, nicht vom Mehl. Das Eis ist keine zusätzliche Flüssigkeit: Es schmilzt in den Teig, die Hydration bleibt gleich. Beim Schmelzen nimmt es Wärme auf und hält den Teig während einer langen Knetzeit kühl. Etwa 10 % passen zum Kneten von Hand; bei Maschine oder warmer Küche mehr, mit 0 ganz weglassen.",
     "saltPercent": "Salz",
     "saltPercentTooltip": "Prozent des Mehlgewichts. Üblich sind 2–3 %.",
     "fermentationSettings": "Gärung",
@@ -91,6 +93,7 @@
     "ingredients": {
       "flour": "Mehl",
       "water": "Wasser",
+      "ice": "Eis",
       "salt": "Salz",
       "yeast": "Hefe",
       "oil": "Öl",
@@ -102,7 +105,7 @@
     "totalFermentationTime": "Gesamte Gärzeit",
     "instructions": "Anleitung",
     "steps": {
-      "knead": "Kneten: Mehl und Wasser mischen, bis kein trockenes Mehl mehr übrig ist, dann Salz und Hefe einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist und sich von der Schüssel löst.",
+      "knead": "Kneten: Mehl mit Wasser und Eis mischen, bis kein trockenes Mehl mehr übrig ist, dann Salz und Hefe einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist und sich von der Schüssel löst – das Eis verhindert, dass er dabei zu warm wird.",
       "bulk": "Stockgare: Den Teig abgedeckt am Stück bei {{temp}} mindestens {{hours}} h gehen lassen.{{extra}}",
       "cold": "Kaltgare: {{what}} für {{hours}} h bei {{temp}} in den Kühlschrank stellen.",
       "ball": "Teigkugeln formen: Den Teig in {{portions}} gleich große Stücke à {{weight}} teilen und jedes straff rund wirken. Mit Abstand in eine leicht geölte, abgedeckte Box legen.",
@@ -122,6 +125,7 @@
     },
     "effectiveCold": "Mit Abkühlzeit gerechnet verhalten sich die {{nominal}} h im Kühlschrank wie {{hours}} h – etwa {{percent}} % {{direction}} Gärung.",
     "effectiveColdMore": "mehr",
-    "effectiveColdLess": "weniger"
+    "effectiveColdLess": "weniger",
+    "iceNote": "Wasser und Eis ergeben zusammen die {{total}} Schüttflüssigkeit – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt."
   }
 }

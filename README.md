@@ -35,6 +35,7 @@ into them.
 | 🍕 **Style presets** | Neapolitan, New York and Roman, plus a free-form mode |
 | ⏱️ **Your own timings** | A slider splits the room-temperature time either side of the fridge |
 | 🌍 **Bilingual** | German and English, metric and imperial, everything converts |
+| 🧊 **Ice in the mix** | A share of the hydration weighed as ice, adjustable, to keep the dough cool while kneading |
 | 🌙 **Dark mode** | Follows the system setting |
 
 ---
@@ -148,7 +149,8 @@ and point at asset files `--delete` has already removed — plus gzip, UTF-8 and
 deny rule for `.ht*`. Every directive is wrapped in an `<IfModule>` guard, so it
 degrades safely on a server missing any of them.
 
-The app has no client-side router, so no rewrite rules are needed.
+The app has no client-side router, so no rewrite rules are needed. The site is
+served publicly with no HTTP auth, so search engines can reach it.
 
 > [!WARNING]
 > `--delete` removes anything in `REMOTE_PATH` that is not part of the build.
@@ -168,8 +170,6 @@ Repository **secrets**:
 | `SSH_PRIVATE_KEY` | one of | deploy key — preferred |
 | `SSH_PASSWORD` | one of | password, used when no key is set |
 | `SSH_KNOWN_HOSTS` | — | pinned host key; without it the workflow runs `ssh-keyscan` and warns |
-| `AUTH_USER` | — | enables HTTP basic auth when set |
-| `AUTH_PASSWORD` | — | password for basic auth |
 
 Repository **variables**:
 
@@ -178,8 +178,7 @@ Repository **variables**:
 | `REMOTE_PATH` | — | target directory on the server (**required**) |
 | `SSH_PORT` | `22` | SSH port |
 | `BASE_PATH` | `/` | set to e.g. `/pizza-calc/` when serving from a subdirectory |
-| `SITE_URL` | — | when set, the deploy is verified over HTTP afterwards |
-| `HTPASSWD_PATH` | `$REMOTE_PATH/.htpasswd` | absolute server path written into `AuthUserFile` |
+| `SITE_URL` | — | your public URL. Enables the sitemap, `rel=canonical` and `hreflang` tags, and an HTTP check after deploying. Set this before submitting to Google |
 
 `REMOTE_PATH` and `SSH_PORT` also fall back to the older `SSH_REMOTE_PATH` and
 `SSH_PORT` secrets.

@@ -29,6 +29,8 @@
     "doughBallWeightTooltip": "Weight of the dough for a single pizza.",
     "waterPercent": "Water",
     "waterPercentTooltip": "Hydration as a percentage of the flour weight.",
+    "icePercent": "Ice (% of water)",
+    "icePercentTooltip": "How much of the water to weigh out as ice — a percentage of the water, not of the flour. The ice is not extra liquid: it melts in, so the hydration is unchanged. Melting absorbs heat, which keeps the dough cool through a long knead. Around 10 % suits hand kneading; go higher for a mixer or a warm kitchen, or 0 to skip it.",
     "saltPercent": "Salt",
     "saltPercentTooltip": "Percentage of the flour weight. 2–3 % is typical.",
     "fermentationSettings": "Fermentation",
@@ -91,6 +93,7 @@
     "ingredients": {
       "flour": "Flour",
       "water": "Water",
+      "ice": "Ice",
       "salt": "Salt",
       "yeast": "Yeast",
       "oil": "Oil",
@@ -102,7 +105,7 @@
     "totalFermentationTime": "Total fermentation time",
     "instructions": "Instructions",
     "steps": {
-      "knead": "Knead: mix the flour with the water until no dry flour is left, then work in the salt and the yeast. Knead for 10–15 minutes until the dough is smooth, elastic and pulls away from the bowl.",
+      "knead": "Knead: mix the flour with the water and the ice until no dry flour is left, then work in the salt and the yeast. Knead for 10–15 minutes until the dough is smooth, elastic and pulls away from the bowl — the ice keeps it from warming up as you work.",
       "bulk": "Bulk fermentation: cover the dough and let it rise as one piece at {{temp}} for at least {{hours}} h.{{extra}}",
       "cold": "Cold fermentation: put {{what}} in the fridge at {{temp}} for {{hours}} h.",
       "ball": "Shape the balls: divide the dough into {{portions}} equal pieces of {{weight}} and shape each one into a tight ball. Place them in a lightly oiled, covered container, well apart.",
@@ -122,6 +125,7 @@
     },
     "effectiveCold": "Cooling time included, the {{nominal}} h in the fridge behave like {{hours}} h — about {{percent}} % {{direction}} fermentation.",
     "effectiveColdMore": "more",
-    "effectiveColdLess": "less"
+    "effectiveColdLess": "less",
+    "iceNote": "Water and ice together make up the {{total}} of hydration — about {{percent}} % is weighed as ice so the dough stays cool while you knead it."
   }
 }

@@ -6,6 +6,7 @@ import { SelectField } from './SelectField';
 import { RoomTimeSplitField } from './RoomTimeSplitField';
 import {
   BALLING_POINTS,
+  DEFAULT_ICE_PERCENT,
   LIMITS,
   REHYDRATION_TEMP_C,
   PIZZA_STYLES,
@@ -32,6 +33,7 @@ const INITIAL_INPUT: RecipeInput = {
   autoCalculateYeast: true,
   yeastPercent: 0.5,
   bulkFermentHours: MIN_BULK_HOURS,
+  icePercent: DEFAULT_ICE_PERCENT,
   ballingPoint: 'afterCold',
   useThermalModel: true,
 };
@@ -117,6 +119,17 @@ export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
             limits={LIMITS.waterPercent}
             quantity="percent"
             step={0.5}
+          />
+          {/* Percent of the *water*, unlike every other field here, so the
+              denominator is spelled out in the label rather than shown as a
+              bare % that would read as a baker's percentage. */}
+          <NumberField
+            label={t('calculator.icePercent')}
+            tooltip={t('calculator.icePercentTooltip')}
+            value={input.icePercent}
+            onChange={(value) => update('icePercent', value)}
+            limits={LIMITS.icePercent}
+            step={5}
           />
           <NumberField
             label={t('calculator.saltPercent')}

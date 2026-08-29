@@ -28,6 +28,8 @@ export const LIMITS = {
   numberOfPizzas: { min: 1, max: 50 },
   doughBallWeight: { min: 100, max: 500 },
   waterPercent: { min: 50, max: 90 },
+  /** Percent of the water, not of the flour. */
+  icePercent: { min: 0, max: 50 },
   saltPercent: { min: 1, max: 4 },
   yeastPercent: { min: 0.05, max: 3 },
   oilPercent: { min: 0, max: 10 },
@@ -44,6 +46,14 @@ export const BAKE_TEMPS = {
   homeOven: { min: 250, max: 300 },
 } as const satisfies Record<string, Range>;
 
+/**
+ * Default share of the hydration weighed out as ice rather than water. The ice
+ * is not extra water — it melts into the dough — so it only splits how the same
+ * total is weighed. It absorbs heat as it melts, which keeps the dough from
+ * warming up during a long knead.
+ */
+export const DEFAULT_ICE_PERCENT = 10;
+
 /** Water temperature for waking up active dry yeast, in °C. */
 export const REHYDRATION_TEMP_C = 35;
 
@@ -51,6 +61,8 @@ export interface RecipeInput {
   numberOfPizzas: number;
   doughBallWeight: number;
   waterPercent: number;
+  /** Share of the water weighed as ice, in percent of the water. */
+  icePercent: number;
   saltPercent: number;
   oilPercent: number;
   sugarPercent: number;
@@ -75,7 +87,14 @@ export interface RecipeInput {
 export interface Recipe {
   /** Ingredient weights in grams. */
   flour: number;
+  /** Liquid water to weigh out — the hydration minus the ice. */
   water: number;
+  /** Part of the hydration weighed as ice. */
+  ice: number;
+  /** water + ice, i.e. the full hydration. */
+  totalWater: number;
+  /** Share of the water weighed as ice, in percent of the water. */
+  icePercent: number;
   salt: number;
   yeast: number;
   oil?: number;
@@ -112,6 +131,7 @@ export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
     numberOfPizzas: 4,
     doughBallWeight: 230,
     waterPercent: 65,
+    icePercent: DEFAULT_ICE_PERCENT,
     saltPercent: 2.5,
     oilPercent: 0,
     sugarPercent: 0,
@@ -125,6 +145,7 @@ export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
     numberOfPizzas: 4,
     doughBallWeight: 240,
     waterPercent: 62,
+    icePercent: DEFAULT_ICE_PERCENT,
     saltPercent: 2,
     oilPercent: 2,
     sugarPercent: 1,
@@ -138,6 +159,7 @@ export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
     numberOfPizzas: 4,
     doughBallWeight: 150,
     waterPercent: 75,
+    icePercent: DEFAULT_ICE_PERCENT,
     saltPercent: 2.5,
     oilPercent: 1.5,
     sugarPercent: 0,
@@ -151,6 +173,7 @@ export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
     numberOfPizzas: 4,
     doughBallWeight: 250,
     waterPercent: 65,
+    icePercent: DEFAULT_ICE_PERCENT,
     saltPercent: 2.5,
     oilPercent: 0,
     sugarPercent: 0,
@@ -168,6 +191,7 @@ const sanitize = (input: RecipeInput): RecipeInput => ({
   numberOfPizzas: Math.round(clampToRange(input.numberOfPizzas, LIMITS.numberOfPizzas)),
   doughBallWeight: clampToRange(input.doughBallWeight, LIMITS.doughBallWeight),
   waterPercent: clampToRange(input.waterPercent, LIMITS.waterPercent),
+  icePercent: clampToRange(input.icePercent, LIMITS.icePercent),
   saltPercent: clampToRange(input.saltPercent, LIMITS.saltPercent),
   oilPercent: clampToRange(input.oilPercent, LIMITS.oilPercent),
   sugarPercent: clampToRange(input.sugarPercent, LIMITS.sugarPercent),
@@ -228,9 +252,13 @@ export const calculateRecipe = (rawInput: RecipeInput): Recipe => {
     100 + input.waterPercent + input.saltPercent + yeastPercent + input.oilPercent + input.sugarPercent;
   const perPercentPoint = totalDough / percentTotal;
 
+  const totalWater = perPercentPoint * input.waterPercent;
+
   return {
     flour: perPercentPoint * 100,
-    water: perPercentPoint * input.waterPercent,
+    water: totalWater * (1 - input.icePercent / 100),
+    ice: totalWater * (input.icePercent / 100),
+    totalWater,
     salt: perPercentPoint * input.saltPercent,
     yeast: perPercentPoint * yeastPercent,
     oil: input.oilPercent > 0 ? perPercentPoint * input.oilPercent : undefined,
@@ -240,6 +268,7 @@ export const calculateRecipe = (rawInput: RecipeInput): Recipe => {
     numberOfPizzas: input.numberOfPizzas,
     yeastType: input.yeastType,
     yeastPercent,
+    icePercent: input.icePercent,
     coldFermentTime: input.coldFermentTime,
     coldFermentTemp: input.coldFermentTemp,
     roomFermentTime: input.roomFermentTime,
