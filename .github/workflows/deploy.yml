@@ -180,6 +180,18 @@ jobs:
           AddDefaultCharset UTF-8
           DirectoryIndex index.html
 
+          # Send plain HTTP to HTTPS. Both conditions must hold, and that is the
+          # point: if TLS is terminated at a proxy, Apache sees %{HTTPS} as off
+          # even though the visitor is already on HTTPS, and a rule keyed on that
+          # alone would redirect forever. Checking X-Forwarded-Proto as well means
+          # either signal saying "https" stops the redirect.
+          <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteCond %{HTTPS} !=on
+            RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+            RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+          </IfModule>
+
           <IfModule mod_headers.c>
             # Vite fingerprints these as name-HASH.ext, so a given URL never
             # changes meaning and can be cached indefinitely.
