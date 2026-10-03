@@ -10,7 +10,7 @@ import {
   Snowflake,
   type LucideIcon,
 } from 'lucide-react';
-import { roomMinimumsFor, splitRoomFermentation } from '../lib/fermentation';
+import { SOURDOUGH, roomMinimumsFor, splitRoomFermentation } from '../lib/fermentation';
 import {
   formatHours,
   formatQuantity,
@@ -69,7 +69,9 @@ function IngredientList({ rows, compact = false }: { rows: IngredientRow[]; comp
 
 export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
   const { t } = useTranslation();
-  const { preferment } = recipe;
+  const { preferment, starter } = recipe;
+  /** Whatever is built ahead of the final dough: a preferment or the fed starter. */
+  const hasStage = preferment !== undefined || starter !== undefined;
 
   const weight = (grams: number, decimals = 0) =>
     formatQuantity(grams, 'weight', unitSystem, decimals);
@@ -78,7 +80,13 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
   const methodText = (key: string, options?: Record<string, unknown>) =>
     t(`methods.${recipe.method}.${key}`, options ?? {});
 
-  const prefermentRows: IngredientRow[] = preferment
+  const stageRows: IngredientRow[] = starter
+    ? [
+        { key: 'seed', label: t('results.starter.seed'), amount: weight(starter.feed.seed), icon: FlaskConical, color: 'text-amber-600 dark:text-amber-400' },
+        { key: 'flour', label: ingredient('flour'), amount: weight(starter.feed.flour), icon: ChefHat, color: 'text-amber-600 dark:text-amber-400' },
+        { key: 'water', label: ingredient('water'), amount: weight(starter.feed.water), icon: Droplets, color: 'text-blue-600 dark:text-blue-400' },
+      ]
+    : preferment
     ? [
         { key: 'flour', label: ingredient('flour'), amount: weight(preferment.flour), icon: ChefHat, color: 'text-amber-600 dark:text-amber-400' },
         { key: 'water', label: ingredient('water'), amount: weight(preferment.water), icon: Droplets, color: 'text-blue-600 dark:text-blue-400' },
@@ -92,15 +100,18 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
     { key: 'salt', label: ingredient('salt'), amount: weight(recipe.salt, 1), icon: Scale, color: 'text-gray-600 dark:text-gray-300' },
   ];
 
-  // With a preferment the final mix may need no yeast at all.
-  if (!preferment || recipe.yeast > 0) {
+  // With a preferment the final mix may need no yeast at all; sourdough has none.
+  if (!starter && (!preferment || recipe.yeast > 0)) {
     ingredients.push({ key: 'yeast', label: ingredient('yeast'), amount: weight(recipe.yeast, 2), icon: Flame, color: 'text-orange-600 dark:text-orange-400' });
   }
-  if (preferment) {
+  const stageWeight = starter
+    ? starter.weight
+    : preferment && preferment.flour + preferment.water + preferment.yeast;
+  if (stageWeight !== undefined) {
     ingredients.unshift({
       key: 'preferment',
-      label: methodText('label'),
-      amount: weight(preferment.flour + preferment.water + preferment.yeast),
+      label: methodText('ingredient'),
+      amount: weight(stageWeight),
       icon: FlaskConical,
       color: 'text-amber-600 dark:text-amber-400',
     });
@@ -133,7 +144,10 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
   // Shown in the order the dough actually goes through them.
   const timeline: { key: string; label: string; hours: number; tone: Tone; tempC: number }[] = [
     ...(preferment
-      ? [{ key: 'preferment', label: methodText('label'), hours: preferment.timeHours, tone: 'preferment' as const, tempC: preferment.tempC }]
+      ? [{ key: 'preferment', label: methodText('ingredient'), hours: preferment.timeHours, tone: 'preferment' as const, tempC: preferment.tempC }]
+      : []),
+    ...(starter
+      ? [{ key: 'preferment', label: methodText('ingredient'), hours: starter.feedHours, tone: 'preferment' as const, tempC: starter.feedTempC }]
       : []),
     ...(recipe.coldFermentTime > 0
       ? [
@@ -177,6 +191,14 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
     recipe.ballingPoint === 'beforeCold' ? [ballStep, coldStep] : [coldStep, ballStep];
 
   const steps = [
+    starter &&
+      methodText('step', {
+        hours: formatHours(starter.feedHours),
+        temp: temperature(starter.feedTempC),
+        seed: weight(starter.feed.seed),
+        flour: weight(starter.feed.flour),
+        water: weight(starter.feed.water),
+      }),
     preferment &&
       methodText('step', {
         hours: formatHours(preferment.timeHours),
@@ -185,7 +207,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
         water: weight(preferment.water),
         yeast: weight(preferment.yeast, 2),
       }),
-    preferment
+    hasStage
       ? methodText('knead', { yeast: recipe.yeast > 0 ? t('results.steps.andYeast') : '' })
       : t('results.steps.knead'),
     t('results.steps.bulk', {
@@ -224,7 +246,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
               temp: temperature(preferment.tempC),
             })}
           </p>
-          <IngredientList rows={prefermentRows} compact />
+          <IngredientList rows={stageRows} compact />
           <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
             {methodText('yeastNote', {
               percent: round(preferment.yeastPercent, 3),
@@ -234,13 +256,50 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
         </section>
       )}
 
-      {preferment && (
+      {starter && (
+        <section className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
+          <h3 className="flex items-center gap-2 font-bold text-gray-900 dark:text-white">
+            <FlaskConical className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            {t('results.starter.heading')}
+          </h3>
+          <p className="mb-4 mt-1 text-sm text-gray-600 dark:text-gray-300">
+            {t('results.starter.timing', {
+              hours: formatHours(starter.feedHours),
+              temp: temperature(starter.feedTempC),
+              ratio: starter.feed.ratio,
+            })}
+          </p>
+          <IngredientList rows={stageRows} compact />
+          <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+            {t('results.starter.keepNote', { keep: weight(SOURDOUGH.keepGrams) })}
+          </p>
+          {starter.feed.mismatch && (
+            <p className="mt-2 text-xs font-medium text-amber-800 dark:text-amber-200">
+              {t(`results.starter.${starter.feed.mismatch}`, {
+                hours: formatHours(starter.feedHours),
+                peak: formatHours(starter.feed.peakHours),
+              })}
+            </p>
+          )}
+        </section>
+      )}
+
+      {hasStage && (
         <h3 className="mb-4 font-bold text-gray-900 dark:text-white">{t('results.finalDough')}</h3>
       )}
 
       <div className="mb-8">
         <IngredientList rows={ingredients} />
       </div>
+
+      {starter?.limited && (
+        <div className="mb-6 flex gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-100">
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden="true" />
+          <p className="leading-relaxed">
+            {t(`results.starter.limited.${starter.limited}`, { percent: round(starter.percent, 1) })}
+          </p>
+        </div>
+      )}
 
       {surplus && (
         <div className="mb-6 flex gap-3 rounded-lg border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-900/30 dark:text-amber-100">
@@ -258,7 +317,7 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
 
       {recipe.icePercent > 0 && (
         <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
-          {t(preferment ? 'results.iceNoteFinal' : 'results.iceNote', {
+          {t(hasStage ? 'results.iceNoteFinal' : 'results.iceNote', {
             percent: round(recipe.icePercent, 1),
             total: weight(recipe.totalWater),
           })}
@@ -266,7 +325,12 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
       )}
 
       <p className="mb-6 text-xs text-gray-500 dark:text-gray-400">
-        {preferment && recipe.yeast <= 0
+        {starter
+          ? t('results.starter.note', {
+              percent: round(starter.percent, 1),
+              hydration: round(starter.hydration, 0),
+            })
+          : preferment && recipe.yeast <= 0
           ? methodText('noExtraYeast')
           : t(preferment ? 'results.yeastNoteFinal' : 'results.yeastNote', {
               percent: round(recipe.yeastPercent, 3),

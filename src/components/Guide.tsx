@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { BookOpen, HelpCircle } from 'lucide-react';
-import { defaultInputFor, resolveYeastPercent } from '../lib/recipe';
+import { defaultInputFor, resolveStarterPercent, resolveYeastPercent } from '../lib/recipe';
 import {
   PREFERMENTS,
   isPrefermentMethod,
@@ -33,8 +33,8 @@ const DOUGH_SCHEDULES: readonly (readonly [number, number])[] = [
 interface TableRow {
   key: string;
   label: string;
-  fresh: number;
-  instant: number;
+  /** One value per column after the schedule, in percent. */
+  values: number[];
 }
 
 const headingClass = 'mb-3 text-xl font-bold text-gray-900 dark:text-white';
@@ -78,8 +78,10 @@ export function Guide({ method, unitSystem }: GuideProps) {
             hours: formatHours(hours),
             temp: temperature(tempC),
           }),
-          fresh: round(prefermentYeastPercent(method, 'fresh', tempC, hours), 2),
-          instant: round(prefermentYeastPercent(method, 'instant', tempC, hours), 2),
+          values: [
+            round(prefermentYeastPercent(method, 'fresh', tempC, hours), 2),
+            round(prefermentYeastPercent(method, 'instant', tempC, hours), 2),
+          ],
         };
       })
     : DOUGH_SCHEDULES.map(([roomHours, coldHours]) => {
@@ -104,10 +106,20 @@ export function Guide({ method, unitSystem }: GuideProps) {
                   hours: formatHours(roomHours),
                   temp: temperature(TABLE_ROOM_TEMP_C),
                 }),
-          fresh: round(resolveYeastPercent({ ...input, yeastType: 'fresh' }), 2),
-          instant: round(resolveYeastPercent({ ...input, yeastType: 'instant' }), 2),
+          // Sourdough is leavened by the starter, so that is the one figure to give.
+          values:
+            method === 'sourdough'
+              ? [round(resolveStarterPercent(input).percent, 1)]
+              : [
+                  round(resolveYeastPercent({ ...input, yeastType: 'fresh' }), 2),
+                  round(resolveYeastPercent({ ...input, yeastType: 'instant' }), 2),
+                ],
         };
       });
+  const columns =
+    method === 'sourdough'
+      ? [t('guide.yeastTable.starter')]
+      : [t('guide.yeastTable.fresh'), t('guide.yeastTable.instant')];
 
   return (
     <article className="mt-12 rounded-2xl border border-orange-100 bg-white p-8 shadow-xl transition-colors duration-300 dark:border-gray-700 dark:bg-gray-800">
@@ -130,20 +142,22 @@ export function Guide({ method, unitSystem }: GuideProps) {
                 <th scope="col" className="py-2 pr-4 font-semibold">
                   {t('guide.yeastTable.schedule')}
                 </th>
-                <th scope="col" className="py-2 pr-4 text-right font-semibold">
-                  {t('guide.yeastTable.fresh')}
-                </th>
-                <th scope="col" className="py-2 text-right font-semibold">
-                  {t('guide.yeastTable.instant')}
-                </th>
+                {columns.map((column) => (
+                  <th key={column} scope="col" className="py-2 pl-4 text-right font-semibold">
+                    {column}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody className="text-gray-700 dark:text-gray-300">
-              {rows.map(({ key, label, fresh, instant }) => (
+              {rows.map(({ key, label, values }) => (
                 <tr key={key} className="border-b border-gray-100 last:border-0 dark:border-gray-700">
                   <td className="py-2 pr-4">{label}</td>
-                  <td className="py-2 pr-4 text-right tabular-nums">{fresh} %</td>
-                  <td className="py-2 text-right tabular-nums">{instant} %</td>
+                  {values.map((value, index) => (
+                    <td key={index} className="py-2 pl-4 text-right tabular-nums">
+                      {value} %
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>

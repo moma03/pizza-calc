@@ -16,6 +16,7 @@ const SLUGS: Record<Method, Record<Language, string>> = {
   direct: { en: '', de: '' },
   poolish: { en: 'poolish', de: 'poolish' },
   biga: { en: 'biga', de: 'biga' },
+  sourdough: { en: 'sourdough', de: 'sauerteig' },
 };
 
 export interface Route {

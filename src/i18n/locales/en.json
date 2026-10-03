@@ -94,6 +94,46 @@
       ],
       "tableHeading": "How much yeast for a biga?",
       "tableIntro": "Yeast as a percentage of the flour in the biga, for a biga that ripens in the given time, worked out by this calculator."
+    },
+    "sourdough": {
+      "title": "Sourdough Pizza Dough Calculator – starter amount & feeding",
+      "description": "Calculate sourdough pizza dough: how much starter for your fermentation time and temperature, when and how to feed it, and the flour, water and salt in grams. No commercial yeast, with cold fermentation.",
+      "heading": "Sourdough Pizza Calculator",
+      "appName": "Sourdough Pizza Dough Calculator",
+      "guideTitle": "Sourdough pizza dough",
+      "intro": "A sourdough pizza is leavened by a starter instead of commercial yeast. This calculator works out how much ripe starter your schedule needs, tells you when and in what ratio to feed it so it peaks just as you mix, and takes its flour and water off the final dough so the hydration stays exactly as set.",
+      "sections": [
+        {
+          "heading": "How much starter?",
+          "paragraphs": [
+            "The more starter, the faster the dough. For pizza that rests 1–3 days in the fridge, 10–25 % of the flour weight is typical; a dough that ferments for a whole day at room temperature needs only 3–5 %, and a same-day dough 25 % or more in a warm spot.",
+            "The calculator takes the figure from the same fermentation model as the yeast doughs, so time, temperature and the fridge all count the same way. Sourdough varies more than yeast, though — a sluggish starter or a cool kitchen can add hours."
+          ]
+        },
+        {
+          "heading": "Feeding the starter",
+          "paragraphs": [
+            "Use the starter at its peak: doubled or more, domed, full of bubbles and pleasantly sour. The feeding ratio sets when that happens — at 22 °C a 1:1:1 feed peaks after about 6 hours, 1:2:2 after about 9 and 1:4:4 after about 12.",
+            "The warmer, the faster: every 6 °C roughly halves the time. The calculator picks the ratio from how long before mixing you feed it, and builds a little extra for you to keep."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "question": "How much starter goes into sourdough pizza dough?",
+          "answer": "Typically 10–25 % of the flour weight for a dough with a fridge phase, and 3–5 % for 24 hours at room temperature. The calculator works it out from your schedule — with the defaults (24 hours in the fridge) it comes to about 22 %."
+        },
+        {
+          "question": "Can I use a stiff starter (lievito madre)?",
+          "answer": "Yes. Set the starter hydration to around 50 %. Its flour and water are counted in the recipe either way, so the dough keeps exactly the hydration you set."
+        },
+        {
+          "question": "Does sourdough pizza need extra yeast?",
+          "answer": "No. An active starter leavens the dough on its own, and this calculator adds no commercial yeast. If your starter is sluggish, give the dough more time rather than adding yeast."
+        }
+      ],
+      "tableHeading": "How much starter for pizza dough?",
+      "tableIntro": "Ripe starter at 100 % hydration, as a percentage of the flour weight, for common schedules — worked out by this calculator."
     }
   },
   "methods": {
@@ -112,7 +152,8 @@
       "surplus": "The poolish alone brings more leavening than this schedule needs, so no yeast goes into the final dough — and the dough will still be ready early, after about {{hours}} h at room temperature instead of {{planned}} h. Shorten the room-temperature time or use less poolish.",
       "surplusTooShort": "The poolish alone brings more leavening than even the shortest schedule needs, so the dough will be ready early. Use less poolish or add a longer cold phase.",
       "step": "Poolish, {{hours}} h before you mix the dough: stir {{flour}} flour, {{water}} water and {{yeast}} yeast into a smooth batter. Cover and leave at {{temp}} until it has doubled or tripled, is full of bubbles and the dome is just starting to settle.",
-      "knead": "Mix the dough: loosen the poolish in the water and the ice, add the flour{{yeast}} and mix until no dry flour is left, then work in the salt. Knead for 10–15 minutes until the dough is smooth and elastic."
+      "knead": "Mix the dough: loosen the poolish in the water and the ice, add the flour{{yeast}} and mix until no dry flour is left, then work in the salt. Knead for 10–15 minutes until the dough is smooth and elastic.",
+      "ingredient": "Poolish"
     },
     "biga": {
       "label": "Biga",
@@ -125,7 +166,15 @@
       "surplus": "The biga alone brings more leavening than this schedule needs, so no yeast goes into the final dough — and the dough will still be ready early, after about {{hours}} h at room temperature instead of {{planned}} h. Shorten the room-temperature time or use less biga.",
       "surplusTooShort": "The biga alone brings more leavening than even the shortest schedule needs, so the dough will be ready early. Use less biga or add a longer cold phase.",
       "step": "Biga, {{hours}} h before you mix the dough: dissolve {{yeast}} yeast in {{water}} cool water, add {{flour}} flour and mix only until the water is absorbed — a shaggy mass of moist crumbs, not a smooth dough. Cover and leave at {{temp}}. It is ripe when it has grown slightly, looks puffy and smells gently of alcohol and fruit.",
-      "knead": "Mix the dough: tear the biga into small pieces and mix it with most of the water{{yeast}} until it starts to come together. Add the flour, then the salt, and work in the remaining water and the ice a little at a time. Knead until the dough is smooth and elastic."
+      "knead": "Mix the dough: tear the biga into small pieces and mix it with most of the water{{yeast}} until it starts to come together. Add the flour, then the salt, and work in the remaining water and the ice a little at a time. Knead until the dough is smooth and elastic.",
+      "ingredient": "Biga"
+    },
+    "sourdough": {
+      "label": "Sourdough",
+      "ingredient": "Starter",
+      "hint": "No commercial yeast: an active sourdough starter leavens the dough. Gives a deeper, gently tangy flavour and a crisp, blistered crust — and the amount of starter follows from your schedule.",
+      "step": "Feed the starter {{hours}} h before you mix the dough: stir {{seed}} ripe starter with {{flour}} flour and {{water}} water, cover and leave at {{temp}}. It is ready when it has at least doubled, is domed and full of bubbles — use it at its peak.",
+      "knead": "Mix the dough: dissolve the starter in the water and the ice, add the flour and mix until no dry flour is left, then work in the salt. Knead for 10–15 minutes until the dough is smooth and elastic."
     }
   },
   "controls": {
@@ -164,7 +213,17 @@
       "share": "Share of flour",
       "hydration": "Hydration"
     },
+    "starter": {
+      "heading": "Sourdough starter",
+      "percent": "Starter",
+      "percentTooltip": "Ripe starter as a percentage of the total flour weight. 15–25 % is typical for pizza fermented in the fridge; 3–5 % for 24 hours at room temperature.",
+      "hydrationTooltip": "Water in the starter as a percentage of its flour: 100 % for a liquid starter, around 50 % for a stiff one (lievito madre). Its flour and water count towards the recipe's totals.",
+      "feedTemp": "Feeding temperature",
+      "feedHours": "Feed before mixing",
+      "feedHoursTooltip": "How many hours before mixing the dough you feed the starter. The feeding ratio is chosen so it peaks just then: the longer, the bigger the feed."
+    },
     "autoCalculateYeast": "Calculate yeast automatically from time and temperature",
+    "autoCalculateStarter": "Calculate the starter automatically from time and temperature",
     "fermentation": {
       "room": "Room temperature",
       "cold": "Cold (fridge)",
@@ -264,7 +323,20 @@
     "effectiveColdMore": "more",
     "effectiveColdLess": "less",
     "iceNote": "Water and ice together make up the {{total}} of hydration — about {{percent}} % is weighed as ice so the dough stays cool while you knead it.",
-    "iceNoteFinal": "Water and ice together make up the {{total}} added in the final mix — about {{percent}} % is weighed as ice so the dough stays cool while you knead it."
+    "iceNoteFinal": "Water and ice together make up the {{total}} added in the final mix — about {{percent}} % is weighed as ice so the dough stays cool while you knead it.",
+    "starter": {
+      "heading": "1 · Feed the starter",
+      "timing": "{{hours}} h before the final dough, at {{temp}} — a 1 : {{ratio}} : {{ratio}} feed (starter : flour : water).",
+      "seed": "Ripe starter",
+      "keepNote": "This builds {{keep}} more than the dough needs, to keep back for next time.",
+      "tooShort": "Even fed 1:1:1 the starter needs about {{peak}} h to peak — feed it earlier than {{hours}} h before mixing, or keep it somewhere warmer.",
+      "tooLong": "Even fed 1:10:10 the starter peaks after about {{peak}} h, well before {{hours}} h — feed it later, or keep it somewhere cooler.",
+      "note": "Starter: {{percent}} % of the total flour, at {{hydration}} % hydration. Its flour and water are already taken off the final dough.",
+      "limited": {
+        "max": "This schedule is short for sourdough: it would need more starter than the {{percent}} % used here, so the dough may not be ready in time. Allow more time at room temperature, or a warmer spot.",
+        "min": "This schedule is long for sourdough: even {{percent}} % starter may leave the dough over-fermented. Shorten the schedule or keep it cooler."
+      }
+    }
   },
   "guide": {
     "sections": [
@@ -295,7 +367,8 @@
       "fresh": "Fresh yeast",
       "instant": "Instant dry yeast",
       "roomOnly": "{{hours}} h at {{temp}}",
-      "withCold": "{{cold}} h in the fridge at {{coldTemp}} + {{room}} h at {{roomTemp}}"
+      "withCold": "{{cold}} h in the fridge at {{coldTemp}} + {{room}} h at {{roomTemp}}",
+      "starter": "Starter"
     },
     "faq": {
       "heading": "Frequently asked questions",

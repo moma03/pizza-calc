@@ -33,6 +33,7 @@ into them.
 | 🌡️ **Yeast from the schedule** | Derived from time *and* temperature, for fresh, instant or active dry yeast |
 | ❄️ **Cooling correction** | Batch size and bulk-vs-ball retarding feed into the yeast figure — [see below](#-the-fermentation-model) |
 | 🍕 **Style presets** | Neapolitan, New York and Roman, plus a free-form mode |
+| 🧪 **Four dough methods** | Direct, poolish, biga and sourdough — preferment and starter amounts, timings and feeding worked out too ([research and calibration](docs/preferments.md)) |
 | ⏱️ **Your own timings** | A slider splits the room-temperature time either side of the fridge |
 | 🌍 **Bilingual** | German and English, each on its own URL — metric and imperial, everything converts |
 | 🔎 **Prerendered** | Every page ships as static HTML with its text, a worked recipe, structured data and `hreflang` — see [below](#-search-engines) |
@@ -105,7 +106,7 @@ asks for German; an explicit pick in the language switcher wins over that. Old
 src/
 ├── components/      presentational React components
 ├── i18n/            i18next setup + en/de locale files
-├── routes.ts        one page per language (and, later, per method)
+├── routes.ts        one page per language and dough method
 ├── navigation.ts    language preference and redirects
 ├── entry-server.tsx build-time render: page HTML, <head>, sitemap
 └── lib/
@@ -148,9 +149,9 @@ empty `<div>`, so crawlers get the full page without running JavaScript:
 SITE_URL=https://example.com npm run build
 ```
 
-The routes are built to take more methods: biga, poolish and sourdough each get
-their own page per language (`/biga/`, `/de/sauerteig/`, …) — see
-[docs/preferments.md](docs/preferments.md).
+Every dough method has its own page per language — `/`, `/poolish/`, `/biga/`,
+`/sourdough/`, and the same under `/de/` (sourdough as `/de/sauerteig/`) — with its own title, guide, table and
+FAQ. Switching method in the form moves to that page's URL without a reload.
 
 ---
 

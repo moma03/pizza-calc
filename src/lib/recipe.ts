@@ -3,14 +3,18 @@ import {
   MIN_BULK_HOURS,
   MIN_ROOM_HOURS,
   PREFERMENTS,
+  SOURDOUGH,
   YEAST_CONVERSION,
   bulkHoursRange,
   effectiveColdTime,
+  feedingPlan,
   isPrefermentMethod,
   minRoomHours,
   prefermentYeastPercent,
   roomMinimumsFor,
+  starterPercentFor,
   yeastPercentFor,
+  type FeedingPlan,
   type FermentationSchedule,
   type Method,
   type PrefermentMethod,
@@ -74,6 +78,18 @@ export const prefermentShareLimits = (
   return { min: range.min, max: Math.min(range.max, (waterPercent / prefermentHydration) * 100) };
 };
 
+/**
+ * Accepted starter range. Its water cannot exceed the recipe's:
+ * `starter% × h / (100 + h) ≤ water%`.
+ */
+export const starterPercentLimits = (waterPercent: number, starterHydration: number): Range => {
+  const { range } = SOURDOUGH.starterPercent;
+  return {
+    min: range.min,
+    max: Math.min(range.max, (waterPercent * (100 + starterHydration)) / starterHydration),
+  };
+};
+
 /** Oven temperature guidance for the bake step, in °C. */
 export const BAKE_TEMPS = {
   pizzaOven: { min: 430, max: 480 },
@@ -117,11 +133,36 @@ export interface RecipeInput {
   ballingPoint: BallingPoint;
   /** See `Recipe.useThermalModel`. */
   useThermalModel: boolean;
-  /** Preferment settings; ignored by the direct method. See `PrefermentProfile`. */
+  /**
+   * Preferment settings; ignored by the direct method. See `PrefermentProfile`.
+   * For sourdough, hydration, time and temperature describe the starter: its
+   * hydration, and how long before mixing and how warm it is fed.
+   */
   prefermentShare: number;
   prefermentHydration: number;
   prefermentTime: number;
   prefermentTemp: number;
+  /**
+   * Sourdough starter in percent of the total flour, used verbatim when
+   * `autoCalculateYeast` is off.
+   */
+  starterPercent: number;
+}
+
+/** The sourdough starter: how much goes into the dough, and how to build it. */
+export interface Starter {
+  /** Starter weight in grams, as it goes into the final dough. */
+  weight: number;
+  /** Starter weight in percent of the total flour. */
+  percent: number;
+  flour: number;
+  water: number;
+  hydration: number;
+  feed: FeedingPlan;
+  feedHours: number;
+  feedTempC: number;
+  /** Set when the schedule asks for more or less starter than the accepted range. */
+  limited?: 'min' | 'max';
 }
 
 /** The preferment, weighed and mixed before the final dough. */
@@ -156,6 +197,7 @@ export interface Recipe {
   /** All the flour in the recipe, preferment included. */
   totalFlour: number;
   preferment?: Preferment;
+  starter?: Starter;
   /**
    * Set when the ripe preferment alone brings more leavening than the final
    * dough's schedule needs, so no yeast is added and the dough will still be
@@ -204,6 +246,7 @@ type StylePreset = Omit<
   | 'prefermentHydration'
   | 'prefermentTime'
   | 'prefermentTemp'
+  | 'starterPercent'
 >;
 
 export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
@@ -268,9 +311,22 @@ export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
 /** A method's preferment settings at their defaults; the poolish's for `direct`, which ignores them. */
 export const prefermentDefaults = (
   method: Method
-): Pick<RecipeInput, 'prefermentShare' | 'prefermentHydration' | 'prefermentTime' | 'prefermentTemp'> => {
+): Pick<
+  RecipeInput,
+  'prefermentShare' | 'prefermentHydration' | 'prefermentTime' | 'prefermentTemp' | 'starterPercent'
+> => {
+  if (method === 'sourdough') {
+    return {
+      prefermentShare: PREFERMENTS.poolish.share.default,
+      prefermentHydration: SOURDOUGH.hydration.default,
+      prefermentTime: SOURDOUGH.feedHours.default,
+      prefermentTemp: SOURDOUGH.feedTemp.default,
+      starterPercent: SOURDOUGH.starterPercent.default,
+    };
+  }
   const profile = PREFERMENTS[isPrefermentMethod(method) ? method : 'poolish'];
   return {
+    starterPercent: SOURDOUGH.starterPercent.default,
     prefermentShare: profile.share.default,
     prefermentHydration: profile.hydration.default,
     prefermentTime: profile.time.default,
@@ -338,6 +394,20 @@ const sanitize = (input: RecipeInput): RecipeInput => {
     ),
   };
 
+  if (method === 'sourdough') {
+    const hydration = clampToRange(input.prefermentHydration, SOURDOUGH.hydration.range);
+    return {
+      ...clamped,
+      prefermentHydration: hydration,
+      prefermentTime: clampToRange(input.prefermentTime, SOURDOUGH.feedHours.range),
+      prefermentTemp: clampToRange(input.prefermentTemp, SOURDOUGH.feedTemp.range),
+      starterPercent: clampToRange(
+        input.starterPercent,
+        starterPercentLimits(waterPercent, hydration)
+      ),
+    };
+  }
+
   if (!isPrefermentMethod(method)) return clamped;
 
   const profile = PREFERMENTS[method];
@@ -395,11 +465,29 @@ const scheduleDemand = (input: RecipeInput): number =>
 export const resolveYeastPercent = (input: RecipeInput): number => {
   const { autoCalculateYeast, yeastType, coldFermentTime, roomFermentTime } = input;
 
+  if (input.method === 'sourdough') return 0;
   if (!autoCalculateYeast) return input.yeastPercent;
   if (coldFermentTime <= 0 && roomFermentTime <= 0) return DEFAULT_YEAST_PERCENT[yeastType];
 
   const freshPercent = Math.max(0, scheduleDemand(input) - prefermentLeavening(input));
   return freshPercent * YEAST_CONVERSION[yeastType];
+};
+
+/**
+ * The sourdough starter the recipe will use, in percent of the total flour:
+ * derived from the schedule, or as entered. `limited` is set when the derived
+ * figure falls outside the accepted range and had to be clamped.
+ */
+export const resolveStarterPercent = (
+  input: RecipeInput
+): { percent: number; limited?: 'min' | 'max' } => {
+  const limits = starterPercentLimits(input.waterPercent, input.prefermentHydration);
+  if (!input.autoCalculateYeast) return { percent: clampToRange(input.starterPercent, limits) };
+
+  const derived = starterPercentFor(scheduleDemand(input));
+  if (derived > limits.max) return { percent: limits.max, limited: 'max' };
+  if (derived < limits.min) return { percent: limits.min, limited: 'min' };
+  return { percent: derived };
 };
 
 /** How far past the schedule's demand a preferment may go before it is flagged. */
@@ -471,17 +559,40 @@ export const calculateRecipe = (rawInput: RecipeInput): Recipe => {
     tempC: input.prefermentTemp,
   };
 
+  let starter: Starter | undefined;
+  if (input.method === 'sourdough') {
+    const { percent, limited } = resolveStarterPercent(input);
+    const weight = totalFlour * (percent / 100);
+    const hydration = input.prefermentHydration;
+    starter = {
+      weight,
+      percent,
+      flour: weight / (1 + hydration / 100),
+      water: weight - weight / (1 + hydration / 100),
+      hydration,
+      feed: feedingPlan(weight, hydration, input.prefermentTime, input.prefermentTemp),
+      feedHours: input.prefermentTime,
+      feedTempC: input.prefermentTemp,
+      limited,
+    };
+  }
+
+  // What the final mix still needs once the preferment or starter is in.
+  const carriedFlour = preferment?.flour ?? starter?.flour ?? 0;
+  const carriedWater = preferment?.water ?? starter?.water ?? 0;
+
   // Water still to add in the final mix; the ice is a share of that.
-  const totalWater = perPercentPoint * input.waterPercent - (preferment?.water ?? 0);
+  const totalWater = perPercentPoint * input.waterPercent - carriedWater;
 
   return {
     method: input.method,
-    flour: totalFlour - (preferment?.flour ?? 0),
+    flour: totalFlour - carriedFlour,
     water: totalWater * (1 - input.icePercent / 100),
     ice: totalWater * (input.icePercent / 100),
     totalWater,
     totalFlour,
     preferment,
+    starter,
     prefermentSurplus: prefermentMethod ? prefermentSurplus(input) : undefined,
     salt: perPercentPoint * input.saltPercent,
     yeast: perPercentPoint * yeastPercent,

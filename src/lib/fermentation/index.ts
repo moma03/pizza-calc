@@ -21,6 +21,14 @@ export {
   type PrefermentMethod,
   type PrefermentProfile,
 } from './methods';
+export {
+  SOURDOUGH,
+  STARTER_PER_FRESH_YEAST,
+  feedingPlan,
+  peakHours,
+  starterPercentFor,
+  type FeedingPlan,
+} from './sourdough';
 export { coolingTimeConstant, effectiveColdHours, thermalLagFactor } from './thermal';
 export {
   DEFAULT_YEAST_PERCENT,

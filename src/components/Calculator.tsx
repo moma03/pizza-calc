@@ -14,9 +14,11 @@ import {
   defaultInputFor,
   prefermentDefaults,
   prefermentShareLimits,
+  resolveStarterPercent,
   resolveYeastPercent,
   roomTimeLimits,
   scheduleFor,
+  starterPercentLimits,
   yeastPercentLimits,
   type BallingPoint,
   type PizzaStyle,
@@ -26,6 +28,7 @@ import {
 import {
   METHODS,
   PREFERMENTS,
+  SOURDOUGH,
   YEAST_TYPES,
   isPrefermentMethod,
   roomMinimumsFor,
@@ -55,6 +58,7 @@ export function Calculator({
   const { method } = input;
   const roomMinimums = roomMinimumsFor(method);
   const preferment = isPrefermentMethod(method) ? PREFERMENTS[method] : undefined;
+  const isSourdough = method === 'sourdough';
 
   /** Update one field; `numberOfPizzas` is deliberately kept across presets. */
   const update = useCallback(
@@ -208,15 +212,18 @@ export function Calculator({
             {t('calculator.fermentationSettings')}
           </h3>
 
-          <SelectField
-            label={t('calculator.yeastType')}
-            value={input.yeastType}
-            options={yeastOptions}
-            onChange={(value: YeastType) => update('yeastType', value)}
-            hint={t(`calculator.yeastTypes.${input.yeastType}.hint`, {
-              temp: formatQuantity(REHYDRATION_TEMP_C, 'temperature', unitSystem),
-            })}
-          />
+          {/* The starter is the leavening; there is no yeast to choose. */}
+          {!isSourdough && (
+            <SelectField
+              label={t('calculator.yeastType')}
+              value={input.yeastType}
+              options={yeastOptions}
+              onChange={(value: YeastType) => update('yeastType', value)}
+              hint={t(`calculator.yeastTypes.${input.yeastType}.hint`, {
+                temp: formatQuantity(REHYDRATION_TEMP_C, 'temperature', unitSystem),
+              })}
+            />
+          )}
 
           <div className="flex items-center gap-3 rounded-lg border border-blue-100 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-900/20">
             <input
@@ -233,6 +240,9 @@ export function Calculator({
                   yeastPercent: enabled
                     ? current.yeastPercent
                     : round(resolveYeastPercent({ ...current, autoCalculateYeast: true }), 3),
+                  starterPercent: enabled
+                    ? current.starterPercent
+                    : round(resolveStarterPercent({ ...current, autoCalculateYeast: true }).percent, 1),
                 }));
               }}
               className="h-5 w-5 rounded text-blue-600 focus:ring-blue-500"
@@ -241,7 +251,7 @@ export function Calculator({
               htmlFor="autoCalculateYeast"
               className="flex-1 text-sm font-medium text-gray-700 dark:text-gray-300"
             >
-              {t('calculator.autoCalculateYeast')}
+              {t(isSourdough ? 'calculator.autoCalculateStarter' : 'calculator.autoCalculateYeast')}
             </label>
           </div>
 
@@ -298,10 +308,67 @@ export function Calculator({
             </div>
           )}
 
+          {isSourdough && (
+            <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
+              <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <FlaskConical className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                {t('calculator.starter.heading')}
+              </h4>
+              <div className="grid grid-cols-2 gap-4">
+                {!input.autoCalculateYeast && (
+                  <NumberField
+                    compact
+                    label={t('calculator.starter.percent')}
+                    tooltip={t('calculator.starter.percentTooltip')}
+                    value={input.starterPercent}
+                    onChange={(value) => update('starterPercent', value)}
+                    limits={starterPercentLimits(input.waterPercent, input.prefermentHydration)}
+                    quantity="percent"
+                    step={1}
+                  />
+                )}
+                <NumberField
+                  compact
+                  label={t('calculator.preferment.hydration')}
+                  tooltip={t('calculator.starter.hydrationTooltip')}
+                  value={input.prefermentHydration}
+                  onChange={(value) => update('prefermentHydration', value)}
+                  limits={SOURDOUGH.hydration.range}
+                  quantity="percent"
+                  step={5}
+                />
+                <NumberField
+                  compact
+                  label={t('calculator.starter.feedTemp')}
+                  value={input.prefermentTemp}
+                  onChange={(value) => update('prefermentTemp', value)}
+                  limits={SOURDOUGH.feedTemp.range}
+                  quantity="temperature"
+                  unitSystem={unitSystem}
+                  step={1}
+                />
+                <NumberField
+                  compact
+                  label={t('calculator.starter.feedHours')}
+                  tooltip={t('calculator.starter.feedHoursTooltip')}
+                  value={input.prefermentTime}
+                  onChange={(value) => update('prefermentTime', value)}
+                  limits={SOURDOUGH.feedHours.range}
+                  quantity="hours"
+                  step={1}
+                />
+              </div>
+            </div>
+          )}
+
           <div className="space-y-3">
             <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
               <Thermometer className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-              {t(preferment ? 'calculator.fermentation.roomFinal' : 'calculator.fermentation.room')}
+              {t(
+                preferment || isSourdough
+                  ? 'calculator.fermentation.roomFinal'
+                  : 'calculator.fermentation.room'
+              )}
             </h4>
             <div className="grid grid-cols-2 gap-4">
               <NumberField
@@ -401,7 +468,7 @@ export function Calculator({
             </>
           )}
 
-          {!input.autoCalculateYeast && (
+          {!input.autoCalculateYeast && !isSourdough && (
             <NumberField
               label={t('calculator.yeastPercent')}
               tooltip={t(

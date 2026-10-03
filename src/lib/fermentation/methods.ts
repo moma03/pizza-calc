@@ -8,14 +8,15 @@ import { YEAST_CONVERSION, freshYeastFraction, type YeastType } from './yeast';
  * then built on. See `docs/preferments.md` for the sources behind every number
  * below.
  */
-export type Method = 'direct' | 'poolish' | 'biga';
+export type Method = 'direct' | 'poolish' | 'biga' | 'sourdough';
 
-export const METHODS: readonly Method[] = ['direct', 'poolish', 'biga'];
+export const METHODS: readonly Method[] = ['direct', 'poolish', 'biga', 'sourdough'];
 
-export type PrefermentMethod = Exclude<Method, 'direct'>;
+/** Preferments leavened with commercial yeast. Sourdough has its own model, in `sourdough.ts`. */
+export type PrefermentMethod = 'poolish' | 'biga';
 
 export const isPrefermentMethod = (method: Method): method is PrefermentMethod =>
-  method !== 'direct';
+  method === 'poolish' || method === 'biga';
 
 interface Setting {
   readonly default: number;

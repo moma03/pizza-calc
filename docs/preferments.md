@@ -199,7 +199,7 @@ at 44 % hydration yeast is water-limited and ferments much more slowly, and the
 ripeness target is earlier. Use a hydration-dependent factor, calibrated to
 ≈ 2.8 at 45 % and falling towards 1 at 60 %.
 
-### 5.3 Sourdough needs its own solver
+### 5.3 Sourdough needs its own solver (superseded, see §5.6)
 
 The output is not a yeast weight but a **starter share**, and its time
 dependence is logarithmic (§4.2), not a power law. The model is:
@@ -264,6 +264,48 @@ done direct.
 schedule needs, nothing is added. The page then shows the room time that would
 match the preferment (found by bisection on the model), or says that even the
 shortest schedule is too long.
+
+### 5.6 Sourdough, as implemented
+
+The plan in §5.3 was a separate logarithmic solver. Tested against pizza
+practice, it fails at the long end. It puts a 3 % starter at ripe after ~9 h at
+23 °C, while Neapolitan practice uses 3 % for 24 h. Its target is a bread's bulk
+rise, and a pizza dough is taken much further than that.
+
+The existing yeast model, which is already calibrated on pizza schedules, fits
+better through a plain linear mapping:
+
+```
+starter % = 35 × (fresh-yeast % the same schedule needs)
+```
+
+Against the §4.2 bread tables the factor comes out at 15–26, which is expected
+since those stop at a 50–75 % bulk rise. Pizza practice gives about 35: 3 % for
+24 h at 23 °C, and 15–25 % for a 24–48 h fridge schedule. Using the yeast
+model also means the cold phase, the thermal lag and the room-time split all
+apply to sourdough unchanged. Results with the defaults:
+
+| Schedule | Starter |
+|---|---|
+| 6 h at 20 °C | 37 % |
+| 8 h at 20 °C | 24 % |
+| 24 h at 23 °C | 3 % |
+| 24 h fridge + 5 h at 20 °C | 22 % |
+| 48 h fridge + 5 h at 20 °C | 16 % |
+| 72 h fridge + 5 h at 20 °C | 13 % |
+
+Outside 2–50 % the starter is clamped and the page warns that the schedule is
+too short or too long for sourdough.
+
+**Feeding.** Time to peak is fitted to §4.1 as
+`(0.3 + 2.8 · log2(dilution)) / 2^((T − 24) / 6)` hours, where dilution is the
+total ÷ seed weight. At 22 °C that gives 1:1:1 ≈ 6 h, 1:2:2 ≈ 8.6 h and
+1:4:4 ≈ 11.6 h. The calculator inverts this for the lead time you enter and
+rounds to a whole 1 : n : n with n from 1 to 10. It builds the starter the
+dough needs plus 20 g to keep, and flags a lead time that no ratio can match.
+
+The starter's flour and water are taken off the final dough, so the total
+hydration stays exactly as set. That includes a stiff starter at 50 %.
 
 ---
 

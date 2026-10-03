@@ -94,6 +94,46 @@
       ],
       "tableHeading": "Wie viel Hefe für eine Biga?",
       "tableIntro": "Hefe in Prozent des Mehls in der Biga, für eine Biga, die in der angegebenen Zeit reift – berechnet mit diesem Rechner."
+    },
+    "sourdough": {
+      "title": "Sauerteig-Pizza-Rechner – Anstellgut & Fütterung berechnen",
+      "description": "Sauerteig-Pizzateig berechnen: wie viel Anstellgut für deine Gärzeit und Temperatur, wann und wie du den Starter fütterst, dazu Mehl, Wasser und Salz in Gramm. Ohne Hefe, mit Kaltgare.",
+      "heading": "Sauerteig-Pizza-Rechner",
+      "appName": "Sauerteig-Pizzateig-Rechner",
+      "guideTitle": "Pizzateig mit Sauerteig",
+      "intro": "Eine Sauerteig-Pizza wird statt mit Backhefe mit einem Starter gelockert. Dieser Rechner berechnet, wie viel reifes Anstellgut dein Zeitplan braucht, sagt dir, wann und in welchem Verhältnis du den Starter fütterst, damit er beim Kneten auf dem Höhepunkt ist, und zieht sein Mehl und Wasser vom Hauptteig ab – so bleibt die Hydration genau wie eingestellt.",
+      "sections": [
+        {
+          "heading": "Wie viel Anstellgut?",
+          "paragraphs": [
+            "Je mehr Anstellgut, desto schneller der Teig. Für Pizza, die 1–3 Tage im Kühlschrank ruht, sind 10–25 % des Mehlgewichts üblich; ein Teig, der einen ganzen Tag bei Raumtemperatur gärt, braucht nur 3–5 %, ein Teig für denselben Tag an einem warmen Ort 25 % oder mehr.",
+            "Der Rechner bestimmt die Menge mit demselben Gärmodell wie bei den Hefeteigen, sodass Zeit, Temperatur und Kühlschrank gleich berücksichtigt werden. Sauerteig schwankt allerdings stärker als Hefe – ein träger Starter oder eine kühle Küche können Stunden ausmachen."
+          ]
+        },
+        {
+          "heading": "Den Starter füttern",
+          "paragraphs": [
+            "Verwende den Starter auf seinem Höhepunkt: mindestens verdoppelt, gewölbt, voller Blasen und angenehm säuerlich. Das Fütterungsverhältnis bestimmt, wann das ist – bei 22 °C erreicht eine Fütterung 1:1:1 nach etwa 6 Stunden ihren Höhepunkt, 1:2:2 nach etwa 9 und 1:4:4 nach etwa 12.",
+            "Je wärmer, desto schneller: Alle 6 °C halbiert sich die Zeit ungefähr. Der Rechner wählt das Verhältnis danach, wie lange vor dem Kneten du fütterst, und setzt etwas mehr an, das du zurückbehalten kannst."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "question": "Wie viel Anstellgut gehört in Sauerteig-Pizzateig?",
+          "answer": "Meist 10–25 % des Mehlgewichts bei einem Teig mit Kaltgare und 3–5 % für 24 Stunden bei Raumtemperatur. Der Rechner bestimmt die Menge aus deinem Zeitplan – mit den Voreinstellungen (24 Stunden im Kühlschrank) sind es etwa 22 %."
+        },
+        {
+          "question": "Kann ich einen festen Starter (Lievito Madre) verwenden?",
+          "answer": "Ja. Stelle die Hydration des Starters auf etwa 50 %. Sein Mehl und Wasser werden in jedem Fall mitgerechnet, der Teig behält also genau die eingestellte Hydration."
+        },
+        {
+          "question": "Braucht Sauerteig-Pizza zusätzliche Hefe?",
+          "answer": "Nein. Ein aktiver Starter lockert den Teig allein, und dieser Rechner gibt keine Backhefe dazu. Ist dein Starter träge, gib dem Teig lieber mehr Zeit, statt Hefe zuzugeben."
+        }
+      ],
+      "tableHeading": "Wie viel Anstellgut für Pizzateig?",
+      "tableIntro": "Reifes Anstellgut mit 100 % Hydration in Prozent des Mehlgewichts für gängige Zeitpläne – berechnet mit diesem Rechner."
     }
   },
   "methods": {
@@ -112,7 +152,8 @@
       "surplus": "Der Poolish allein bringt mehr Triebkraft mit, als dieser Zeitplan braucht. Deshalb kommt keine Hefe in den Hauptteig – und trotzdem ist der Teig früher fertig, nach etwa {{hours}} h bei Raumtemperatur statt {{planned}} h. Verkürze die Zeit bei Raumtemperatur oder nimm weniger Poolish.",
       "surplusTooShort": "Der Poolish allein bringt mehr Triebkraft mit, als selbst der kürzeste Zeitplan braucht – der Teig ist früher fertig. Nimm weniger Poolish oder plane eine längere Kaltgare ein.",
       "step": "Poolish, {{hours}} h bevor du den Teig knetest: {{flour}} Mehl, {{water}} Wasser und {{yeast}} Hefe zu einem glatten, flüssigen Teig verrühren. Abgedeckt bei {{temp}} stehen lassen, bis er sich verdoppelt bis verdreifacht hat, voller Blasen ist und die Kuppel gerade einzusinken beginnt.",
-      "knead": "Teig mischen: den Poolish im Wasser und dem Eis auflösen, das Mehl{{yeast}} zugeben und mischen, bis kein trockenes Mehl mehr zu sehen ist, dann das Salz einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist."
+      "knead": "Teig mischen: den Poolish im Wasser und dem Eis auflösen, das Mehl{{yeast}} zugeben und mischen, bis kein trockenes Mehl mehr zu sehen ist, dann das Salz einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist.",
+      "ingredient": "Poolish"
     },
     "biga": {
       "label": "Biga",
@@ -125,7 +166,15 @@
       "surplus": "Die Biga allein bringt mehr Triebkraft mit, als dieser Zeitplan braucht. Deshalb kommt keine Hefe in den Hauptteig – und trotzdem ist der Teig früher fertig, nach etwa {{hours}} h bei Raumtemperatur statt {{planned}} h. Verkürze die Zeit bei Raumtemperatur oder nimm weniger Biga.",
       "surplusTooShort": "Die Biga allein bringt mehr Triebkraft mit, als selbst der kürzeste Zeitplan braucht – der Teig ist früher fertig. Nimm weniger Biga oder plane eine längere Kaltgare ein.",
       "step": "Biga, {{hours}} h bevor du den Teig knetest: {{yeast}} Hefe in {{water}} kühlem Wasser auflösen, {{flour}} Mehl zugeben und nur so lange mischen, bis das Wasser aufgenommen ist – eine grobe, feuchte Krümelmasse, kein glatter Teig. Abgedeckt bei {{temp}} reifen lassen. Reif ist sie, wenn sie etwas aufgegangen ist, die Krümel aufgebläht aussehen und sie leicht nach Alkohol und Frucht riecht.",
-      "knead": "Teig mischen: die Biga in kleine Stücke reißen und mit dem Großteil des Wassers{{yeast}} mischen, bis sie sich zu verbinden beginnt. Das Mehl zugeben, dann das Salz, und das restliche Wasser und das Eis nach und nach einarbeiten. Kneten, bis der Teig glatt und elastisch ist."
+      "knead": "Teig mischen: die Biga in kleine Stücke reißen und mit dem Großteil des Wassers{{yeast}} mischen, bis sie sich zu verbinden beginnt. Das Mehl zugeben, dann das Salz, und das restliche Wasser und das Eis nach und nach einarbeiten. Kneten, bis der Teig glatt und elastisch ist.",
+      "ingredient": "Biga"
+    },
+    "sourdough": {
+      "label": "Sauerteig",
+      "ingredient": "Anstellgut",
+      "hint": "Ohne Backhefe: Ein aktiver Sauerteig-Starter lockert den Teig. Ergibt ein tieferes, leicht säuerliches Aroma und einen knusprigen, blasigen Rand – die Menge Anstellgut ergibt sich aus deinem Zeitplan.",
+      "step": "Den Starter {{hours}} h vor dem Kneten füttern: {{seed}} reifen Starter mit {{flour}} Mehl und {{water}} Wasser verrühren, abdecken und bei {{temp}} stehen lassen. Er ist bereit, wenn er sich mindestens verdoppelt hat, gewölbt und voller Blasen ist – auf dem Höhepunkt verwenden.",
+      "knead": "Teig mischen: das Anstellgut im Wasser und dem Eis auflösen, das Mehl zugeben und mischen, bis kein trockenes Mehl mehr zu sehen ist, dann das Salz einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist."
     }
   },
   "controls": {
@@ -164,7 +213,17 @@
       "share": "Mehlanteil",
       "hydration": "Hydration"
     },
+    "starter": {
+      "heading": "Sauerteig-Starter",
+      "percent": "Anstellgut",
+      "percentTooltip": "Reifes Anstellgut in Prozent des gesamten Mehlgewichts. 15–25 % sind für Pizza mit Kaltgare üblich, 3–5 % für 24 Stunden bei Raumtemperatur.",
+      "hydrationTooltip": "Wasser im Starter in Prozent seines Mehls: 100 % für einen flüssigen Starter, etwa 50 % für einen festen (Lievito Madre). Sein Mehl und Wasser zählen zur Gesamtmenge des Rezepts.",
+      "feedTemp": "Temperatur beim Füttern",
+      "feedHours": "Füttern vor dem Kneten",
+      "feedHoursTooltip": "Wie viele Stunden vor dem Kneten du den Starter fütterst. Das Fütterungsverhältnis wird so gewählt, dass er genau dann seinen Höhepunkt erreicht: je länger, desto größer die Fütterung."
+    },
     "autoCalculateYeast": "Hefe automatisch aus Zeit und Temperatur berechnen",
+    "autoCalculateStarter": "Anstellgut automatisch aus Zeit und Temperatur berechnen",
     "fermentation": {
       "room": "Raumtemperatur",
       "cold": "Kalt (Kühlschrank)",
@@ -264,7 +323,20 @@
     "effectiveColdMore": "mehr",
     "effectiveColdLess": "weniger",
     "iceNote": "Wasser und Eis ergeben zusammen die {{total}} Schüttflüssigkeit – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt.",
-    "iceNoteFinal": "Wasser und Eis ergeben zusammen die {{total}}, die in den Hauptteig kommen – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt."
+    "iceNoteFinal": "Wasser und Eis ergeben zusammen die {{total}}, die in den Hauptteig kommen – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt.",
+    "starter": {
+      "heading": "1 · Starter füttern",
+      "timing": "{{hours}} h vor dem Hauptteig, bei {{temp}} – Fütterung 1 : {{ratio}} : {{ratio}} (Starter : Mehl : Wasser).",
+      "seed": "Reifer Starter",
+      "keepNote": "Das ergibt {{keep}} mehr, als der Teig braucht – zum Zurückbehalten für das nächste Mal.",
+      "tooShort": "Selbst bei 1:1:1 braucht der Starter etwa {{peak}} h bis zum Höhepunkt – füttere ihn früher als {{hours}} h vor dem Kneten oder stelle ihn wärmer.",
+      "tooLong": "Selbst bei 1:10:10 erreicht der Starter schon nach etwa {{peak}} h seinen Höhepunkt, deutlich vor {{hours}} h – füttere ihn später oder stelle ihn kühler.",
+      "note": "Anstellgut: {{percent}} % des gesamten Mehls bei {{hydration}} % Hydration. Sein Mehl und Wasser sind beim Hauptteig schon abgezogen.",
+      "limited": {
+        "max": "Dieser Zeitplan ist für Sauerteig knapp: Er bräuchte mehr Anstellgut als die hier verwendeten {{percent}} %, der Teig wird also womöglich nicht rechtzeitig fertig. Plane mehr Zeit bei Raumtemperatur oder einen wärmeren Ort ein.",
+        "min": "Dieser Zeitplan ist für Sauerteig lang: Selbst mit {{percent}} % Anstellgut kann der Teig übergären. Verkürze den Zeitplan oder halte ihn kühler."
+      }
+    }
   },
   "guide": {
     "sections": [
@@ -295,7 +367,8 @@
       "fresh": "Frischhefe",
       "instant": "Instant-Trockenhefe",
       "roomOnly": "{{hours}} h bei {{temp}}",
-      "withCold": "{{cold}} h im Kühlschrank bei {{coldTemp}} + {{room}} h bei {{roomTemp}}"
+      "withCold": "{{cold}} h im Kühlschrank bei {{coldTemp}} + {{room}} h bei {{roomTemp}}",
+      "starter": "Anstellgut"
     },
     "faq": {
       "heading": "Häufige Fragen",
