@@ -1,7 +1,14 @@
 {
   "nav": {
-    "title": "Pizza Calculator",
     "subtitle": "Work out dough, yeast and timings for the perfect pizza"
+  },
+  "pages": {
+    "direct": {
+      "title": "Pizza Dough Calculator – yeast from time & temperature",
+      "description": "Free pizza dough calculator: flour, water, salt and yeast in grams, with the yeast worked out from your fermentation time and temperature. Neapolitan, New York and Roman presets, cold fermentation, metric and imperial.",
+      "heading": "Pizza Dough Calculator",
+      "appName": "Pizza Dough Calculator"
+    }
   },
   "controls": {
     "language": "Language",
@@ -128,9 +135,71 @@
     "effectiveColdLess": "less",
     "iceNote": "Water and ice together make up the {{total}} of hydration — about {{percent}} % is weighed as ice so the dough stays cool while you knead it."
   },
+  "guide": {
+    "title": "How the pizza dough calculator works",
+    "intro": "Most dough recipes fix the amount of yeast and leave you to fit your day around it. This calculator works the other way round: you say how long the dough has and how warm it will be, and it works out the yeast that makes the dough ready on time. Everything else follows from the number of pizzas, the weight of each dough ball and the dough's baker's percentages.",
+    "sections": [
+      {
+        "heading": "Baker's percentages",
+        "paragraphs": [
+          "Every ingredient is given as a percentage of the flour weight, with the flour itself at 100 %. A Neapolitan dough at 65 % hydration and 2.5 % salt uses 650 g of water and 25 g of salt for each kilogram of flour.",
+          "To get from there to grams, the calculator adds up all the percentages and divides the total dough weight — pizzas × ball weight — by that sum. That gives the flour, and every other ingredient is the flour times its percentage."
+        ]
+      },
+      {
+        "heading": "Yeast from time and temperature",
+        "paragraphs": [
+          "Yeast works faster the warmer it is and the longer it has, so the same dough can need ten times more yeast for a same-day bake than for a three-day cold ferment. The calculator models the room-temperature hours and the fridge hours separately and combines them, so any mix of the two gives a sensible amount.",
+          "Fresh, instant and active dry yeast are converted automatically: instant dry yeast is about 40 % of the fresh-yeast weight, active dry yeast about 50 %."
+        ]
+      },
+      {
+        "heading": "Cold fermentation in the fridge",
+        "paragraphs": [
+          "A long, cold rest builds flavour and makes the dough easier to stretch, without it over-proving. The fridge does not stop fermentation though: the dough takes hours to cool down, and it keeps working while it does.",
+          "How long depends on its size. A whole batch retarded in one piece cools much more slowly than the same dough divided into balls, so it banks more fermentation on the way down and needs a little less yeast. The calculator accounts for this when it is switched on."
+        ]
+      }
+    ],
+    "yeastTable": {
+      "heading": "How much yeast for pizza dough?",
+      "intro": "Yeast as a percentage of the flour weight for common schedules, worked out by this calculator for a batch of four Neapolitan dough balls.",
+      "schedule": "Schedule",
+      "fresh": "Fresh yeast",
+      "instant": "Instant dry yeast",
+      "roomOnly": "{{hours}} h at {{temp}}",
+      "withCold": "{{cold}} h in the fridge at {{coldTemp}} + {{room}} h at {{roomTemp}}"
+    },
+    "faq": {
+      "heading": "Frequently asked questions",
+      "items": [
+        {
+          "question": "How long should pizza dough ferment?",
+          "answer": "A same-day dough needs at least 5 hours at room temperature. Most pizzerias ferment for 24 to 72 hours with most of that time in the fridge, which gives more flavour and a dough that is easier to stretch. Choose the schedule that fits your day, and the calculator sets the yeast to match."
+        },
+        {
+          "question": "What hydration should pizza dough have?",
+          "answer": "Neapolitan dough is usually around 60–65 % water, New York style around 60–63 % with a little oil and sugar, and Roman-style pizza 70–80 %. Higher hydration gives a lighter, more open crust but is stickier to handle."
+        },
+        {
+          "question": "How do I convert fresh yeast to dry yeast?",
+          "answer": "Use about 40 % of the fresh-yeast weight for instant dry yeast and about 50 % for active dry yeast. 10 g of fresh yeast becomes about 4 g instant or 5 g active dry. Pick the yeast type in the calculator and it converts for you."
+        },
+        {
+          "question": "Should the dough go into the fridge in one piece or as balls?",
+          "answer": "Both work. In one piece the dough cools slowly and keeps fermenting for hours on the way down, so it needs slightly less yeast and is shaped after the fridge. As balls it chills faster, needs slightly more yeast, and can go straight from the fridge to the final proof."
+        },
+        {
+          "question": "Why add ice to pizza dough?",
+          "answer": "Kneading warms the dough, and warm dough ferments faster than planned. Weighing part of the water as ice keeps it cool. The ice is not extra water — the hydration stays the same — and about 10 % of the water is enough for hand kneading."
+        }
+      ]
+    }
+  },
   "footer": {
     "source": "Source on GitHub",
     "license": "MIT licence",
     "privacy": "No cookies, no tracking, no analytics, and no external fonts or scripts. The calculator runs entirely in your browser — nothing you enter is ever sent to a server. The only thing kept is your chosen language and unit system, saved in this browser so the page remembers them; clearing your site data removes them again."
-  }
+  },
+  "noscript": "This pizza dough calculator needs JavaScript to recalculate. It works out flour, water, salt and yeast in grams from the number of pizzas and the fermentation time and temperature you give it."
 }

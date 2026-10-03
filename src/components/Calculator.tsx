@@ -6,7 +6,7 @@ import { SelectField } from './SelectField';
 import { RoomTimeSplitField } from './RoomTimeSplitField';
 import {
   BALLING_POINTS,
-  DEFAULT_ICE_PERCENT,
+  DEFAULT_INPUT,
   LIMITS,
   REHYDRATION_TEMP_C,
   PIZZA_STYLES,
@@ -27,21 +27,10 @@ interface CalculatorProps {
   unitSystem: UnitSystem;
 }
 
-const INITIAL_INPUT: RecipeInput = {
-  ...STYLE_PRESETS.neapolitan,
-  yeastType: 'fresh',
-  autoCalculateYeast: true,
-  yeastPercent: 0.5,
-  bulkFermentHours: MIN_BULK_HOURS,
-  icePercent: DEFAULT_ICE_PERCENT,
-  ballingPoint: 'afterCold',
-  useThermalModel: true,
-};
-
 export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
   const { t } = useTranslation();
   const [pizzaStyle, setPizzaStyle] = useState<PizzaStyle>('neapolitan');
-  const [input, setInput] = useState<RecipeInput>(INITIAL_INPUT);
+  const [input, setInput] = useState<RecipeInput>(DEFAULT_INPUT);
 
   /** Update one field; `numberOfPizzas` is deliberately kept across presets. */
   const update = useCallback(

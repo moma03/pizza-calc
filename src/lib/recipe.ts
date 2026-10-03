@@ -185,6 +185,16 @@ export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
   },
 };
 
+/** What the calculator opens with, and what the prerendered page shows. */
+export const DEFAULT_INPUT: RecipeInput = {
+  ...STYLE_PRESETS.neapolitan,
+  yeastType: 'fresh',
+  autoCalculateYeast: true,
+  yeastPercent: 0.5,
+  ballingPoint: 'afterCold',
+  useThermalModel: true,
+};
+
 /** Clamp every numeric input into its accepted range. */
 const sanitize = (input: RecipeInput): RecipeInput => ({
   ...input,

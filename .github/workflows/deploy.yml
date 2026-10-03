@@ -67,9 +67,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # The build prerenders one page per language and route; with SITE_URL it
+      # also writes canonical/hreflang tags and sitemap.xml (scripts/prerender.mjs).
       - name: Build
         env:
           BASE_PATH: ${{ vars.BASE_PATH || '/' }}
+          SITE_URL: ${{ vars.SITE_URL }}
         run: npm run build
 
       - name: Write release manifest
@@ -120,58 +123,13 @@ jobs:
           set -euo pipefail
           { [ -n "${SSH_PRIVATE_KEY:-}" ] && echo "has_key=true" || echo "has_key=false"; } >> "$GITHUB_OUTPUT"
 
-      # Search engines need an absolute URL, which only exists once the site has
-      # a domain — so these are generated here rather than committed.
-      - name: Write sitemap and canonical URL
-        if: vars.SITE_URL != ''
-        env:
-          SITE_URL: ${{ vars.SITE_URL }}
-        run: |
-          set -euo pipefail
-          BASE="${SITE_URL%/}"
-          TODAY="$(date -u +%Y-%m-%d)"
-
-          cat > dist/sitemap.xml <<EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-                  xmlns:xhtml="http://www.w3.org/1999/xhtml">
-            <url>
-              <loc>${BASE}/</loc>
-              <lastmod>${TODAY}</lastmod>
-              <xhtml:link rel="alternate" hreflang="en" href="${BASE}/?lng=en"/>
-              <xhtml:link rel="alternate" hreflang="de" href="${BASE}/?lng=de"/>
-              <xhtml:link rel="alternate" hreflang="x-default" href="${BASE}/"/>
-            </url>
-          </urlset>
-          EOF
-
-          printf '\nSitemap: %s/sitemap.xml\n' "$BASE" >> dist/robots.txt
-
-          # A canonical URL stops ?lng= variants being treated as duplicates.
-          python3 - "$BASE" <<'PY'
-          import sys, io
-          base = sys.argv[1]
-          path = 'dist/index.html'
-          html = io.open(path, encoding='utf-8').read()
-          tags = (
-              f'<link rel="canonical" href="{base}/" />\n'
-              f'    <link rel="alternate" hreflang="en" href="{base}/?lng=en" />\n'
-              f'    <link rel="alternate" hreflang="de" href="{base}/?lng=de" />\n'
-              f'    <link rel="alternate" hreflang="x-default" href="{base}/" />\n'
-              '    <meta property="og:url" content="' + base + '/" />\n    </head>'
-          )
-          assert '</head>' in html, 'no </head> in built index.html'
-          io.open(path, 'w', encoding='utf-8').write(html.replace('</head>', tags, 1))
-          PY
-
-          echo "--- sitemap.xml ---"; cat dist/sitemap.xml
-          echo "--- robots.txt ---";  cat dist/robots.txt
-
       # Without this Apache sends no Cache-Control at all and browsers fall back
       # to heuristic caching — which would let a stale index.html survive a
       # deploy or a rollback, pointing at asset filenames that `mirror --delete`
       # has already removed.
       - name: Write Apache configuration
+        env:
+          BASE_PATH: ${{ vars.BASE_PATH || '/' }}
         run: |
           set -euo pipefail
           cat > dist/.htaccess <<'EOF'
@@ -190,6 +148,13 @@ jobs:
             RewriteCond %{HTTPS} !=on
             RewriteCond %{HTTP:X-Forwarded-Proto} !=https
             RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+            # Each language used to be the same page with ?lng=; it now has its
+            # own URL. Send old links there permanently, dropping the query.
+            RewriteCond %{QUERY_STRING} (^|&)lng=de [NC]
+            RewriteRule ^(index\.html)?$ __BASE_PATH__de/ [R=301,L,QSD]
+            RewriteCond %{QUERY_STRING} (^|&)lng=en [NC]
+            RewriteRule ^(index\.html)?$ __BASE_PATH__ [R=301,L,QSD]
           </IfModule>
 
           <IfModule mod_headers.c>
@@ -201,7 +166,7 @@ jobs:
 
             # Files copied from public/ are NOT fingerprinted, so cache them
             # only briefly or a replacement would never reach anyone.
-            <FilesMatch "\.(svg|png|ico|webmanifest|woff2?)$">
+            <FilesMatch "\.(svg|png|jpe?g|ico|webmanifest|woff2?)$">
               Header set Cache-Control "public, max-age=86400"
             </FilesMatch>
 
@@ -243,6 +208,9 @@ jobs:
             </IfModule>
           </FilesMatch>
           EOF
+          # Substituted here rather than expanded in the heredoc, whose $
+          # anchors and %{} variables belong to Apache.
+          sed -i "s|__BASE_PATH__|${BASE_PATH%/}/|g" dist/.htaccess
 
       - name: Install lftp
         run: |
@@ -326,6 +294,8 @@ jobs:
           CURL=(curl --fail --silent --show-error --location --retry 3 --retry-delay 5)
 
           "${CURL[@]}" -o /dev/null "${SITE_URL%/}/"
+          "${CURL[@]}" -o /dev/null "${SITE_URL%/}/de/"
+          "${CURL[@]}" -o /dev/null "${SITE_URL%/}/sitemap.xml"
 
           LIVE=$("${CURL[@]}" "${SITE_URL%/}/release.json")
           echo "$LIVE"

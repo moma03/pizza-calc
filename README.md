@@ -34,7 +34,8 @@ into them.
 | ❄️ **Cooling correction** | Batch size and bulk-vs-ball retarding feed into the yeast figure — [see below](#-the-fermentation-model) |
 | 🍕 **Style presets** | Neapolitan, New York and Roman, plus a free-form mode |
 | ⏱️ **Your own timings** | A slider splits the room-temperature time either side of the fridge |
-| 🌍 **Bilingual** | German and English, metric and imperial, everything converts |
+| 🌍 **Bilingual** | German and English, each on its own URL — metric and imperial, everything converts |
+| 🔎 **Prerendered** | Every page ships as static HTML with its text, a worked recipe, structured data and `hreflang` — see [below](#-search-engines) |
 | 🧊 **Ice in the mix** | A share of the hydration weighed as ice, adjustable, to keep the dough cool while kneading |
 | 🌙 **Dark mode** | Follows the system setting |
 
@@ -82,7 +83,7 @@ npm run dev
 | script | what it does |
 |---|---|
 | `npm run dev` | dev server on :5173 |
-| `npm run build` | production build into `dist/` |
+| `npm run build` | production build into `dist/`, prerendered per page |
 | `npm run typecheck` | `tsc`, including the translation completeness check |
 | `npm run lint` | eslint |
 
@@ -93,7 +94,10 @@ against it with `satisfies` in [`src/i18n/index.ts`](src/i18n/index.ts). A missi
 or misspelt German key **fails `npm run typecheck`** rather than silently falling
 back to English.
 
-Append `?lng=de` or `?lng=en` to the URL to force a language.
+Each language is its own page: English at `/`, German at `/de/`. The English
+page doubles as the `x-default` and forwards first-time visitors whose browser
+asks for German; an explicit pick in the language switcher wins over that. Old
+`?lng=de` links are 301-redirected to `/de/`.
 
 ### Layout
 
@@ -101,6 +105,9 @@ Append `?lng=de` or `?lng=en` to the URL to force a language.
 src/
 ├── components/      presentational React components
 ├── i18n/            i18next setup + en/de locale files
+├── routes.ts        one page per language (and, later, per method)
+├── navigation.ts    language preference and redirects
+├── entry-server.tsx build-time render: page HTML, <head>, sitemap
 └── lib/
     ├── math.ts      clamping, rounding, interpolation, table lookup
     ├── units.ts     metric ⇄ imperial conversion and formatting
@@ -109,11 +116,41 @@ src/
                      factor tables, yeast maths, room schedule,
                      cooling-curve correction
 docs/
-└── fermentation-model.md
+├── fermentation-model.md
+└── preferments.md   research for biga, poolish and sourdough
+scripts/
+└── prerender.mjs    writes the static pages after `vite build`
 ```
 
 Everything in `lib/` works in metric base units — grams, °C, hours. Conversion to
 whatever unit system is on screen happens only in the components.
+
+---
+
+## 🔎 Search engines
+
+`npm run build` runs Vite twice — the client bundle, then an SSR build of
+[`src/entry-server.tsx`](src/entry-server.tsx) — and
+[`scripts/prerender.mjs`](scripts/prerender.mjs) renders every route in
+[`src/routes.ts`](src/routes.ts) into its own `index.html` (`dist/`,
+`dist/de/`). The browser then hydrates that markup instead of starting from an
+empty `<div>`, so crawlers get the full page without running JavaScript:
+
+- the calculator with a complete default recipe, plus a guide, a yeast table
+  computed by the model, and an FAQ under it
+- a localised `<title>`, description, Open Graph tags and `<html lang>`
+- `WebApplication` and `FAQPage` structured data
+- with `SITE_URL` set: `rel=canonical`, `hreflang` alternates (including
+  `x-default`), `og:url`/`og:image`, and a `sitemap.xml` referenced from
+  `robots.txt`
+
+```bash
+SITE_URL=https://example.com npm run build
+```
+
+The routes are built to take more methods: biga, poolish and sourdough each get
+their own page per language (`/biga/`, `/de/sauerteig/`, …) — see
+[docs/preferments.md](docs/preferments.md).
 
 ---
 
@@ -145,11 +182,13 @@ build artifact and expires after 90 days.
 The deploy writes an `.htaccess` alongside the build. It sets long-lived
 `immutable` caching on Vite's fingerprinted assets, `no-cache` on `index.html`
 and `release.json` — without which a stale entry point could survive a rollback
-and point at asset files `--delete` has already removed — plus gzip, UTF-8 and a
-deny rule for `.ht*`. Every directive is wrapped in an `<IfModule>` guard, so it
+and point at asset files `--delete` has already removed — plus gzip, UTF-8, a
+deny rule for `.ht*`, and 301s from the old `?lng=` URLs to the per-language
+pages. Every directive is wrapped in an `<IfModule>` guard, so it
 degrades safely on a server missing any of them.
 
-The app has no client-side router, so no rewrite rules are needed. The site is
+The app has no client-side router: every page is a real directory with its own
+`index.html`, so no fallback rewrite is needed. The site is
 served publicly with no HTTP auth, so search engines can reach it.
 
 > [!WARNING]
@@ -178,7 +217,7 @@ Repository **variables**:
 | `REMOTE_PATH` | — | target directory on the server (**required**) |
 | `SSH_PORT` | `22` | SSH port |
 | `BASE_PATH` | `/` | set to e.g. `/pizza-calc/` when serving from a subdirectory |
-| `SITE_URL` | — | your public URL. Enables the sitemap, `rel=canonical` and `hreflang` tags, and an HTTP check after deploying. Set this before submitting to Google |
+| `SITE_URL` | — | your public URL, including `BASE_PATH`. Passed to the build for the sitemap, `rel=canonical`, `hreflang` and Open Graph URLs, and used for an HTTP check after deploying. Set this before submitting to Google |
 
 `REMOTE_PATH` and `SSH_PORT` also fall back to the older `SSH_REMOTE_PATH` and
 `SSH_PORT` secrets.

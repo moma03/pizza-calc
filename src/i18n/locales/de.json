@@ -1,7 +1,14 @@
 {
   "nav": {
-    "title": "Pizza-Rechner",
     "subtitle": "Teig, Hefe und Zeiten für die perfekte Pizza berechnen"
+  },
+  "pages": {
+    "direct": {
+      "title": "Pizzateig-Rechner – Hefemenge aus Zeit & Temperatur",
+      "description": "Kostenloser Pizzateig-Rechner: Mehl, Wasser, Salz und Hefe in Gramm, die Hefemenge berechnet aus Gärzeit und Temperatur. Neapolitanisch, New York und Römisch, mit Kaltgare im Kühlschrank.",
+      "heading": "Pizzateig-Rechner",
+      "appName": "Pizzateig-Rechner"
+    }
   },
   "controls": {
     "language": "Sprache",
@@ -128,9 +135,71 @@
     "effectiveColdLess": "weniger",
     "iceNote": "Wasser und Eis ergeben zusammen die {{total}} Schüttflüssigkeit – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt."
   },
+  "guide": {
+    "title": "So funktioniert der Pizzateig-Rechner",
+    "intro": "Die meisten Teigrezepte legen die Hefemenge fest, und du musst deinen Tag danach planen. Dieser Rechner geht den umgekehrten Weg: Du gibst an, wie viel Zeit der Teig hat und wie warm es ist, und er berechnet die Hefemenge, mit der der Teig pünktlich fertig ist. Alles andere ergibt sich aus der Anzahl der Pizzen, dem Gewicht der Teigkugeln und den Bäckerprozenten.",
+    "sections": [
+      {
+        "heading": "Bäckerprozente",
+        "paragraphs": [
+          "Jede Zutat wird als Prozentsatz des Mehlgewichts angegeben, das Mehl selbst zählt als 100 %. Ein neapolitanischer Teig mit 65 % Hydration und 2,5 % Salz braucht also 650 g Wasser und 25 g Salz pro Kilogramm Mehl.",
+          "Für die Grammangaben addiert der Rechner alle Prozentsätze und teilt das gesamte Teiggewicht – Pizzen × Kugelgewicht – durch diese Summe. Das ergibt das Mehl, und jede weitere Zutat ist das Mehl mal ihr Prozentsatz."
+        ]
+      },
+      {
+        "heading": "Hefe aus Zeit und Temperatur",
+        "paragraphs": [
+          "Hefe arbeitet umso schneller, je wärmer es ist und je länger sie Zeit hat. Derselbe Teig kann für das Backen am selben Tag die zehnfache Hefemenge brauchen wie für eine dreitägige Kaltgare. Der Rechner betrachtet die Stunden bei Raumtemperatur und im Kühlschrank getrennt und verrechnet sie, sodass jede Kombination eine sinnvolle Menge ergibt.",
+          "Frischhefe, Instant-Trockenhefe und aktive Trockenhefe werden automatisch umgerechnet: Instant-Trockenhefe ist etwa 40 % der Frischhefe-Menge, aktive Trockenhefe etwa 50 %."
+        ]
+      },
+      {
+        "heading": "Kaltgare im Kühlschrank",
+        "paragraphs": [
+          "Eine lange, kalte Ruhezeit bringt Aroma und macht den Teig dehnbarer, ohne dass er übergärt. Der Kühlschrank stoppt die Gärung aber nicht sofort: Der Teig braucht Stunden, um abzukühlen, und arbeitet währenddessen weiter.",
+          "Wie lange, hängt von seiner Größe ab. Ein ganzer Teig am Stück kühlt viel langsamer ab als derselbe Teig in Kugeln, gärt auf dem Weg nach unten also länger und braucht etwas weniger Hefe. Der Rechner berücksichtigt das, wenn die Option eingeschaltet ist."
+        ]
+      }
+    ],
+    "yeastTable": {
+      "heading": "Wie viel Hefe für Pizzateig?",
+      "intro": "Hefe in Prozent des Mehlgewichts für gängige Zeitpläne, berechnet mit diesem Rechner für vier neapolitanische Teigkugeln.",
+      "schedule": "Zeitplan",
+      "fresh": "Frischhefe",
+      "instant": "Instant-Trockenhefe",
+      "roomOnly": "{{hours}} h bei {{temp}}",
+      "withCold": "{{cold}} h im Kühlschrank bei {{coldTemp}} + {{room}} h bei {{roomTemp}}"
+    },
+    "faq": {
+      "heading": "Häufige Fragen",
+      "items": [
+        {
+          "question": "Wie lange sollte Pizzateig gehen?",
+          "answer": "Ein Teig für denselben Tag braucht mindestens 5 Stunden bei Raumtemperatur. Die meisten Pizzerien lassen ihn 24 bis 72 Stunden gehen, den Großteil davon im Kühlschrank – das bringt mehr Aroma und einen Teig, der sich leichter ausziehen lässt. Wähle den Zeitplan, der zu deinem Tag passt, und der Rechner passt die Hefe daran an."
+        },
+        {
+          "question": "Welche Hydration sollte Pizzateig haben?",
+          "answer": "Neapolitanischer Teig hat meist etwa 60–65 % Wasser, New York Style etwa 60–63 % mit etwas Öl und Zucker, römische Pizza 70–80 %. Mehr Wasser ergibt einen luftigeren, offeneren Rand, der Teig klebt aber stärker."
+        },
+        {
+          "question": "Wie rechne ich Frischhefe in Trockenhefe um?",
+          "answer": "Für Instant-Trockenhefe etwa 40 % der Frischhefe-Menge nehmen, für aktive Trockenhefe etwa 50 %. Aus 10 g Frischhefe werden also etwa 4 g Instant- oder 5 g aktive Trockenhefe. Wähle im Rechner die Hefe-Art, dann rechnet er selbst um."
+        },
+        {
+          "question": "Soll der Teig am Stück oder als Kugeln in den Kühlschrank?",
+          "answer": "Beides funktioniert. Am Stück kühlt der Teig langsam ab und gärt dabei noch stundenlang weiter, braucht also etwas weniger Hefe und wird nach dem Kühlschrank geformt. Als Kugeln kühlt er schneller, braucht etwas mehr Hefe und kann direkt aus dem Kühlschrank in die Stückgare."
+        },
+        {
+          "question": "Warum Eis in den Pizzateig?",
+          "answer": "Beim Kneten erwärmt sich der Teig, und warmer Teig gärt schneller als geplant. Wird ein Teil des Wassers als Eis abgewogen, bleibt er kühl. Das Eis ist kein zusätzliches Wasser – die Hydration bleibt gleich –, und etwa 10 % des Wassers reichen beim Kneten von Hand."
+        }
+      ]
+    }
+  },
   "footer": {
     "source": "Quellcode auf GitHub",
     "license": "MIT-Lizenz",
     "privacy": "Keine Cookies, kein Tracking, keine Analyse und keine externen Schriften oder Skripte. Der Rechner läuft vollständig in deinem Browser – nichts, was du eingibst, wird an einen Server gesendet. Gespeichert wird ausschließlich deine gewählte Sprache und das Einheitensystem, lokal in diesem Browser, damit die Seite sie sich merkt; beim Löschen der Website-Daten verschwinden sie wieder."
-  }
+  },
+  "noscript": "Dieser Pizzateig-Rechner braucht JavaScript zum Rechnen. Er berechnet Mehl, Wasser, Salz und Hefe in Gramm aus der Anzahl der Pizzen sowie Gärzeit und Temperatur."
 }
