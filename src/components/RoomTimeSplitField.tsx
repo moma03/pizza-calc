@@ -1,12 +1,19 @@
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tooltip } from './Tooltip';
-import { bulkHoursRange, splitRoomFermentation, MIN_ROOM_HOURS } from '../lib/fermentation';
+import {
+  bulkHoursRange,
+  minRoomHours,
+  splitRoomFermentation,
+  type RoomMinimums,
+} from '../lib/fermentation';
 import { formatHours } from '../lib/units';
 
 interface RoomTimeSplitFieldProps {
   totalRoomHours: number;
   bulkHours: number;
+  /** The method's shortest bulk rise and ball proof. */
+  minimums: RoomMinimums;
   onChange: (bulkHours: number) => void;
 }
 
@@ -17,14 +24,15 @@ interface RoomTimeSplitFieldProps {
 export function RoomTimeSplitField({
   totalRoomHours,
   bulkHours,
+  minimums,
   onChange,
 }: RoomTimeSplitFieldProps) {
   const { t } = useTranslation();
   const id = useId();
 
-  const range = bulkHoursRange(totalRoomHours);
+  const range = bulkHoursRange(totalRoomHours, minimums);
   const hasSlack = range.max > range.min;
-  const split = splitRoomFermentation(totalRoomHours, bulkHours);
+  const split = splitRoomFermentation(totalRoomHours, bulkHours, minimums);
 
   return (
     <div>
@@ -65,7 +73,7 @@ export function RoomTimeSplitField({
 
       {!hasSlack && (
         <p className="mt-2 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
-          {t('calculator.fermentation.split.noSlack', { minimum: MIN_ROOM_HOURS })}
+          {t('calculator.fermentation.split.noSlack', { minimum: minRoomHours(minimums) })}
         </p>
       )}
     </div>

@@ -7,7 +7,72 @@
       "title": "Pizzateig-Rechner – Hefemenge aus Zeit & Temperatur",
       "description": "Kostenloser Pizzateig-Rechner: Mehl, Wasser, Salz und Hefe in Gramm, die Hefemenge berechnet aus Gärzeit und Temperatur. Neapolitanisch, New York und Römisch, mit Kaltgare im Kühlschrank.",
       "heading": "Pizzateig-Rechner",
-      "appName": "Pizzateig-Rechner"
+      "appName": "Pizzateig-Rechner",
+      "guideTitle": "So funktioniert der Pizzateig-Rechner",
+      "intro": "Die meisten Teigrezepte legen die Hefemenge fest, und du musst deinen Tag danach planen. Dieser Rechner geht den umgekehrten Weg: Du gibst an, wie viel Zeit der Teig hat und wie warm es ist, und er berechnet die Hefemenge, mit der der Teig pünktlich fertig ist. Alles andere ergibt sich aus der Anzahl der Pizzen, dem Gewicht der Teigkugeln und den Bäckerprozenten.",
+      "sections": [],
+      "faq": [],
+      "tableHeading": "Wie viel Hefe für Pizzateig?",
+      "tableIntro": "Hefe in Prozent des Mehlgewichts für gängige Zeitpläne, berechnet mit diesem Rechner für vier neapolitanische Teigkugeln."
+    },
+    "poolish": {
+      "title": "Poolish-Rechner für Pizzateig – Hefe nach Zeit & Temperatur",
+      "description": "Poolish-Pizzateig berechnen: Mehl, Wasser und Hefe für Poolish und Hauptteig in Gramm – die Hefemenge aus Reifezeit und Temperatur des Poolish. Kostenlos, mit Kaltgare und neapolitanischen Vorlagen.",
+      "heading": "Poolish-Rechner",
+      "appName": "Poolish-Pizzateig-Rechner",
+      "guideTitle": "Pizzateig mit Poolish",
+      "intro": "Ein Poolish ist ein Vorteig aus gleich viel Mehl und Wasser mit einer Prise Hefe, der mehrere Stunden reift, bevor der eigentliche Teig geknetet wird. Dieser Rechner teilt das Rezept in Poolish und Hauptteig auf, bemisst die Hefe im Poolish so, dass er zur richtigen Zeit reif ist, und gibt in den Hauptteig nur so viel Hefe, wie dessen eigener Zeitplan noch braucht.",
+      "sections": [
+        {
+          "heading": "Was ein Poolish bewirkt",
+          "paragraphs": [
+            "Während der langen, feuchten Reifezeit bildet der Poolish Aromen und Enzyme, die Stärke und Gluten behutsam aufschließen. Das Ergebnis ist ein Teig, der sich leicht ausziehen lässt, ein luftiger, offener Rand und ein mildes, leicht süßliches, nussiges Aroma – ohne die Säure eines Sauerteigs.",
+            "Für Pizza sind 25–35 % des Mehls im Poolish üblich. Mehr bringt kräftigeres Aroma und einen dehnbareren Teig; der Hauptteig braucht dann weniger Hefe oder gar keine."
+          ]
+        },
+        {
+          "heading": "Wann der Poolish reif ist",
+          "paragraphs": [
+            "Ein reifer Poolish hat sich verdoppelt bis verdreifacht, ist voller Blasen und riecht fruchtig und leicht süßlich. Verarbeite ihn, wenn die Kuppel gerade flacher wird. Ist er eingefallen und riecht scharf sauer oder nach Alkohol, ist er zu weit.",
+            "Die Hefemenge bestimmt, wann dieser Punkt erreicht ist: je länger und kühler, desto weniger Hefe. Ein Poolish für 16 Stunden braucht nur einen Bruchteil der Hefe eines 4-Stunden-Poolish. Ändern sich deine Pläne, hält sich ein reifer Poolish bis zu etwa einem Tag im Kühlschrank."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "question": "Wie viel Poolish gehört in Pizzateig?",
+          "answer": "Meist 25–35 % des gesamten Mehls; dieser Rechner startet mit 30 %. Bis 50 % bringen kräftigeres Aroma und einen noch dehnbareren Teig."
+        },
+        {
+          "question": "Braucht Pizzateig mit Poolish zusätzliche Hefe?",
+          "answer": "Oft nur wenig. Der reife Poolish bringt schon viel aktive Hefe mit, deshalb gibt der Rechner nur so viel in den Hauptteig, wie dessen eigener Zeitplan noch braucht – und gar keine, wenn der Poolish allein reicht."
+        },
+        {
+          "question": "Kann ein Poolish in den Kühlschrank?",
+          "answer": "Ein Poolish reift am besten in der Wärme, lass ihn also zuerst bei Raumtemperatur reifen. Danach hält sich der reife Poolish bis zu etwa 24 Stunden im Kühlschrank; lass ihn 30–60 Minuten temperieren, bevor er in den Teig kommt."
+        }
+      ],
+      "tableHeading": "Wie viel Hefe für einen Poolish?",
+      "tableIntro": "Hefe in Prozent des Mehls im Poolish, für einen Poolish, der in der angegebenen Zeit reift – berechnet mit diesem Rechner."
+    }
+  },
+  "methods": {
+    "direct": {
+      "label": "Direkte Führung (nur Hefe)",
+      "hint": "Die gesamte Hefe kommt in einen Teig. Die einfachste Methode – das Aroma entsteht allein durch die Gärzeit."
+    },
+    "poolish": {
+      "label": "Poolish",
+      "hint": "Ein Teil des Mehls gärt vorab mehrere Stunden als flüssiger Vorteig aus gleich viel Mehl und Wasser. Ergibt einen dehnbareren Teig, einen luftigeren Rand und ein mildes, leicht süßliches Aroma.",
+      "shareTooltip": "Wie viel vom gesamten Mehl des Rezepts in den Poolish kommt. Für Pizza sind 25–35 % üblich, bis 50 % für mehr Aroma und einen sehr dehnbaren Teig.",
+      "hydrationTooltip": "Wasser im Poolish, in Prozent seines eigenen Mehls.",
+      "timeTooltip": "Stunden, bis der Poolish reif ist. Die Hefe wird so bemessen, dass er genau dann seinen Höhepunkt erreicht: je länger und kühler, desto weniger Hefe.",
+      "yeastNote": "Hefe im Poolish: {{percent}} % {{yeast}} bezogen auf das Poolish-Mehl.",
+      "noExtraYeast": "Keine zusätzliche Hefe im Hauptteig – der reife Poolish lockert ihn allein.",
+      "surplus": "Der Poolish allein bringt mehr Triebkraft mit, als dieser Zeitplan braucht. Deshalb kommt keine Hefe in den Hauptteig – und trotzdem ist der Teig früher fertig, nach etwa {{hours}} h bei Raumtemperatur statt {{planned}} h. Verkürze die Zeit bei Raumtemperatur oder nimm weniger Poolish.",
+      "surplusTooShort": "Der Poolish allein bringt mehr Triebkraft mit, als selbst der kürzeste Zeitplan braucht – der Teig ist früher fertig. Nimm weniger Poolish oder plane eine längere Kaltgare ein.",
+      "step": "Poolish, {{hours}} h bevor du den Teig knetest: {{flour}} Mehl, {{water}} Wasser und {{yeast}} Hefe zu einem glatten, flüssigen Teig verrühren. Abgedeckt bei {{temp}} stehen lassen, bis er sich verdoppelt bis verdreifacht hat, voller Blasen ist und die Kuppel gerade einzusinken beginnt.",
+      "knead": "Teig mischen: den Poolish im Wasser und dem Eis auflösen, das Mehl{{yeast}} zugeben und mischen, bis kein trockenes Mehl mehr zu sehen ist, dann das Salz einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist."
     }
   },
   "controls": {
@@ -31,6 +96,7 @@
       "roman": "Sehr nasser Teig für dünne, krosse Pizza – meist im Blech oder auf dem Stein gebacken.",
       "custom": "Neutraler Ausgangspunkt – alle Werte frei nach eigenem Rezept anpassen."
     },
+    "method": "Teigführung",
     "numberOfPizzas": "Anzahl Pizzen",
     "doughBallWeight": "Gewicht pro Teigkugel",
     "doughBallWeightTooltip": "Teiggewicht für eine einzelne Pizza.",
@@ -41,6 +107,10 @@
     "saltPercent": "Salz",
     "saltPercentTooltip": "Prozent des Mehlgewichts. Üblich sind 2–3 %.",
     "fermentationSettings": "Gärung",
+    "preferment": {
+      "share": "Mehlanteil",
+      "hydration": "Hydration"
+    },
     "autoCalculateYeast": "Hefe automatisch aus Zeit und Temperatur berechnen",
     "fermentation": {
       "room": "Raumtemperatur",
@@ -55,7 +125,8 @@
         "bulk": "Vor dem Kühlschrank",
         "proof": "Vor dem Backen",
         "noSlack": "Erhöhe die Raumtemperatur-Zeit über {{minimum}} h, um Stunden zwischen den beiden Phasen zu verschieben."
-      }
+      },
+      "roomFinal": "Raumtemperatur (Hauptteig)"
     },
     "yeastType": "Hefe-Art",
     "yeastTypes": {
@@ -74,6 +145,7 @@
     },
     "yeastPercent": "Hefe",
     "yeastPercentTooltip": "Prozent des Mehlgewichts, für die oben gewählte Hefe-Art.",
+    "yeastPercentFinalTooltip": "Hefe, die in den Hauptteig kommt, in Prozent des gesamten Mehls. Bei 0 übernimmt der Vorteig die Lockerung allein.",
     "oilPercent": "Öl",
     "oilPercentTooltip": "Prozent des Mehlgewichts (0 = kein Öl). Macht den Boden weicher und bräunt stärker.",
     "sugarPercent": "Zucker",
@@ -97,6 +169,9 @@
   },
   "results": {
     "title": "Dein Rezept",
+    "prefermentHeading": "1 · {{name}}",
+    "prefermentTiming": "{{hours}} h vor dem Hauptteig ansetzen und bei {{temp}} reifen lassen.",
+    "finalDough": "2 · Hauptteig",
     "ingredients": {
       "flour": "Mehl",
       "water": "Wasser",
@@ -107,6 +182,7 @@
       "sugar": "Zucker"
     },
     "yeastNote": "Hefe: {{percent}} % {{yeast}} bezogen auf das Mehlgewicht.",
+    "yeastNoteFinal": "Hauptteig: {{percent}} % {{yeast}} bezogen auf das gesamte Mehl.",
     "totalDough": "Teig gesamt",
     "perPizza": "Pro Pizza",
     "totalFermentationTime": "Gesamte Gärzeit",
@@ -122,7 +198,8 @@
       "coldSubject": {
         "afterCold": "den abgedeckten Teig am Stück",
         "beforeCold": "die abgedeckten Teigkugeln"
-      }
+      },
+      "andYeast": " und die Hefe"
     },
     "phases": {
       "bulk": "Stockgare",
@@ -133,11 +210,10 @@
     "effectiveCold": "Mit Abkühlzeit gerechnet verhalten sich die {{nominal}} h im Kühlschrank wie {{hours}} h – etwa {{percent}} % {{direction}} Gärung.",
     "effectiveColdMore": "mehr",
     "effectiveColdLess": "weniger",
-    "iceNote": "Wasser und Eis ergeben zusammen die {{total}} Schüttflüssigkeit – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt."
+    "iceNote": "Wasser und Eis ergeben zusammen die {{total}} Schüttflüssigkeit – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt.",
+    "iceNoteFinal": "Wasser und Eis ergeben zusammen die {{total}}, die in den Hauptteig kommen – etwa {{percent}} % davon werden als Eis abgewogen, damit der Teig beim Kneten kühl bleibt."
   },
   "guide": {
-    "title": "So funktioniert der Pizzateig-Rechner",
-    "intro": "Die meisten Teigrezepte legen die Hefemenge fest, und du musst deinen Tag danach planen. Dieser Rechner geht den umgekehrten Weg: Du gibst an, wie viel Zeit der Teig hat und wie warm es ist, und er berechnet die Hefemenge, mit der der Teig pünktlich fertig ist. Alles andere ergibt sich aus der Anzahl der Pizzen, dem Gewicht der Teigkugeln und den Bäckerprozenten.",
     "sections": [
       {
         "heading": "Bäckerprozente",
@@ -162,8 +238,6 @@
       }
     ],
     "yeastTable": {
-      "heading": "Wie viel Hefe für Pizzateig?",
-      "intro": "Hefe in Prozent des Mehlgewichts für gängige Zeitpläne, berechnet mit diesem Rechner für vier neapolitanische Teigkugeln.",
       "schedule": "Zeitplan",
       "fresh": "Frischhefe",
       "instant": "Instant-Trockenhefe",

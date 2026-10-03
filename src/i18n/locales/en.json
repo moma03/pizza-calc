@@ -7,7 +7,72 @@
       "title": "Pizza Dough Calculator – yeast from time & temperature",
       "description": "Free pizza dough calculator: flour, water, salt and yeast in grams, with the yeast worked out from your fermentation time and temperature. Neapolitan, New York and Roman presets, cold fermentation, metric and imperial.",
       "heading": "Pizza Dough Calculator",
-      "appName": "Pizza Dough Calculator"
+      "appName": "Pizza Dough Calculator",
+      "guideTitle": "How the pizza dough calculator works",
+      "intro": "Most dough recipes fix the amount of yeast and leave you to fit your day around it. This calculator works the other way round: you say how long the dough has and how warm it will be, and it works out the yeast that makes the dough ready on time. Everything else follows from the number of pizzas, the weight of each dough ball and the dough's baker's percentages.",
+      "sections": [],
+      "faq": [],
+      "tableHeading": "How much yeast for pizza dough?",
+      "tableIntro": "Yeast as a percentage of the flour weight for common schedules, worked out by this calculator for a batch of four Neapolitan dough balls."
+    },
+    "poolish": {
+      "title": "Poolish Pizza Dough Calculator – poolish yeast by time",
+      "description": "Calculate poolish pizza dough: flour, water and yeast for the poolish and the final dough in grams, with the yeast worked out from how long and how warm the poolish ripens. Free, metric and imperial.",
+      "heading": "Poolish Pizza Calculator",
+      "appName": "Poolish Pizza Dough Calculator",
+      "guideTitle": "Pizza dough with a poolish",
+      "intro": "A poolish is a preferment of equal parts flour and water with a pinch of yeast, left to ripen for several hours before the dough is mixed. This calculator splits the recipe into the poolish and the final dough, sets the poolish yeast so it peaks when you need it, and adds only as much yeast to the final dough as its own schedule still needs.",
+      "sections": [
+        {
+          "heading": "What a poolish does",
+          "paragraphs": [
+            "During its long, wet ripening the poolish builds aroma and enzymes that gently break down starch and gluten. The result is a dough that stretches easily, a light, open crust and a mild, slightly sweet, nutty flavour — without the sourness of a sourdough.",
+            "For pizza, 25–35 % of the flour in the poolish is typical. More gives a stronger flavour and a more extensible dough, and the final dough then needs less yeast, or none at all."
+          ]
+        },
+        {
+          "heading": "When the poolish is ripe",
+          "paragraphs": [
+            "A ripe poolish has doubled or tripled, is full of bubbles and smells fruity and slightly sweet. Use it when the dome is just starting to flatten. Once it has collapsed and smells sharply sour or of alcohol, it has gone too far.",
+            "The amount of yeast decides when that point comes: the longer and cooler, the less yeast. A 16-hour poolish needs only a fraction of the yeast of a 4-hour one. If your plans change, a ripe poolish keeps in the fridge for up to about a day."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "question": "How much poolish should pizza dough have?",
+          "answer": "Usually 25–35 % of the total flour; this calculator starts at 30 %. Up to 50 % gives a stronger flavour and an even more extensible dough."
+        },
+        {
+          "question": "Does poolish pizza dough need extra yeast?",
+          "answer": "Often only a little. The ripe poolish already brings plenty of active yeast, so the calculator adds only what the final dough's own schedule still needs — and none at all if the poolish alone is enough."
+        },
+        {
+          "question": "Can a poolish go in the fridge?",
+          "answer": "A poolish ripens best in the warmth, so let it ripen at room temperature first. A ripe poolish then keeps in the fridge for up to about 24 hours; let it warm up for 30–60 minutes before mixing it into the dough."
+        }
+      ],
+      "tableHeading": "How much yeast for a poolish?",
+      "tableIntro": "Yeast as a percentage of the flour in the poolish, for a poolish that ripens in the given time, worked out by this calculator."
+    }
+  },
+  "methods": {
+    "direct": {
+      "label": "Direct (yeast only)",
+      "hint": "All the yeast goes into one dough. The simplest method — the flavour comes from the fermentation schedule alone."
+    },
+    "poolish": {
+      "label": "Poolish",
+      "hint": "Part of the flour ferments for several hours first, as a runny preferment of equal flour and water. Gives a more extensible dough, a lighter crust and a mild, slightly sweet aroma.",
+      "shareTooltip": "How much of the recipe's total flour goes into the poolish. 25–35 % is typical for pizza; up to 50 % for more flavour and a very extensible dough.",
+      "hydrationTooltip": "Water in the poolish, as a percentage of its own flour.",
+      "timeTooltip": "Hours until the poolish is ripe. The yeast is set so it peaks just then: the longer and cooler, the less yeast.",
+      "yeastNote": "Poolish yeast: {{percent}} % {{yeast}} relative to the poolish flour.",
+      "noExtraYeast": "No extra yeast in the final dough — the ripe poolish leavens it on its own.",
+      "surplus": "The poolish alone brings more leavening than this schedule needs, so no yeast goes into the final dough — and the dough will still be ready early, after about {{hours}} h at room temperature instead of {{planned}} h. Shorten the room-temperature time or use less poolish.",
+      "surplusTooShort": "The poolish alone brings more leavening than even the shortest schedule needs, so the dough will be ready early. Use less poolish or add a longer cold phase.",
+      "step": "Poolish, {{hours}} h before you mix the dough: stir {{flour}} flour, {{water}} water and {{yeast}} yeast into a smooth batter. Cover and leave at {{temp}} until it has doubled or tripled, is full of bubbles and the dome is just starting to settle.",
+      "knead": "Mix the dough: loosen the poolish in the water and the ice, add the flour{{yeast}} and mix until no dry flour is left, then work in the salt. Knead for 10–15 minutes until the dough is smooth and elastic."
     }
   },
   "controls": {
@@ -31,6 +96,7 @@
       "roman": "Very wet dough for thin, crunchy pizza — usually baked in a tray or on a stone.",
       "custom": "Neutral starting point — change every value to your own recipe."
     },
+    "method": "Dough method",
     "numberOfPizzas": "Number of pizzas",
     "doughBallWeight": "Dough ball weight",
     "doughBallWeightTooltip": "Weight of the dough for a single pizza.",
@@ -41,6 +107,10 @@
     "saltPercent": "Salt",
     "saltPercentTooltip": "Percentage of the flour weight. 2–3 % is typical.",
     "fermentationSettings": "Fermentation",
+    "preferment": {
+      "share": "Share of flour",
+      "hydration": "Hydration"
+    },
     "autoCalculateYeast": "Calculate yeast automatically from time and temperature",
     "fermentation": {
       "room": "Room temperature",
@@ -55,7 +125,8 @@
         "bulk": "Before the fridge",
         "proof": "Before baking",
         "noSlack": "Raise the room-temperature time above {{minimum}} h to shift hours between the two phases."
-      }
+      },
+      "roomFinal": "Room temperature (final dough)"
     },
     "yeastType": "Yeast type",
     "yeastTypes": {
@@ -74,6 +145,7 @@
     },
     "yeastPercent": "Yeast",
     "yeastPercentTooltip": "Percentage of the flour weight, for the yeast type selected above.",
+    "yeastPercentFinalTooltip": "Yeast added to the final dough, as a percentage of the total flour. At 0 the preferment does all the leavening.",
     "oilPercent": "Oil",
     "oilPercentTooltip": "Percentage of the flour weight (0 = no oil). Makes the base softer and browner.",
     "sugarPercent": "Sugar",
@@ -97,6 +169,9 @@
   },
   "results": {
     "title": "Your recipe",
+    "prefermentHeading": "1 · {{name}}",
+    "prefermentTiming": "Mix it {{hours}} h before the final dough and let it ripen at {{temp}}.",
+    "finalDough": "2 · Final dough",
     "ingredients": {
       "flour": "Flour",
       "water": "Water",
@@ -107,6 +182,7 @@
       "sugar": "Sugar"
     },
     "yeastNote": "Yeast: {{percent}} % {{yeast}} relative to the flour weight.",
+    "yeastNoteFinal": "Final dough: {{percent}} % {{yeast}} relative to the total flour.",
     "totalDough": "Total dough",
     "perPizza": "Per pizza",
     "totalFermentationTime": "Total fermentation time",
@@ -122,7 +198,8 @@
       "coldSubject": {
         "afterCold": "the covered dough in one piece",
         "beforeCold": "the covered dough balls"
-      }
+      },
+      "andYeast": " and the yeast"
     },
     "phases": {
       "bulk": "Bulk fermentation",
@@ -133,11 +210,10 @@
     "effectiveCold": "Cooling time included, the {{nominal}} h in the fridge behave like {{hours}} h — about {{percent}} % {{direction}} fermentation.",
     "effectiveColdMore": "more",
     "effectiveColdLess": "less",
-    "iceNote": "Water and ice together make up the {{total}} of hydration — about {{percent}} % is weighed as ice so the dough stays cool while you knead it."
+    "iceNote": "Water and ice together make up the {{total}} of hydration — about {{percent}} % is weighed as ice so the dough stays cool while you knead it.",
+    "iceNoteFinal": "Water and ice together make up the {{total}} added in the final mix — about {{percent}} % is weighed as ice so the dough stays cool while you knead it."
   },
   "guide": {
-    "title": "How the pizza dough calculator works",
-    "intro": "Most dough recipes fix the amount of yeast and leave you to fit your day around it. This calculator works the other way round: you say how long the dough has and how warm it will be, and it works out the yeast that makes the dough ready on time. Everything else follows from the number of pizzas, the weight of each dough ball and the dough's baker's percentages.",
     "sections": [
       {
         "heading": "Baker's percentages",
@@ -162,8 +238,6 @@
       }
     ],
     "yeastTable": {
-      "heading": "How much yeast for pizza dough?",
-      "intro": "Yeast as a percentage of the flour weight for common schedules, worked out by this calculator for a batch of four Neapolitan dough balls.",
       "schedule": "Schedule",
       "fresh": "Fresh yeast",
       "instant": "Instant dry yeast",

@@ -1,13 +1,12 @@
 import { SUPPORTED_LANGUAGES, type Language } from './i18n/languages';
+import { METHODS, type Method } from './lib/fermentation';
 
 /**
- * How the dough is leavened. Each method gets its own page per language, so
- * each can rank for its own searches ("biga calculator", "Sauerteig Pizza").
- * Biga, poolish and sourdough slot in here — see docs/preferments.md §6.
+ * Every leavening method gets its own page per language, so each can rank for
+ * its own searches ("poolish pizza dough", "Biga Rechner"); see
+ * docs/preferments.md §6.
  */
-export type Method = 'direct';
-
-export const METHODS: readonly Method[] = ['direct'];
+export type { Method };
 
 /** The language every page falls back to, served without a path prefix. */
 export const DEFAULT_LANGUAGE: Language = 'en';
@@ -15,6 +14,7 @@ export const DEFAULT_LANGUAGE: Language = 'en';
 /** Path segment per method and language; empty for the method at the root. */
 const SLUGS: Record<Method, Record<Language, string>> = {
   direct: { en: '', de: '' },
+  poolish: { en: 'poolish', de: 'poolish' },
 };
 
 export interface Route {

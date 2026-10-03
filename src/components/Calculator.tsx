@@ -1,36 +1,59 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Clock, Thermometer } from 'lucide-react';
+import { Clock, FlaskConical, Thermometer } from 'lucide-react';
 import { NumberField } from './NumberField';
 import { SelectField } from './SelectField';
 import { RoomTimeSplitField } from './RoomTimeSplitField';
 import {
   BALLING_POINTS,
-  DEFAULT_INPUT,
   LIMITS,
   REHYDRATION_TEMP_C,
   PIZZA_STYLES,
   STYLE_PRESETS,
   calculateRecipe,
+  defaultInputFor,
+  prefermentDefaults,
+  prefermentShareLimits,
   resolveYeastPercent,
+  roomTimeLimits,
+  yeastPercentLimits,
   type BallingPoint,
   type PizzaStyle,
   type Recipe,
   type RecipeInput,
 } from '../lib/recipe';
-import { MIN_BULK_HOURS, MIN_ROOM_HOURS, YEAST_TYPES, type YeastType } from '../lib/fermentation';
+import {
+  METHODS,
+  PREFERMENTS,
+  YEAST_TYPES,
+  isPrefermentMethod,
+  roomMinimumsFor,
+  type Method,
+  type YeastType,
+} from '../lib/fermentation';
 import { round } from '../lib/math';
 import { formatQuantity, type UnitSystem } from '../lib/units';
 
 interface CalculatorProps {
+  /** The method of the page the calculator sits on; it opens with that one. */
+  initialMethod: Method;
   onRecipeChange: (recipe: Recipe) => void;
+  onMethodChange: (method: Method) => void;
   unitSystem: UnitSystem;
 }
 
-export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
+export function Calculator({
+  initialMethod,
+  onRecipeChange,
+  onMethodChange,
+  unitSystem,
+}: CalculatorProps) {
   const { t } = useTranslation();
   const [pizzaStyle, setPizzaStyle] = useState<PizzaStyle>('neapolitan');
-  const [input, setInput] = useState<RecipeInput>(DEFAULT_INPUT);
+  const [input, setInput] = useState<RecipeInput>(() => defaultInputFor(initialMethod));
+  const { method } = input;
+  const roomMinimums = roomMinimumsFor(method);
+  const preferment = isPrefermentMethod(method) ? PREFERMENTS[method] : undefined;
 
   /** Update one field; `numberOfPizzas` is deliberately kept across presets. */
   const update = useCallback(
@@ -44,9 +67,25 @@ export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
     setInput((current) => ({ ...current, ...STYLE_PRESETS[style], numberOfPizzas: current.numberOfPizzas }));
   };
 
+  /** A new method starts from its own preferment defaults. */
+  const selectMethod = (next: Method) => {
+    setInput((current) => ({
+      ...current,
+      method: next,
+      ...prefermentDefaults(next),
+      bulkFermentHours: roomMinimumsFor(next).bulk,
+    }));
+    onMethodChange(next);
+  };
+
   useEffect(() => {
     onRecipeChange(calculateRecipe(input));
   }, [input, onRecipeChange]);
+
+  const methodOptions = METHODS.map((value) => ({
+    value,
+    label: t(`methods.${value}.label`),
+  }));
 
   const styleOptions = PIZZA_STYLES.map((style) => ({
     value: style,
@@ -76,6 +115,14 @@ export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
           options={styleOptions}
           onChange={selectStyle}
           hint={t(`calculator.pizzaStyleHints.${pizzaStyle}`)}
+        />
+
+        <SelectField
+          label={t('calculator.method')}
+          value={method}
+          options={methodOptions}
+          onChange={selectMethod}
+          hint={t(`methods.${method}.hint`)}
         />
 
         <NumberField
@@ -192,10 +239,63 @@ export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
             </label>
           </div>
 
+          {preferment && isPrefermentMethod(method) && (
+            <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
+              <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <FlaskConical className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                {t(`methods.${method}.label`)}
+              </h4>
+              <div className="grid grid-cols-2 gap-4">
+                <NumberField
+                  compact
+                  label={t('calculator.preferment.share')}
+                  tooltip={t(`methods.${method}.shareTooltip`)}
+                  value={input.prefermentShare}
+                  onChange={(value) => update('prefermentShare', value)}
+                  limits={prefermentShareLimits(method, input.waterPercent, input.prefermentHydration)}
+                  quantity="percent"
+                  step={5}
+                />
+                {preferment.hydration.range.min < preferment.hydration.range.max && (
+                  <NumberField
+                    compact
+                    label={t('calculator.preferment.hydration')}
+                    tooltip={t(`methods.${method}.hydrationTooltip`)}
+                    value={input.prefermentHydration}
+                    onChange={(value) => update('prefermentHydration', value)}
+                    limits={preferment.hydration.range}
+                    quantity="percent"
+                    step={1}
+                  />
+                )}
+                <NumberField
+                  compact
+                  label={t('calculator.fermentation.temperature')}
+                  value={input.prefermentTemp}
+                  onChange={(value) => update('prefermentTemp', value)}
+                  limits={preferment.temperature.range}
+                  quantity="temperature"
+                  unitSystem={unitSystem}
+                  step={1}
+                />
+                <NumberField
+                  compact
+                  label={t('calculator.fermentation.time')}
+                  tooltip={t(`methods.${method}.timeTooltip`)}
+                  value={input.prefermentTime}
+                  onChange={(value) => update('prefermentTime', value)}
+                  limits={preferment.time.range}
+                  quantity="hours"
+                  step={1}
+                />
+              </div>
+            </div>
+          )}
+
           <div className="space-y-3">
             <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
               <Thermometer className="h-4 w-4 text-orange-600 dark:text-orange-400" />
-              {t('calculator.fermentation.room')}
+              {t(preferment ? 'calculator.fermentation.roomFinal' : 'calculator.fermentation.room')}
             </h4>
             <div className="grid grid-cols-2 gap-4">
               <NumberField
@@ -211,10 +311,12 @@ export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
               <NumberField
                 compact
                 label={t('calculator.fermentation.time')}
-                tooltip={t('calculator.fermentation.roomTimeTooltip', { minimum: MIN_ROOM_HOURS })}
+                tooltip={t('calculator.fermentation.roomTimeTooltip', {
+                  minimum: roomTimeLimits(method).min,
+                })}
                 value={input.roomFermentTime}
                 onChange={(value) => update('roomFermentTime', value)}
-                limits={LIMITS.roomFermentTime}
+                limits={roomTimeLimits(method)}
                 quantity="hours"
                 step={0.5}
               />
@@ -256,7 +358,8 @@ export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
             <>
               <RoomTimeSplitField
                 totalRoomHours={input.roomFermentTime}
-                bulkHours={input.bulkFermentHours ?? MIN_BULK_HOURS}
+                bulkHours={input.bulkFermentHours}
+                minimums={roomMinimums}
                 onChange={(hours) => update('bulkFermentHours', hours)}
               />
 
@@ -295,10 +398,12 @@ export function Calculator({ onRecipeChange, unitSystem }: CalculatorProps) {
           {!input.autoCalculateYeast && (
             <NumberField
               label={t('calculator.yeastPercent')}
-              tooltip={t('calculator.yeastPercentTooltip')}
+              tooltip={t(
+                preferment ? 'calculator.yeastPercentFinalTooltip' : 'calculator.yeastPercentTooltip'
+              )}
               value={input.yeastPercent}
               onChange={(value) => update('yeastPercent', value)}
-              limits={LIMITS.yeastPercent}
+              limits={yeastPercentLimits(method)}
               quantity="percent"
               step={0.01}
             />

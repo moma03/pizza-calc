@@ -232,6 +232,32 @@ stage 2: final dough  bulk (short) → [fridge: bulk or balls] → ball proof �
   a small per-method block. Style presets get a sensible default per method,
   e.g. Neapolitan + poolish 30 %, Roman + biga 100 %.
 
+### 5.5 As implemented
+
+The numbers live in [`src/lib/fermentation/methods.ts`](../src/lib/fermentation/methods.ts):
+
+| | Poolish |
+|---|---|
+| Yeast factor on the room curve | 0.8 |
+| Ripe yeast equivalent (fresh %, of preferment flour) | 1.5 |
+| Minimum bulk / ball proof of the final dough | 1 h / 3 h |
+| Share, default (range) | 30 % (10–50) |
+| Ripening, default (range) | 12 h (3–18) at 20 °C (15–28) |
+
+**Final-dough yeast.** The final dough gets whatever its own schedule needs
+under the direct model, minus what the ripe preferment brings
+(`share × ripe yeast equivalent`), and never less than zero. For poolish,
+the published recipes disagree. Some add no yeast at all to a 30 % poolish
+dough (≈ 2 %); others add a full direct dough's worth (≈ 0 %). 1.5 % sits
+between them. With the defaults (30 % poolish, 24 h fridge), that adds about
+0.18 % fresh yeast to the final dough, against 0.63 % for the same schedule
+done direct.
+
+**Surplus.** When the preferment alone brings more than 1.15× what the
+schedule needs, nothing is added. The page then shows the room time that would
+match the preferment (found by bisection on the model), or says that even the
+shortest schedule is too long.
+
 ---
 
 ## 6. Search: one page per method

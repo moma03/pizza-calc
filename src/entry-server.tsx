@@ -8,7 +8,7 @@ import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import App from './App';
 import i18n from './i18n';
-import type { FaqItem } from './components/Guide';
+import { guideContent } from './guideContent';
 import { DEFAULT_LANGUAGE, ROUTES, routePath, type Route } from './routes';
 
 export { ROUTES, routePath };
@@ -60,7 +60,7 @@ export const renderPage = (route: Route, siteUrl?: string): RenderedPage => {
   const url = absolute(route);
   const title = page('title');
   const description = page('description');
-  const faq = t('guide.faq.items', { returnObjects: true }) as FaqItem[];
+  const { faq } = guideContent(t, route.method);
 
   const meta = (attribute: 'name' | 'property', key: string, content: string) =>
     `<meta ${attribute}="${key}" content="${escapeHtml(content)}" />`;
