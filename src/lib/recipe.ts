@@ -278,9 +278,29 @@ export const prefermentDefaults = (
   };
 };
 
+/**
+ * The final dough's schedule for a method and style: the method's own where it
+ * has one (a biga dough rises only briefly), otherwise the style preset's.
+ */
+export const scheduleFor = (
+  method: Method,
+  style: PizzaStyle
+): Pick<RecipeInput, 'roomFermentTime' | 'bulkFermentHours' | 'coldFermentTime'> => {
+  const schedule = isPrefermentMethod(method) ? PREFERMENTS[method].schedule : undefined;
+  const preset = STYLE_PRESETS[style];
+  return schedule
+    ? { roomFermentTime: schedule.room, bulkFermentHours: schedule.bulk, coldFermentTime: schedule.cold }
+    : {
+        roomFermentTime: preset.roomFermentTime,
+        bulkFermentHours: Math.max(preset.bulkFermentHours, roomMinimumsFor(method).bulk),
+        coldFermentTime: preset.coldFermentTime,
+      };
+};
+
 /** What the calculator opens with on a method's page, and what that page is prerendered with. */
 export const defaultInputFor = (method: Method): RecipeInput => ({
   ...STYLE_PRESETS.neapolitan,
+  ...scheduleFor(method, 'neapolitan'),
   method,
   yeastType: 'fresh',
   autoCalculateYeast: true,

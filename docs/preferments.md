@@ -224,8 +224,8 @@ stage 2: final dough  bulk (short) → [fridge: bulk or balls] → ball proof �
 ```
 
 * Stage 2 reuses the current room/cold/balling logic unchanged. Only the
-  minimum bulk time falls, because the preferment brings ripe yeast: biga
-  15–60 min instead of 2 h.
+  minimum room times fall, because the preferment brings ripe yeast: biga
+  30 min bulk instead of 2 h.
 * The timeline bar gets a stage-1 segment before the knead.
 * Ingredient output splits into two cards: **preferment** and **final dough**.
 * Recipe input gains `method: 'direct' | 'biga' | 'poolish' | 'sourdough'` plus
@@ -236,13 +236,20 @@ stage 2: final dough  bulk (short) → [fridge: bulk or balls] → ball proof �
 
 The numbers live in [`src/lib/fermentation/methods.ts`](../src/lib/fermentation/methods.ts):
 
-| | Poolish |
-|---|---|
-| Yeast factor on the room curve | 0.8 |
-| Ripe yeast equivalent (fresh %, of preferment flour) | 1.5 |
-| Minimum bulk / ball proof of the final dough | 1 h / 3 h |
-| Share, default (range) | 30 % (10–50) |
-| Ripening, default (range) | 12 h (3–18) at 20 °C (15–28) |
+| | Poolish | Biga |
+|---|---|---|
+| Yeast factor on the room curve | 0.8 | 2.8 |
+| Ripe yeast equivalent (fresh %, of preferment flour) | 1.5 | 3 |
+| Minimum bulk / ball proof of the final dough | 1 h / 3 h | 0.5 h / 1.5 h |
+| Share, default (range) | 30 % (10–50) | 50 % (20–100) |
+| Hydration, default (range) | 100 % (fixed) | 45 % (40–60) |
+| Ripening, default (range) | 12 h (3–18) at 20 °C (15–28) | 17 h (8–24) at 18 °C (15–25) |
+| Final dough's default schedule | the style preset's | 0.5 h bulk, 24 h fridge, 2.5 h proof |
+
+The biga factor reproduces Giorilli's biga exactly: 0.99 % fresh yeast for 17 h
+at 18 °C. Its ripe equivalent of 3 % is anchored on the 100 % biga dough. That
+dough takes no added yeast and is baked about 3 h after mixing. The direct
+model puts that schedule at 2.9 % fresh yeast.
 
 **Final-dough yeast.** The final dough gets whatever its own schedule needs
 under the direct model, minus what the ripe preferment brings

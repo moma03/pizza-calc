@@ -8,9 +8,9 @@ import { YEAST_CONVERSION, freshYeastFraction, type YeastType } from './yeast';
  * then built on. See `docs/preferments.md` for the sources behind every number
  * below.
  */
-export type Method = 'direct' | 'poolish';
+export type Method = 'direct' | 'poolish' | 'biga';
 
-export const METHODS: readonly Method[] = ['direct', 'poolish'];
+export const METHODS: readonly Method[] = ['direct', 'poolish', 'biga'];
 
 export type PrefermentMethod = Exclude<Method, 'direct'>;
 
@@ -45,6 +45,13 @@ export interface PrefermentProfile {
   readonly ripeYeastEquivalent: number;
   /** Shortest bulk rise and ball proof of the final dough. */
   readonly roomMinimums: RoomMinimums;
+  /**
+   * The final dough's schedule this method opens with, when the style
+   * presets' would not suit it. All hours.
+   */
+  readonly schedule?: { readonly room: number; readonly bulk: number; readonly cold: number };
+  /** Ripening times for the yeast table on the method's page. */
+  readonly tableHours: readonly number[];
 }
 
 export const PREFERMENTS: Record<PrefermentMethod, PrefermentProfile> = {
@@ -60,9 +67,29 @@ export const PREFERMENTS: Record<PrefermentMethod, PrefermentProfile> = {
     temperature: { default: 20, range: { min: 15, max: 28 } },
     yeastFactor: 0.8,
     // Between recipes that add no yeast to a 30 % poolish dough and ones that
-    // add a direct dough's worth; see docs/preferments.md §5.4.
+    // add a direct dough's worth; see docs/preferments.md §5.5.
     ripeYeastEquivalent: 1.5,
     roomMinimums: { bulk: 1, ballProof: 3 },
+    tableHours: [4, 6, 8, 10, 12, 16],
+  },
+  /**
+   * Stiff and crumbly. The room curve has to be scaled ×2.8 to reproduce the
+   * classic Giorilli biga — 1 % fresh yeast for 16–18 h at 18 °C — which fits
+   * yeast being water-limited at 45 % hydration (docs/preferments.md §5.2).
+   */
+  biga: {
+    share: { default: 50, range: { min: 20, max: 100 } },
+    hydration: { default: 45, range: { min: 40, max: 60 } },
+    time: { default: 17, range: { min: 8, max: 24 } },
+    temperature: { default: 18, range: { min: 15, max: 25 } },
+    yeastFactor: 2.8,
+    // A 100 % biga dough needs no added yeast for a ~3 h final rise at 20 °C,
+    // which the direct model puts at 2.9 % fresh yeast.
+    ripeYeastEquivalent: 3,
+    // Puntata of 15–60 min, then an appretto of 1–2 h for a full biga.
+    roomMinimums: { bulk: 0.5, ballProof: 1.5 },
+    schedule: { room: 3, bulk: 0.5, cold: 24 },
+    tableHours: [8, 12, 16, 18, 24],
   },
 };
 

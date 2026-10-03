@@ -15,6 +15,7 @@ export const DEFAULT_LANGUAGE: Language = 'en';
 const SLUGS: Record<Method, Record<Language, string>> = {
   direct: { en: '', de: '' },
   poolish: { en: 'poolish', de: 'poolish' },
+  biga: { en: 'biga', de: 'biga' },
 };
 
 export interface Route {

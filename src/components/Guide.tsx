@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { BookOpen, HelpCircle } from 'lucide-react';
 import { defaultInputFor, resolveYeastPercent } from '../lib/recipe';
-import { isPrefermentMethod, prefermentYeastPercent, type Method } from '../lib/fermentation';
+import {
+  PREFERMENTS,
+  isPrefermentMethod,
+  prefermentYeastPercent,
+  type Method,
+} from '../lib/fermentation';
 import { formatHours, formatQuantity, type UnitSystem } from '../lib/units';
 import { round } from '../lib/math';
 import { guideContent, type GuideSection } from '../guideContent';
@@ -24,8 +29,6 @@ const DOUGH_SCHEDULES: readonly (readonly [number, number])[] = [
   [5, 72],
 ];
 
-/** Ripening times for a preferment's yeast table, all at `TABLE_ROOM_TEMP_C`. */
-const PREFERMENT_HOURS: readonly number[] = [4, 6, 8, 10, 12, 16];
 
 interface TableRow {
   key: string;
@@ -65,16 +68,20 @@ export function Guide({ method, unitSystem }: GuideProps) {
   const temperature = (celsius: number) => formatQuantity(celsius, 'temperature', unitSystem);
   const content = guideContent(t, method);
 
+  // A preferment's table runs at the temperature it is usually ripened at.
   const rows: TableRow[] = isPrefermentMethod(method)
-    ? PREFERMENT_HOURS.map((hours) => ({
-        key: `${hours}`,
-        label: t('guide.yeastTable.roomOnly', {
-          hours: formatHours(hours),
-          temp: temperature(TABLE_ROOM_TEMP_C),
-        }),
-        fresh: round(prefermentYeastPercent(method, 'fresh', TABLE_ROOM_TEMP_C, hours), 2),
-        instant: round(prefermentYeastPercent(method, 'instant', TABLE_ROOM_TEMP_C, hours), 2),
-      }))
+    ? PREFERMENTS[method].tableHours.map((hours) => {
+        const tempC = PREFERMENTS[method].temperature.default;
+        return {
+          key: `${hours}`,
+          label: t('guide.yeastTable.roomOnly', {
+            hours: formatHours(hours),
+            temp: temperature(tempC),
+          }),
+          fresh: round(prefermentYeastPercent(method, 'fresh', tempC, hours), 2),
+          instant: round(prefermentYeastPercent(method, 'instant', tempC, hours), 2),
+        };
+      })
     : DOUGH_SCHEDULES.map(([roomHours, coldHours]) => {
         const input = {
           ...defaultInputFor(method),

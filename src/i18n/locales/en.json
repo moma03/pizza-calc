@@ -54,6 +54,46 @@
       ],
       "tableHeading": "How much yeast for a poolish?",
       "tableIntro": "Yeast as a percentage of the flour in the poolish, for a poolish that ripens in the given time, worked out by this calculator."
+    },
+    "biga": {
+      "title": "Biga Pizza Dough Calculator – biga yeast & timings",
+      "description": "Calculate biga pizza dough: flour, water and yeast for the biga and the final dough in grams, with the biga yeast worked out from its time and temperature. From 20 to 100 % biga, metric and imperial.",
+      "heading": "Biga Pizza Calculator",
+      "appName": "Biga Pizza Dough Calculator",
+      "guideTitle": "Pizza dough with a biga",
+      "intro": "A biga is a stiff Italian preferment: flour with only about 45 % water and a little yeast, mixed into a crumbly mass and left to ripen for around 16–18 hours. This calculator splits the recipe into the biga and the final dough, sets the biga yeast for your time and temperature, and works out how much yeast, if any, the final dough still needs.",
+      "sections": [
+        {
+          "heading": "What a biga does",
+          "paragraphs": [
+            "With so little water the yeast works slowly, and the biga develops a gentle, slightly alcoholic and fruity aroma rather than acidity. It strengthens the gluten, so biga doughs take high hydration well and bake into a crisp, airy crust with a very open crumb.",
+            "Pizzerias put anything from 20 to 100 % of the flour into the biga. At 50 % and more the biga brings so much mature yeast that the final dough usually needs no extra yeast and only a short rise."
+          ]
+        },
+        {
+          "heading": "Mixing and ripening a biga",
+          "paragraphs": [
+            "Dissolve the yeast in cool water, add the flour and mix only briefly, until the water is absorbed and the biga looks like coarse, moist crumbs. Do not knead it into a smooth ball. The classic biga ripens for 16–18 hours at 16–18 °C with about 1 % fresh yeast, mixed to around 20 °C.",
+            "A ripe biga has grown by only about a fifth, the crumbs look puffy, and it smells gently of alcohol and fruit. If it has doubled or smells sharp, it has gone too far. Tear it into small pieces before it goes into the final dough, or it will not mix in evenly."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "question": "How much biga should pizza dough have?",
+          "answer": "Anything from 20 to 100 % of the flour. 30–50 % is a good start, and this calculator opens at 50 %. The more biga, the more flavour and strength — and the less yeast and time the final dough needs."
+        },
+        {
+          "question": "What hydration should a biga have?",
+          "answer": "The classic biga uses 44–45 % water. Up to about 55–60 % is easier to mix by hand and ferments a little faster. The rest of the recipe's water goes into the final dough."
+        },
+        {
+          "question": "Does a biga dough need extra yeast?",
+          "answer": "At 50 % biga or more, usually not: the ripe biga carries enough yeast for a short final rise. With less biga or a long cold phase, the calculator adds the little the final dough still needs."
+        }
+      ],
+      "tableHeading": "How much yeast for a biga?",
+      "tableIntro": "Yeast as a percentage of the flour in the biga, for a biga that ripens in the given time, worked out by this calculator."
     }
   },
   "methods": {
@@ -73,6 +113,19 @@
       "surplusTooShort": "The poolish alone brings more leavening than even the shortest schedule needs, so the dough will be ready early. Use less poolish or add a longer cold phase.",
       "step": "Poolish, {{hours}} h before you mix the dough: stir {{flour}} flour, {{water}} water and {{yeast}} yeast into a smooth batter. Cover and leave at {{temp}} until it has doubled or tripled, is full of bubbles and the dome is just starting to settle.",
       "knead": "Mix the dough: loosen the poolish in the water and the ice, add the flour{{yeast}} and mix until no dry flour is left, then work in the salt. Knead for 10–15 minutes until the dough is smooth and elastic."
+    },
+    "biga": {
+      "label": "Biga",
+      "hint": "Part or all of the flour ferments first as a stiff, crumbly preferment with about 45 % water, typically 16–18 hours. Builds strength for an airy, crisp crust and a mild, slightly fruity aroma.",
+      "shareTooltip": "How much of the recipe's total flour goes into the biga. Anything from 20 to 100 % is used; 30–50 % is a good start. The more biga, the shorter the final dough's rise.",
+      "hydrationTooltip": "Water in the biga, as a percentage of its own flour. The classic biga uses 44–45 %; up to about 60 % is easier to mix by hand.",
+      "timeTooltip": "Hours until the biga is ripe. The classic is 16–18 h at 16–18 °C with about 1 % fresh yeast; the yeast is adjusted for your time and temperature.",
+      "yeastNote": "Biga yeast: {{percent}} % {{yeast}} relative to the biga flour.",
+      "noExtraYeast": "No extra yeast in the final dough — the ripe biga leavens it on its own.",
+      "surplus": "The biga alone brings more leavening than this schedule needs, so no yeast goes into the final dough — and the dough will still be ready early, after about {{hours}} h at room temperature instead of {{planned}} h. Shorten the room-temperature time or use less biga.",
+      "surplusTooShort": "The biga alone brings more leavening than even the shortest schedule needs, so the dough will be ready early. Use less biga or add a longer cold phase.",
+      "step": "Biga, {{hours}} h before you mix the dough: dissolve {{yeast}} yeast in {{water}} cool water, add {{flour}} flour and mix only until the water is absorbed — a shaggy mass of moist crumbs, not a smooth dough. Cover and leave at {{temp}}. It is ripe when it has grown slightly, looks puffy and smells gently of alcohol and fruit.",
+      "knead": "Mix the dough: tear the biga into small pieces and mix it with most of the water{{yeast}} until it starts to come together. Add the flour, then the salt, and work in the remaining water and the ice a little at a time. Knead until the dough is smooth and elastic."
     }
   },
   "controls": {

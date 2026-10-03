@@ -54,6 +54,46 @@
       ],
       "tableHeading": "Wie viel Hefe für einen Poolish?",
       "tableIntro": "Hefe in Prozent des Mehls im Poolish, für einen Poolish, der in der angegebenen Zeit reift – berechnet mit diesem Rechner."
+    },
+    "biga": {
+      "title": "Biga-Rechner für Pizzateig – Hefe & Zeiten für die Biga",
+      "description": "Biga-Pizzateig berechnen: Mehl, Wasser und Hefe für Biga und Hauptteig in Gramm – die Hefe in der Biga aus Reifezeit und Temperatur. Von 20 bis 100 % Biga, kostenlos, mit Kaltgare.",
+      "heading": "Biga-Rechner",
+      "appName": "Biga-Pizzateig-Rechner",
+      "guideTitle": "Pizzateig mit Biga",
+      "intro": "Eine Biga ist ein fester italienischer Vorteig: Mehl mit nur etwa 45 % Wasser und wenig Hefe, zu einer krümeligen Masse gemischt und rund 16–18 Stunden gereift. Dieser Rechner teilt das Rezept in Biga und Hauptteig auf, bemisst die Hefe in der Biga für deine Zeit und Temperatur und berechnet, wie viel Hefe der Hauptteig noch braucht – falls überhaupt.",
+      "sections": [
+        {
+          "heading": "Was eine Biga bewirkt",
+          "paragraphs": [
+            "Bei so wenig Wasser arbeitet die Hefe langsam, und die Biga entwickelt statt Säure ein sanftes, leicht alkoholisches und fruchtiges Aroma. Sie stärkt das Gluten, sodass Biga-Teige viel Wasser vertragen und zu einem knusprigen, luftigen Rand mit sehr offener Porung backen.",
+            "Pizzerien geben 20 bis 100 % des Mehls in die Biga. Ab etwa 50 % bringt die Biga so viel reife Hefe mit, dass der Hauptteig meist keine zusätzliche Hefe und nur eine kurze Gare braucht."
+          ]
+        },
+        {
+          "heading": "Biga ansetzen und reifen lassen",
+          "paragraphs": [
+            "Die Hefe in kühlem Wasser auflösen, das Mehl zugeben und nur kurz mischen, bis das Wasser aufgenommen ist und die Biga wie grobe, feuchte Krümel aussieht. Nicht zu einer glatten Kugel kneten. Die klassische Biga reift 16–18 Stunden bei 16–18 °C mit etwa 1 % Frischhefe und wird auf rund 20 °C gemischt.",
+            "Eine reife Biga ist nur um etwa ein Fünftel gewachsen, die Krümel sehen aufgebläht aus, und sie riecht leicht nach Alkohol und Frucht. Hat sie sich verdoppelt oder riecht stechend, ist sie zu weit. Reiß sie in kleine Stücke, bevor sie in den Hauptteig kommt, sonst verteilt sie sich nicht gleichmäßig."
+          ]
+        }
+      ],
+      "faq": [
+        {
+          "question": "Wie viel Biga gehört in Pizzateig?",
+          "answer": "Zwischen 20 und 100 % des Mehls. 30–50 % sind ein guter Start, dieser Rechner beginnt mit 50 %. Je mehr Biga, desto mehr Aroma und Kraft – und desto weniger Hefe und Zeit braucht der Hauptteig."
+        },
+        {
+          "question": "Welche Hydration sollte eine Biga haben?",
+          "answer": "Die klassische Biga hat 44–45 % Wasser. Bis etwa 55–60 % lässt sie sich leichter von Hand mischen und gärt etwas schneller. Das übrige Wasser des Rezepts kommt in den Hauptteig."
+        },
+        {
+          "question": "Braucht ein Biga-Teig zusätzliche Hefe?",
+          "answer": "Ab 50 % Biga meist nicht: Die reife Biga bringt genug Hefe für eine kurze Gare mit. Bei weniger Biga oder langer Kaltgare gibt der Rechner das Wenige dazu, das der Hauptteig noch braucht."
+        }
+      ],
+      "tableHeading": "Wie viel Hefe für eine Biga?",
+      "tableIntro": "Hefe in Prozent des Mehls in der Biga, für eine Biga, die in der angegebenen Zeit reift – berechnet mit diesem Rechner."
     }
   },
   "methods": {
@@ -73,6 +113,19 @@
       "surplusTooShort": "Der Poolish allein bringt mehr Triebkraft mit, als selbst der kürzeste Zeitplan braucht – der Teig ist früher fertig. Nimm weniger Poolish oder plane eine längere Kaltgare ein.",
       "step": "Poolish, {{hours}} h bevor du den Teig knetest: {{flour}} Mehl, {{water}} Wasser und {{yeast}} Hefe zu einem glatten, flüssigen Teig verrühren. Abgedeckt bei {{temp}} stehen lassen, bis er sich verdoppelt bis verdreifacht hat, voller Blasen ist und die Kuppel gerade einzusinken beginnt.",
       "knead": "Teig mischen: den Poolish im Wasser und dem Eis auflösen, das Mehl{{yeast}} zugeben und mischen, bis kein trockenes Mehl mehr zu sehen ist, dann das Salz einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist."
+    },
+    "biga": {
+      "label": "Biga",
+      "hint": "Ein Teil oder das gesamte Mehl gärt vorab als fester, krümeliger Vorteig mit etwa 45 % Wasser, meist 16–18 Stunden. Gibt Kraft für einen luftigen, knusprigen Rand und ein mildes, leicht fruchtiges Aroma.",
+      "shareTooltip": "Wie viel vom gesamten Mehl des Rezepts in die Biga kommt. Üblich sind 20 bis 100 %, 30–50 % sind ein guter Start. Je mehr Biga, desto kürzer die Gare des Hauptteigs.",
+      "hydrationTooltip": "Wasser in der Biga, in Prozent ihres eigenen Mehls. Die klassische Biga hat 44–45 %; bis etwa 60 % lässt sie sich leichter von Hand mischen.",
+      "timeTooltip": "Stunden, bis die Biga reif ist. Klassisch sind 16–18 h bei 16–18 °C mit etwa 1 % Frischhefe; die Hefe wird an deine Zeit und Temperatur angepasst.",
+      "yeastNote": "Hefe in der Biga: {{percent}} % {{yeast}} bezogen auf das Biga-Mehl.",
+      "noExtraYeast": "Keine zusätzliche Hefe im Hauptteig – die reife Biga lockert ihn allein.",
+      "surplus": "Die Biga allein bringt mehr Triebkraft mit, als dieser Zeitplan braucht. Deshalb kommt keine Hefe in den Hauptteig – und trotzdem ist der Teig früher fertig, nach etwa {{hours}} h bei Raumtemperatur statt {{planned}} h. Verkürze die Zeit bei Raumtemperatur oder nimm weniger Biga.",
+      "surplusTooShort": "Die Biga allein bringt mehr Triebkraft mit, als selbst der kürzeste Zeitplan braucht – der Teig ist früher fertig. Nimm weniger Biga oder plane eine längere Kaltgare ein.",
+      "step": "Biga, {{hours}} h bevor du den Teig knetest: {{yeast}} Hefe in {{water}} kühlem Wasser auflösen, {{flour}} Mehl zugeben und nur so lange mischen, bis das Wasser aufgenommen ist – eine grobe, feuchte Krümelmasse, kein glatter Teig. Abgedeckt bei {{temp}} reifen lassen. Reif ist sie, wenn sie etwas aufgegangen ist, die Krümel aufgebläht aussehen und sie leicht nach Alkohol und Frucht riecht.",
+      "knead": "Teig mischen: die Biga in kleine Stücke reißen und mit dem Großteil des Wassers{{yeast}} mischen, bis sie sich zu verbinden beginnt. Das Mehl zugeben, dann das Salz, und das restliche Wasser und das Eis nach und nach einarbeiten. Kneten, bis der Teig glatt und elastisch ist."
     }
   },
   "controls": {

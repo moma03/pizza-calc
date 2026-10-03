@@ -16,6 +16,7 @@ import {
   prefermentShareLimits,
   resolveYeastPercent,
   roomTimeLimits,
+  scheduleFor,
   yeastPercentLimits,
   type BallingPoint,
   type PizzaStyle,
@@ -64,7 +65,12 @@ export function Calculator({
 
   const selectStyle = (style: PizzaStyle) => {
     setPizzaStyle(style);
-    setInput((current) => ({ ...current, ...STYLE_PRESETS[style], numberOfPizzas: current.numberOfPizzas }));
+    setInput((current) => ({
+      ...current,
+      ...STYLE_PRESETS[style],
+      ...scheduleFor(current.method, style),
+      numberOfPizzas: current.numberOfPizzas,
+    }));
   };
 
   /** A new method starts from its own preferment defaults. */
@@ -73,7 +79,7 @@ export function Calculator({
       ...current,
       method: next,
       ...prefermentDefaults(next),
-      bulkFermentHours: roomMinimumsFor(next).bulk,
+      ...scheduleFor(next, pizzaStyle),
     }));
     onMethodChange(next);
   };
