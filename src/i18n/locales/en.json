@@ -146,28 +146,56 @@
       "hint": "Part of the flour ferments for several hours first, as a runny preferment of equal flour and water. Gives a more extensible dough, a lighter crust and a mild, slightly sweet aroma.",
       "shareTooltip": "How much of the recipe's total flour goes into the poolish. 25–35 % is typical for pizza; up to 50 % for more flavour and a very extensible dough.",
       "hydrationTooltip": "Water in the poolish, as a percentage of its own flour.",
-      "timeTooltip": "Hours until the poolish is ripe. The yeast is set so it peaks just then: the longer and cooler, the less yeast.",
+      "timeTooltip": "Hours at room temperature. The yeast is set so the poolish peaks just as you mix the dough: the longer and cooler, the less yeast.",
       "yeastNote": "Poolish yeast: {{percent}} % {{yeast}} relative to the poolish flour.",
       "noExtraYeast": "No extra yeast in the final dough — the ripe poolish leavens it on its own.",
       "surplus": "The poolish alone brings more leavening than this schedule needs, so no yeast goes into the final dough — and the dough will still be ready early, after about {{hours}} h at room temperature instead of {{planned}} h. Shorten the room-temperature time or use less poolish.",
       "surplusTooShort": "The poolish alone brings more leavening than even the shortest schedule needs, so the dough will be ready early. Use less poolish or add a longer cold phase.",
-      "step": "Poolish, {{hours}} h before you mix the dough: stir {{flour}} flour, {{water}} water and {{yeast}} yeast into a smooth batter. Cover and leave at {{temp}} until it has doubled or tripled, is full of bubbles and the dome is just starting to settle.",
       "knead": "Mix the dough: loosen the poolish in the water and the ice, add the flour{{yeast}} and mix until no dry flour is left, then work in the salt. Knead for 10–15 minutes until the dough is smooth and elastic.",
-      "ingredient": "Poolish"
+      "ingredient": "Poolish",
+      "stepIntro": "Poolish, {{hours}} h before you mix the dough:",
+      "mix": "stir {{flour}} flour, {{water}} water{{waterTemp}} and {{yeast}} yeast into a smooth batter.",
+      "ripe": "It is ripe when it has doubled or tripled, is full of bubbles and the dome is just starting to settle.",
+      "variants": {
+        "room": {
+          "label": "At room temperature",
+          "hint": "The classic poolish: it ripens in the warmth over about 12 hours and is used at its peak — domed, bubbly, just starting to settle."
+        },
+        "fridge": {
+          "label": "Overnight in the fridge",
+          "hint": "An hour at room temperature to get the yeast going, then about 16 hours in the fridge. It ripens slowly and holds its peak longer, which makes it easy to fit around a working day — at the cost of noticeably more yeast."
+        }
+      }
     },
     "biga": {
       "label": "Biga",
       "hint": "Part or all of the flour ferments first as a stiff, crumbly preferment with about 45 % water, typically 16–18 hours. Builds strength for an airy, crisp crust and a mild, slightly fruity aroma.",
       "shareTooltip": "How much of the recipe's total flour goes into the biga. Anything from 20 to 100 % is used; 30–50 % is a good start. The more biga, the shorter the final dough's rise.",
       "hydrationTooltip": "Water in the biga, as a percentage of its own flour. The classic biga uses 44–45 %; up to about 60 % is easier to mix by hand.",
-      "timeTooltip": "Hours until the biga is ripe. The classic is 16–18 h at 16–18 °C with about 1 % fresh yeast; the yeast is adjusted for your time and temperature.",
+      "timeTooltip": "Hours at room temperature — 0 for a biga that only goes in the fridge. The yeast is worked out for the whole schedule.",
       "yeastNote": "Biga yeast: {{percent}} % {{yeast}} relative to the biga flour.",
       "noExtraYeast": "No extra yeast in the final dough — the ripe biga leavens it on its own.",
       "surplus": "The biga alone brings more leavening than this schedule needs, so no yeast goes into the final dough — and the dough will still be ready early, after about {{hours}} h at room temperature instead of {{planned}} h. Shorten the room-temperature time or use less biga.",
       "surplusTooShort": "The biga alone brings more leavening than even the shortest schedule needs, so the dough will be ready early. Use less biga or add a longer cold phase.",
-      "step": "Biga, {{hours}} h before you mix the dough: dissolve {{yeast}} yeast in {{water}} cool water, add {{flour}} flour and mix only until the water is absorbed — a shaggy mass of moist crumbs, not a smooth dough. Cover and leave at {{temp}}. It is ripe when it has grown slightly, looks puffy and smells gently of alcohol and fruit.",
       "knead": "Mix the dough: tear the biga into small pieces and mix it with most of the water{{yeast}} until it starts to come together. Add the flour, then the salt, and work in the remaining water and the ice a little at a time. Knead until the dough is smooth and elastic.",
-      "ingredient": "Biga"
+      "ingredient": "Biga",
+      "stepIntro": "Biga, {{hours}} h before you mix the dough:",
+      "mix": "dissolve {{yeast}} yeast in {{water}} water{{waterTemp}}, add {{flour}} flour and mix only until the water is absorbed — a shaggy mass of moist crumbs, not a smooth dough.",
+      "ripe": "It is ripe when it has grown slightly, looks puffy and smells gently of alcohol and fruit.",
+      "variants": {
+        "classic": {
+          "label": "Classic (Giorilli)",
+          "hint": "The standard Italian biga: 44–45 % water and about 1 % fresh yeast, ripened for 16–18 hours somewhere cool, ideally 16–18 °C."
+        },
+        "cold": {
+          "label": "Cold biga (biga fredda)",
+          "hint": "Mixed warm, to about 25 °C, with 50 % water, then straight into the fridge for 24–48 hours. Forgiving of a warm kitchen, with a milder, more controlled aroma."
+        },
+        "long": {
+          "label": "Long biga (48 h)",
+          "hint": "24 hours in the fridge, then 24 hours at 18–20 °C, with 40–42 % water and very little yeast — a 48-hour biga for the most aroma. With a 24-hour final dough it makes a 72-hour pizza."
+        }
+      }
     },
     "sourdough": {
       "label": "Sourdough",
@@ -211,7 +239,15 @@
     "fermentationSettings": "Fermentation",
     "preferment": {
       "share": "Share of flour",
-      "hydration": "Hydration"
+      "hydration": "Hydration",
+      "variant": "Variant",
+      "custom": "Custom schedule",
+      "customHint": "You have changed the schedule. Pick a variant to start from its settings again.",
+      "coldTooltip": "Hours the preferment spends in the fridge. At 0 it stays at room temperature the whole time.",
+      "order": "Order",
+      "roomFirst": "Room temperature first, then the fridge",
+      "coldFirst": "Fridge first, then room temperature",
+      "total": "Ripens for {{total}} h in all before the final dough is mixed."
     },
     "starter": {
       "heading": "Sourdough starter",
@@ -282,7 +318,7 @@
   "results": {
     "title": "Your recipe",
     "prefermentHeading": "1 · {{name}}",
-    "prefermentTiming": "Mix it {{hours}} h before the final dough and let it ripen at {{temp}}.",
+    "prefermentTiming": "Start it {{hours}} h before the final dough: {{schedule}}.",
     "finalDough": "2 · Final dough",
     "ingredients": {
       "flour": "Flour",
@@ -311,13 +347,16 @@
         "afterCold": "the covered dough in one piece",
         "beforeCold": "the covered dough balls"
       },
-      "andYeast": " and the yeast"
+      "andYeast": " and the yeast",
+      "waterAt": " (about {{temp}})",
+      "ripen": "Cover it and let it ripen: {{schedule}}."
     },
     "phases": {
       "bulk": "Bulk fermentation",
       "cold": "Cold fermentation",
       "proof": "Final proof",
-      "room": "Room temperature"
+      "room": "Room temperature",
+      "stageCold": "{{name}} (fridge)"
     },
     "effectiveCold": "Cooling time included, the {{nominal}} h in the fridge behave like {{hours}} h — about {{percent}} % {{direction}} fermentation.",
     "effectiveColdMore": "more",
@@ -336,6 +375,16 @@
         "max": "This schedule is short for sourdough: it would need more starter than the {{percent}} % used here, so the dough may not be ready in time. Allow more time at room temperature, or a warmer spot.",
         "min": "This schedule is long for sourdough: even {{percent}} % starter may leave the dough over-fermented. Shorten the schedule or keep it cooler."
       }
+    },
+    "schedule": {
+      "room": "{{hours}} h at {{temp}}",
+      "cold": "{{hours}} h in the fridge at {{temp}}",
+      "then": ", then "
+    },
+    "prefermentEquivalent": "With the fridge time, that is worth about {{hours}} h at {{temp}}.",
+    "planner": {
+      "label": "Ready to bake at",
+      "start": "Start: {{time}}"
     }
   },
   "guide": {

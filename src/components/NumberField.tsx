@@ -23,6 +23,11 @@ interface NumberFieldProps {
   tooltip?: string;
   /** Smaller padding, for the fermentation grid. */
   compact?: boolean;
+  /**
+   * Also show a range slider under the field, for values worth sweeping —
+   * mostly fermentation hours. Moves in `step`, within `limits`.
+   */
+  slider?: boolean;
 }
 
 const inputPrecision = (quantity: Quantity, system: UnitSystem): number => {
@@ -49,6 +54,7 @@ export function NumberField({
   unitSystem = 'metric',
   tooltip,
   compact = false,
+  slider = false,
 }: NumberFieldProps) {
   const id = useId();
   const [draft, setDraft] = useState<string | null>(null);
@@ -104,6 +110,21 @@ export function NumberField({
           compact ? 'px-3 py-2' : 'px-4 py-3'
         }`}
       />
+      {slider && (
+        <input
+          type="range"
+          aria-label={label}
+          min={displayLimits.min}
+          max={displayLimits.max}
+          step={step}
+          value={toDisplayUnit(value, quantity, unitSystem)}
+          onChange={(event) => {
+            setDraft(null);
+            onChange(fromDisplayUnit(Number(event.target.value), quantity, unitSystem));
+          }}
+          className="mt-2 h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-orange-600 dark:bg-gray-600"
+        />
+      )}
     </div>
   );
 }

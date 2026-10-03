@@ -1,11 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { BookOpen, HelpCircle } from 'lucide-react';
-import { defaultInputFor, resolveStarterPercent, resolveYeastPercent } from '../lib/recipe';
+import {
+  calculateRecipe,
+  defaultInputFor,
+  resolveStarterPercent,
+  resolveYeastPercent,
+  variantFields,
+} from '../lib/recipe';
 import {
   PREFERMENTS,
   isPrefermentMethod,
   prefermentYeastPercent,
+  startsCold,
   type Method,
+  type YeastType,
 } from '../lib/fermentation';
 import { formatHours, formatQuantity, type UnitSystem } from '../lib/units';
 import { round } from '../lib/math';
@@ -68,22 +76,47 @@ export function Guide({ method, unitSystem }: GuideProps) {
   const temperature = (celsius: number) => formatQuantity(celsius, 'temperature', unitSystem);
   const content = guideContent(t, method);
 
-  // A preferment's table runs at the temperature it is usually ripened at.
+  // A preferment's table: room-only times at its classic temperature, then
+  // one row per fridge variant, each worked out for the default batch.
   const rows: TableRow[] = isPrefermentMethod(method)
-    ? PREFERMENTS[method].tableHours.map((hours) => {
-        const tempC = PREFERMENTS[method].temperature.default;
-        return {
-          key: `${hours}`,
-          label: t('guide.yeastTable.roomOnly', {
-            hours: formatHours(hours),
-            temp: temperature(tempC),
+    ? [
+        ...PREFERMENTS[method].tableHours.map((hours) => {
+          const tempC = PREFERMENTS[method].variants[0].schedule.roomTempC;
+          const schedule = { roomHours: hours, roomTempC: tempC, coldHours: 0, coldTempC: 4, coldFirst: false };
+          return {
+            key: `${hours}`,
+            label: t('guide.yeastTable.roomOnly', {
+              hours: formatHours(hours),
+              temp: temperature(tempC),
+            }),
+            // Room only, so the batch weight does not enter.
+            values: [
+              round(prefermentYeastPercent(method, 'fresh', schedule, 0), 2),
+              round(prefermentYeastPercent(method, 'instant', schedule, 0), 2),
+            ],
+          };
+        }),
+        ...PREFERMENTS[method].variants
+          .filter(({ schedule }) => schedule.coldHours > 0)
+          .map((variant) => {
+            const input = { ...defaultInputFor(method), ...variantFields(method, variant) };
+            const yeastFor = (yeastType: YeastType) =>
+              round(calculateRecipe({ ...input, yeastType }).preferment?.yeastPercent ?? 0, 2);
+            const { schedule } = variant;
+            const phases = [
+              schedule.roomHours > 0 &&
+                t('results.schedule.room', { hours: formatHours(schedule.roomHours), temp: temperature(schedule.roomTempC) }),
+              t('results.schedule.cold', { hours: formatHours(schedule.coldHours), temp: temperature(schedule.coldTempC) }),
+            ].filter((phase): phase is string => typeof phase === 'string');
+            return {
+              key: variant.id,
+              label: `${t(`methods.${method}.variants.${variant.id}.label`)}: ${(
+                startsCold(schedule) ? [...phases].reverse() : phases
+              ).join(t('results.schedule.then'))}`,
+              values: [yeastFor('fresh'), yeastFor('instant')],
+            };
           }),
-          values: [
-            round(prefermentYeastPercent(method, 'fresh', tempC, hours), 2),
-            round(prefermentYeastPercent(method, 'instant', tempC, hours), 2),
-          ],
-        };
-      })
+      ]
     : DOUGH_SCHEDULES.map(([roomHours, coldHours]) => {
         const input = {
           ...defaultInputFor(method),

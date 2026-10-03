@@ -14,12 +14,19 @@ export {
 export {
   METHODS,
   PREFERMENTS,
+  equivalentRoomHours,
   isPrefermentMethod,
+  matchVariant,
+  prefermentWaterTemp,
   prefermentYeastPercent,
   roomMinimumsFor,
+  startsCold,
+  totalHours,
   type Method,
   type PrefermentMethod,
   type PrefermentProfile,
+  type PrefermentSchedule,
+  type PrefermentVariant,
 } from './methods';
 export {
   SOURDOUGH,
@@ -29,7 +36,7 @@ export {
   starterPercentFor,
   type FeedingPlan,
 } from './sourdough';
-export { coolingTimeConstant, effectiveColdHours, thermalLagFactor } from './thermal';
+export { Q10, coolingTimeConstant, effectiveColdHours, thermalLagFactor } from './thermal';
 export {
   DEFAULT_YEAST_PERCENT,
   YEAST_CONVERSION,

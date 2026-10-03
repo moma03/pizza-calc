@@ -34,6 +34,8 @@ into them.
 | ❄️ **Cooling correction** | Batch size and bulk-vs-ball retarding feed into the yeast figure — [see below](#-the-fermentation-model) |
 | 🍕 **Style presets** | Neapolitan, New York and Roman, plus a free-form mode |
 | 🧪 **Four dough methods** | Direct, poolish, biga and sourdough — preferment and starter amounts, timings and feeding worked out too ([research and calibration](docs/preferments.md)) |
+| ❄️ **Cold and long preferments** | Fridge poolish, cold biga and the 48 h biga as variants, or any mix of room and fridge hours with sliders, and one-click shares from 20 to 100 % |
+| 🗓️ **Bake-time planner** | Enter when you want to bake and every step gets its clock time — a 72 h biga pizza included |
 | ⏱️ **Your own timings** | A slider splits the room-temperature time either side of the fridge |
 | 🌍 **Bilingual** | German and English, each on its own URL — metric and imperial, everything converts |
 | 🔎 **Prerendered** | Every page ships as static HTML with its text, a worked recipe, structured data and `hreflang` — see [below](#-search-engines) |
@@ -47,7 +49,8 @@ into them.
 The interesting part of this project isn't the arithmetic — it's working out how
 much yeast a given schedule needs.
 
-> **[docs/fermentation-model.md](docs/fermentation-model.md)** — the full write-up
+> **[docs/](docs/README.md)** — the full write-up, starting with
+> **[a diagram of the whole calculation](docs/calculation-pipeline.md)**
 
 It covers:
 
@@ -62,6 +65,9 @@ It covers:
 - **[Does the order matter?](docs/fermentation-model.md#6-does-it-matter-where-the-warm-time-happens)** —
   why the theory says no, why thermal lag says yes, and why the popular
   explanation (yeast multiplying in the dough) turns out to be wrong
+- **[Preferments](docs/preferments.md)** — biga, poolish and sourdough as the
+  sources make them, and how each was calibrated onto the model, cold and long
+  variants included
 
 Short version: dough takes **hours** to reach fridge temperature, and a single
 mass cools far slower than divided balls — so *when* you shape them changes how
@@ -117,8 +123,10 @@ src/
                      factor tables, yeast maths, room schedule,
                      cooling-curve correction
 docs/
-├── fermentation-model.md
-└── preferments.md   research for biga, poolish and sourdough
+├── README.md               index
+├── calculation-pipeline.md diagrams of the calculation
+├── fermentation-model.md   the yeast model
+└── preferments.md          research and calibration for biga, poolish, sourdough
 scripts/
 └── prerender.mjs    writes the static pages after `vite build`
 ```

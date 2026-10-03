@@ -4,6 +4,7 @@ import { Clock, FlaskConical, Thermometer } from 'lucide-react';
 import { NumberField } from './NumberField';
 import { SelectField } from './SelectField';
 import { RoomTimeSplitField } from './RoomTimeSplitField';
+import { PrefermentFields } from './PrefermentFields';
 import {
   BALLING_POINTS,
   LIMITS,
@@ -13,7 +14,6 @@ import {
   calculateRecipe,
   defaultInputFor,
   prefermentDefaults,
-  prefermentShareLimits,
   resolveStarterPercent,
   resolveYeastPercent,
   roomTimeLimits,
@@ -255,57 +255,13 @@ export function Calculator({
             </label>
           </div>
 
-          {preferment && isPrefermentMethod(method) && (
-            <div className="space-y-3 rounded-lg border border-amber-200 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-900/20">
-              <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                <FlaskConical className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                {t(`methods.${method}.label`)}
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <NumberField
-                  compact
-                  label={t('calculator.preferment.share')}
-                  tooltip={t(`methods.${method}.shareTooltip`)}
-                  value={input.prefermentShare}
-                  onChange={(value) => update('prefermentShare', value)}
-                  limits={prefermentShareLimits(method, input.waterPercent, input.prefermentHydration)}
-                  quantity="percent"
-                  step={5}
-                />
-                {preferment.hydration.range.min < preferment.hydration.range.max && (
-                  <NumberField
-                    compact
-                    label={t('calculator.preferment.hydration')}
-                    tooltip={t(`methods.${method}.hydrationTooltip`)}
-                    value={input.prefermentHydration}
-                    onChange={(value) => update('prefermentHydration', value)}
-                    limits={preferment.hydration.range}
-                    quantity="percent"
-                    step={1}
-                  />
-                )}
-                <NumberField
-                  compact
-                  label={t('calculator.fermentation.temperature')}
-                  value={input.prefermentTemp}
-                  onChange={(value) => update('prefermentTemp', value)}
-                  limits={preferment.temperature.range}
-                  quantity="temperature"
-                  unitSystem={unitSystem}
-                  step={1}
-                />
-                <NumberField
-                  compact
-                  label={t('calculator.fermentation.time')}
-                  tooltip={t(`methods.${method}.timeTooltip`)}
-                  value={input.prefermentTime}
-                  onChange={(value) => update('prefermentTime', value)}
-                  limits={preferment.time.range}
-                  quantity="hours"
-                  step={1}
-                />
-              </div>
-            </div>
+          {isPrefermentMethod(method) && (
+            <PrefermentFields
+              method={method}
+              input={input}
+              onChange={(fields) => setInput((current) => ({ ...current, ...fields }))}
+              unitSystem={unitSystem}
+            />
           )}
 
           {isSourdough && (
@@ -349,6 +305,7 @@ export function Calculator({
                 />
                 <NumberField
                   compact
+                  slider
                   label={t('calculator.starter.feedHours')}
                   tooltip={t('calculator.starter.feedHoursTooltip')}
                   value={input.prefermentTime}
@@ -383,6 +340,7 @@ export function Calculator({
               />
               <NumberField
                 compact
+                slider
                 label={t('calculator.fermentation.time')}
                 tooltip={t('calculator.fermentation.roomTimeTooltip', {
                   minimum: roomTimeLimits(method).min,
@@ -414,6 +372,7 @@ export function Calculator({
               />
               <NumberField
                 compact
+                slider
                 label={t('calculator.fermentation.time')}
                 tooltip={t('calculator.fermentation.coldTimeTooltip')}
                 value={input.coldFermentTime}

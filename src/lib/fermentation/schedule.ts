@@ -12,7 +12,10 @@ export interface RoomMinimums {
   readonly ballProof: number;
 }
 
-/** Minimums for a dough leavened with yeast alone. */
+/**
+ * Minimums for a dough leavened with yeast alone.
+ * See docs/fermentation-model.md §5; preferment minimums in docs/preferments.md §5.5.
+ */
 export const DIRECT_ROOM_MINIMUMS: RoomMinimums = { bulk: 2, ballProof: 3 };
 
 export const MIN_BULK_HOURS = DIRECT_ROOM_MINIMUMS.bulk;
@@ -50,6 +53,7 @@ export const bulkHoursRange = (
  * time. Without one — there is no cold phase to plan around — both phases sit
  * at their minimum and the surplus is reported separately, for the caller to
  * offer at either end.
+ * See docs/fermentation-model.md §5.
  */
 export const splitRoomFermentation = (
   totalRoomHours: number,

@@ -146,28 +146,56 @@
       "hint": "Ein Teil des Mehls gärt vorab mehrere Stunden als flüssiger Vorteig aus gleich viel Mehl und Wasser. Ergibt einen dehnbareren Teig, einen luftigeren Rand und ein mildes, leicht süßliches Aroma.",
       "shareTooltip": "Wie viel vom gesamten Mehl des Rezepts in den Poolish kommt. Für Pizza sind 25–35 % üblich, bis 50 % für mehr Aroma und einen sehr dehnbaren Teig.",
       "hydrationTooltip": "Wasser im Poolish, in Prozent seines eigenen Mehls.",
-      "timeTooltip": "Stunden, bis der Poolish reif ist. Die Hefe wird so bemessen, dass er genau dann seinen Höhepunkt erreicht: je länger und kühler, desto weniger Hefe.",
+      "timeTooltip": "Stunden bei Raumtemperatur. Die Hefe wird so bemessen, dass der Poolish genau beim Kneten seinen Höhepunkt erreicht: je länger und kühler, desto weniger Hefe.",
       "yeastNote": "Hefe im Poolish: {{percent}} % {{yeast}} bezogen auf das Poolish-Mehl.",
       "noExtraYeast": "Keine zusätzliche Hefe im Hauptteig – der reife Poolish lockert ihn allein.",
       "surplus": "Der Poolish allein bringt mehr Triebkraft mit, als dieser Zeitplan braucht. Deshalb kommt keine Hefe in den Hauptteig – und trotzdem ist der Teig früher fertig, nach etwa {{hours}} h bei Raumtemperatur statt {{planned}} h. Verkürze die Zeit bei Raumtemperatur oder nimm weniger Poolish.",
       "surplusTooShort": "Der Poolish allein bringt mehr Triebkraft mit, als selbst der kürzeste Zeitplan braucht – der Teig ist früher fertig. Nimm weniger Poolish oder plane eine längere Kaltgare ein.",
-      "step": "Poolish, {{hours}} h bevor du den Teig knetest: {{flour}} Mehl, {{water}} Wasser und {{yeast}} Hefe zu einem glatten, flüssigen Teig verrühren. Abgedeckt bei {{temp}} stehen lassen, bis er sich verdoppelt bis verdreifacht hat, voller Blasen ist und die Kuppel gerade einzusinken beginnt.",
       "knead": "Teig mischen: den Poolish im Wasser und dem Eis auflösen, das Mehl{{yeast}} zugeben und mischen, bis kein trockenes Mehl mehr zu sehen ist, dann das Salz einarbeiten. 10–15 Minuten kneten, bis der Teig glatt und elastisch ist.",
-      "ingredient": "Poolish"
+      "ingredient": "Poolish",
+      "stepIntro": "Poolish, {{hours}} h bevor du den Teig knetest:",
+      "mix": "{{flour}} Mehl, {{water}} Wasser{{waterTemp}} und {{yeast}} Hefe zu einem glatten, flüssigen Teig verrühren.",
+      "ripe": "Reif ist er, wenn er sich verdoppelt bis verdreifacht hat, voller Blasen ist und die Kuppel gerade einzusinken beginnt.",
+      "variants": {
+        "room": {
+          "label": "Bei Raumtemperatur",
+          "hint": "Der klassische Poolish: Er reift in der Wärme in etwa 12 Stunden und wird auf seinem Höhepunkt verarbeitet – gewölbt, voller Blasen, gerade dabei einzusinken."
+        },
+        "fridge": {
+          "label": "Über Nacht im Kühlschrank",
+          "hint": "Eine Stunde bei Raumtemperatur, damit die Hefe anspringt, dann etwa 16 Stunden im Kühlschrank. Er reift langsam und hält seinen Höhepunkt länger – lässt sich gut um einen Arbeitstag planen, braucht aber deutlich mehr Hefe."
+        }
+      }
     },
     "biga": {
       "label": "Biga",
       "hint": "Ein Teil oder das gesamte Mehl gärt vorab als fester, krümeliger Vorteig mit etwa 45 % Wasser, meist 16–18 Stunden. Gibt Kraft für einen luftigen, knusprigen Rand und ein mildes, leicht fruchtiges Aroma.",
       "shareTooltip": "Wie viel vom gesamten Mehl des Rezepts in die Biga kommt. Üblich sind 20 bis 100 %, 30–50 % sind ein guter Start. Je mehr Biga, desto kürzer die Gare des Hauptteigs.",
       "hydrationTooltip": "Wasser in der Biga, in Prozent ihres eigenen Mehls. Die klassische Biga hat 44–45 %; bis etwa 60 % lässt sie sich leichter von Hand mischen.",
-      "timeTooltip": "Stunden, bis die Biga reif ist. Klassisch sind 16–18 h bei 16–18 °C mit etwa 1 % Frischhefe; die Hefe wird an deine Zeit und Temperatur angepasst.",
+      "timeTooltip": "Stunden bei Raumtemperatur – 0 für eine Biga, die nur in den Kühlschrank kommt. Die Hefe wird für den ganzen Zeitplan berechnet.",
       "yeastNote": "Hefe in der Biga: {{percent}} % {{yeast}} bezogen auf das Biga-Mehl.",
       "noExtraYeast": "Keine zusätzliche Hefe im Hauptteig – die reife Biga lockert ihn allein.",
       "surplus": "Die Biga allein bringt mehr Triebkraft mit, als dieser Zeitplan braucht. Deshalb kommt keine Hefe in den Hauptteig – und trotzdem ist der Teig früher fertig, nach etwa {{hours}} h bei Raumtemperatur statt {{planned}} h. Verkürze die Zeit bei Raumtemperatur oder nimm weniger Biga.",
       "surplusTooShort": "Die Biga allein bringt mehr Triebkraft mit, als selbst der kürzeste Zeitplan braucht – der Teig ist früher fertig. Nimm weniger Biga oder plane eine längere Kaltgare ein.",
-      "step": "Biga, {{hours}} h bevor du den Teig knetest: {{yeast}} Hefe in {{water}} kühlem Wasser auflösen, {{flour}} Mehl zugeben und nur so lange mischen, bis das Wasser aufgenommen ist – eine grobe, feuchte Krümelmasse, kein glatter Teig. Abgedeckt bei {{temp}} reifen lassen. Reif ist sie, wenn sie etwas aufgegangen ist, die Krümel aufgebläht aussehen und sie leicht nach Alkohol und Frucht riecht.",
       "knead": "Teig mischen: die Biga in kleine Stücke reißen und mit dem Großteil des Wassers{{yeast}} mischen, bis sie sich zu verbinden beginnt. Das Mehl zugeben, dann das Salz, und das restliche Wasser und das Eis nach und nach einarbeiten. Kneten, bis der Teig glatt und elastisch ist.",
-      "ingredient": "Biga"
+      "ingredient": "Biga",
+      "stepIntro": "Biga, {{hours}} h bevor du den Teig knetest:",
+      "mix": "{{yeast}} Hefe in {{water}} Wasser{{waterTemp}} auflösen, {{flour}} Mehl zugeben und nur so lange mischen, bis das Wasser aufgenommen ist – eine grobe, feuchte Krümelmasse, kein glatter Teig.",
+      "ripe": "Reif ist sie, wenn sie etwas aufgegangen ist, die Krümel aufgebläht aussehen und sie leicht nach Alkohol und Frucht riecht.",
+      "variants": {
+        "classic": {
+          "label": "Klassisch (Giorilli)",
+          "hint": "Die italienische Standard-Biga: 44–45 % Wasser und etwa 1 % Frischhefe, 16–18 Stunden kühl gereift, ideal bei 16–18 °C."
+        },
+        "cold": {
+          "label": "Kalte Biga (biga fredda)",
+          "hint": "Warm angesetzt, auf etwa 25 °C, mit 50 % Wasser, dann direkt für 24–48 Stunden in den Kühlschrank. Verzeiht eine warme Küche, mit milderem, kontrollierterem Aroma."
+        },
+        "long": {
+          "label": "Lange Biga (48 h)",
+          "hint": "24 Stunden im Kühlschrank, dann 24 Stunden bei 18–20 °C, mit 40–42 % Wasser und sehr wenig Hefe – eine 48-Stunden-Biga für das meiste Aroma. Mit einem 24-Stunden-Hauptteig ergibt das eine 72-Stunden-Pizza."
+        }
+      }
     },
     "sourdough": {
       "label": "Sauerteig",
@@ -211,7 +239,15 @@
     "fermentationSettings": "Gärung",
     "preferment": {
       "share": "Mehlanteil",
-      "hydration": "Hydration"
+      "hydration": "Hydration",
+      "variant": "Variante",
+      "custom": "Eigener Zeitplan",
+      "customHint": "Du hast den Zeitplan angepasst. Wähle eine Variante, um wieder von ihren Einstellungen auszugehen.",
+      "coldTooltip": "Stunden, die der Vorteig im Kühlschrank verbringt. Bei 0 bleibt er die ganze Zeit bei Raumtemperatur.",
+      "order": "Reihenfolge",
+      "roomFirst": "Erst Raumtemperatur, dann Kühlschrank",
+      "coldFirst": "Erst Kühlschrank, dann Raumtemperatur",
+      "total": "Reift insgesamt {{total}} h, bevor der Hauptteig geknetet wird."
     },
     "starter": {
       "heading": "Sauerteig-Starter",
@@ -282,7 +318,7 @@
   "results": {
     "title": "Dein Rezept",
     "prefermentHeading": "1 · {{name}}",
-    "prefermentTiming": "{{hours}} h vor dem Hauptteig ansetzen und bei {{temp}} reifen lassen.",
+    "prefermentTiming": "{{hours}} h vor dem Hauptteig ansetzen: {{schedule}}.",
     "finalDough": "2 · Hauptteig",
     "ingredients": {
       "flour": "Mehl",
@@ -311,13 +347,16 @@
         "afterCold": "den abgedeckten Teig am Stück",
         "beforeCold": "die abgedeckten Teigkugeln"
       },
-      "andYeast": " und die Hefe"
+      "andYeast": " und die Hefe",
+      "waterAt": " (etwa {{temp}})",
+      "ripen": "Abgedeckt reifen lassen: {{schedule}}."
     },
     "phases": {
       "bulk": "Stockgare",
       "cold": "Kaltgare",
       "proof": "Stückgare",
-      "room": "Raumtemperatur"
+      "room": "Raumtemperatur",
+      "stageCold": "{{name}} (Kühlschrank)"
     },
     "effectiveCold": "Mit Abkühlzeit gerechnet verhalten sich die {{nominal}} h im Kühlschrank wie {{hours}} h – etwa {{percent}} % {{direction}} Gärung.",
     "effectiveColdMore": "mehr",
@@ -336,6 +375,16 @@
         "max": "Dieser Zeitplan ist für Sauerteig knapp: Er bräuchte mehr Anstellgut als die hier verwendeten {{percent}} %, der Teig wird also womöglich nicht rechtzeitig fertig. Plane mehr Zeit bei Raumtemperatur oder einen wärmeren Ort ein.",
         "min": "Dieser Zeitplan ist für Sauerteig lang: Selbst mit {{percent}} % Anstellgut kann der Teig übergären. Verkürze den Zeitplan oder halte ihn kühler."
       }
+    },
+    "schedule": {
+      "room": "{{hours}} h bei {{temp}}",
+      "cold": "{{hours}} h im Kühlschrank bei {{temp}}",
+      "then": ", danach "
+    },
+    "prefermentEquivalent": "Mit der Kühlschrankzeit entspricht das etwa {{hours}} h bei {{temp}}.",
+    "planner": {
+      "label": "Backen am",
+      "start": "Beginn: {{time}}"
     }
   },
   "guide": {

@@ -6,6 +6,7 @@ import { lookupNearest } from '../math';
  *
  * Keyed by room temperature in °C. Warmer dough needs dramatically less yeast,
  * which is why the values fall by two orders of magnitude across the range.
+ * See docs/fermentation-model.md §2.1.
  */
 const ROOM_TEMPERATURE_COEFFICIENTS: Record<number, number> = {
   14: 0.33,
@@ -37,7 +38,10 @@ const ROOM_TEMPERATURE_COEFFICIENTS: Record<number, number> = {
   40: 0.00265,
 };
 
-/** Exponent on room-temperature fermentation time. */
+/**
+ * Exponent on room-temperature fermentation time.
+ * See docs/fermentation-model.md §2.1.
+ */
 export const ROOM_TIME_EXPONENT = -1.45;
 
 export interface ColdCoefficients {
@@ -47,7 +51,10 @@ export interface ColdCoefficients {
   readonly time: number;
 }
 
-/** Half-saturation time of the cold-fermentation curve, in hours. */
+/**
+ * Half-saturation time of the cold-fermentation curve, in hours.
+ * See docs/fermentation-model.md §2.2.
+ */
 export const COLD_HALF_SATURATION_HOURS = 9.8233;
 
 /** Cold-fermentation coefficients keyed by fridge temperature in °C. */

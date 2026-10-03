@@ -77,7 +77,8 @@ smell means it is overripe.
    population.
 6. Divide and ball (*staglio*).
 7. Ball proof (*appretto*): **1–2 h at room temperature for 100 % biga**,
-   longer with less biga. Alternatively 1 h at room temperature, then into the fridge.
+   longer with less biga. Gozney also gives 1 h at room temperature, then the
+   fridge until needed, so the calculator's shortest biga ball proof is **1 h**.
 
 Example, 100 % biga, 66 % total hydration, 6 × 280 g (Gozney):
 biga 1000 g flour + 450 g water + 10 g fresh yeast, 16–18 h at 16–18 °C →
@@ -239,11 +240,15 @@ The numbers live in [`src/lib/fermentation/methods.ts`](../src/lib/fermentation/
 | | Poolish | Biga |
 |---|---|---|
 | Yeast factor on the room curve | 0.8 | 2.8 |
-| Ripe yeast equivalent (fresh %, of preferment flour) | 1.5 | 3 |
-| Minimum bulk / ball proof of the final dough | 1 h / 3 h | 0.5 h / 1.5 h |
+| Ripe yeast equivalent (fresh %, of preferment flour) | 1.1 | 3 |
+| Minimum bulk / ball proof of the final dough | 1 h / 3 h | 0.5 h / 1 h |
 | Share, default (range) | 30 % (10–50) | 50 % (20–100) |
-| Hydration, default (range) | 100 % (fixed) | 45 % (40–60) |
-| Ripening, default (range) | 12 h (3–18) at 20 °C (15–28) | 17 h (8–24) at 18 °C (15–25) |
+| Share presets (§8) | 20 / 30 / 40 / 50 % | 30 / 50 / 75 / 80 / 100 % |
+| Hydration, default (range) | 100 % (fixed) | 45 % (40–60); 50 % cold, 42 % long |
+| Room phase (range) | 0–24 h at 15–28 °C | 0–48 h at 15–25 °C |
+| Fridge phase (range) | 0–48 h at 4–13 °C | 0–72 h at 4–13 °C |
+| Shortest total ripening | 3 h | 8 h |
+| Variants (§7.1) | room 12 h at 20 °C · fridge 1 h + 16 h at 4 °C | classic 17 h at 18 °C · cold 24 h at 4 °C · long 24 h at 4 °C + 24 h at 18 °C |
 | Final dough's default schedule | the style preset's | 0.5 h bulk, 24 h fridge, 2.5 h proof |
 
 The biga factor reproduces Giorilli's biga exactly: 0.99 % fresh yeast for 17 h
@@ -253,12 +258,21 @@ model puts that schedule at 2.9 % fresh yeast.
 
 **Final-dough yeast.** The final dough gets whatever its own schedule needs
 under the direct model, minus what the ripe preferment brings
-(`share × ripe yeast equivalent`), and never less than zero. For poolish,
-the published recipes disagree. Some add no yeast at all to a 30 % poolish
-dough (≈ 2 %); others add a full direct dough's worth (≈ 0 %). 1.5 % sits
-between them. With the defaults (30 % poolish, 24 h fridge), that adds about
-0.18 % fresh yeast to the final dough, against 0.63 % for the same schedule
-done direct.
+(`share × ripe yeast equivalent`), and never less than zero.
+
+For poolish the published recipes disagree a lot. Working back from each one
+what its poolish must be worth gives:
+
+| Recipe | Poolish | Final dough | Implied equivalent |
+|---|---|---|---|
+| Vito Iacopelli (as reproduced by CopyCat Cooking) | 30 % | no yeast; 16–24 h fridge + ~4 h (0.87 % demand) | ≈ 2.9 |
+| Jordo's, cold | 30 % | 0.1–0.15 % instant on the rest; 24 h fridge | ≈ 1.4 |
+| My Pizza Corner | 48 % | no yeast; ~11 h at ~21 °C (0.39 % demand) | ≈ 0.8 |
+| Jordo's, same day | 30 % | 0.3–0.5 % instant on the rest | ≈ 0.3 |
+
+The app uses the median, **1.1**. With the defaults (30 % poolish, 24 h
+fridge), that adds about 0.30 % fresh yeast to the final dough, against 0.63 %
+for the same schedule done direct.
 
 **Surplus.** When the preferment alone brings more than 1.15× what the
 schedule needs, nothing is added. The page then shows the room time that would
@@ -309,7 +323,127 @@ hydration stays exactly as set. That includes a stiff starter at 50 %.
 
 ---
 
-## 6. Search: one page per method
+## 7. Cold and long preferments
+
+### 7.1 What the sources do
+
+| Variant | Hydration | Fresh yeast | Mix to | Schedule | Source |
+|---|---|---|---|---|---|
+| Classic biga | 44–45 % | 1 % | ~21 °C | 16–18 h at 16–18 °C | Giorilli; Farina Petra; Arte Bianca |
+| Cold biga (*biga fredda*) | 50 % (to 60 %) | 1 % (0.7–1) | 25–26 °C | 24 h at 4 °C, up to 48 h | Farina Petra; Arte Bianca; Consultapizza (≥ 24 h at 10 °C) |
+| Long controlled biga | 40–42 % | 0.3–0.7 % (1 % "reduced to 0.5 %") | — | 24 h at 4 °C, then 24 h at 18–20 °C | Consultapizza; Mulino Val d'Orcia; Cucina con Silvia |
+| Long room biga | 50 % | 0.1–0.2 % | — | 24 h at room temperature | Consultapizza |
+| Fridge poolish | 100 % | 0.1–0.3 % instant (≈ 0.25–0.75 % fresh) | room | 1 h at room temperature, then 12–18 h in the fridge | Jordo's; Emily Fabulous; PizzaBlab |
+| Fridge poolish, fast | 100 % | ~1.7 % (5 g per 300 g, type not stated), plus honey | room | 1 h, then 16–24 h in the fridge | Vito Iacopelli (via CopyCat Cooking); an outlier, not used for calibration |
+
+The calculator offers the first three biga rows and the poolish rows as
+**variants**. A variant only fills in the fields. Once you edit them, the
+schedule shows as custom.
+
+The two phases can come in either order. Fridge first means the preferment
+goes into the fridge straight after mixing. That is the cold biga, and the
+long biga, which spends its second day at room temperature.
+
+### 7.2 The model: fridge hours as room hours
+
+The direct dough's combined room/cold tables (fermentation-model §2.3) are
+**not** used here. They were fitted to doughs with at least 5 h of room time.
+For a preferment with 1 h or none they run away. A fridge poolish of 1 h + 16 h
+comes out at 6 % yeast, more than the same poolish fridge-only. Instead:
+
+```
+equivalent room hours = room h + effectiveColdHours(fridge h) · Q10^((T_fridge − T_room) / 10)
+preferment yeast      = room curve(T_room, equivalent hours) × method factor
+```
+
+* `effectiveColdHours` is the existing cooling-curve integral
+  (fermentation-model §6.5). It now takes the temperature the preferment goes
+  in at: its mix temperature when the fridge comes first (25 °C for a cold
+  biga, which is closed warm on purpose), otherwise the room it stood in.
+* `Q10 = 2` is the same coefficient the cooling model already uses (§3.2), so
+  nothing new is fitted.
+* The cooling time scales with the preferment's mass, estimated as
+  `total flour × share × (1 + hydration)`.
+
+With no fridge phase this reduces exactly to §5.1/§5.2, so the classic
+calibrations are untouched.
+
+### 7.3 Check against the sources
+
+Computed for the default recipe (4 × 230 g, so about 400 g of biga or 330 g of
+poolish):
+
+| Variant | Model | Source |
+|---|---|---|
+| Poolish, 12 h at 20 °C | 0.31 % | 0.3 % |
+| Poolish, 1 h + 16 h at 4 °C | 0.63 % | 0.25–0.75 % |
+| Classic biga, 17 h at 18 °C | 0.99 % | 1 % |
+| Cold biga, 48 h at 4 °C | 0.76 % | 0.7–1 % |
+| Long biga, 24 h at 4 °C + 24 h at 18 °C | 0.34 % | 0.3–0.7 % |
+| Long room biga, 24 h at 20 °C | 0.40 % | 0.1–0.2 % |
+| Cold biga, 24 h at 4 °C | 1.8 % (400 g) | 1 % |
+
+The last two rows are off by about 2×, so they get a closer look.
+
+**Cold biga, 24 h.** The 1 % comes from pizzerias, where a biga is several
+kilograms and takes many hours to cool. The model reproduces that once it is
+given the same mass:
+
+| Biga mass | 400 g | 800 g | 1.5 kg | 3 kg | 7.5 kg | 15 kg |
+|---|---|---|---|---|---|---|
+| Fresh yeast, 24 h at 4 °C | 1.82 % | 1.64 % | 1.45 % | 1.23 % | 0.96 % | 0.79 % |
+
+A home-sized biga chills within a few hours and banks much less fermentation
+on the way down, so it needs more yeast for the same 24 h. Following the 1 %
+figure at home with a small batch gives a biga that is still young after 24 h.
+That is consistent with sources allowing it up to 48 h, which the model puts
+at 0.76 %.
+
+**Long room biga.** That row is a single source. The model's room curve is
+the well-checked classic biga calibration (§5.2) extended to 24 h, so it is
+kept rather than bent to one point.
+
+### 7.4 Water temperature
+
+The biga sources give the water temperature by the bakers' rule
+`water = base − (room + flour)`. The base is **55** for a classic biga closed
+at ~21 °C, and **70** for a cold biga closed at 25–26 °C (Arte Bianca). The
+calculator takes the flour to be at the final dough's room temperature. It
+applies the 70 base whenever the biga goes into the fridge first, and clamps
+the result to 2–40 °C. In a 20 °C kitchen that gives 15 °C water for a classic
+biga and 30 °C for a cold one. Poolish sources give no rule (room-temperature
+water), so none is shown.
+
+---
+
+## 8. Share presets
+
+One-click shares beside the field, taken from the ranges in use:
+
+* **Poolish 20 / 30 / 40 / 50 %.** 25–35 % is typical for pizza and 40–50 %
+  for a strong, very extensible dough (fond.kitchen).
+* **Biga 30 / 50 / 75 / 80 / 100 %.** "Generally 30 to 100 %" (Arte Bianca),
+  with 20–30 % the maximum without extra yeast and 60–100 % for short final
+  fermentations (Consultapizza). 75–80 % is common for Roman-style and
+  high-hydration doughs.
+
+A preset above what the hydration allows is hidden: the preferment's water
+cannot exceed the recipe's.
+
+---
+
+## 9. Planning by clock time
+
+With a bake time entered, each step's start time is shown as the bake time
+minus the hours left after it (calculation-pipeline §5). A 48 h long biga at
+80 % with a 24 h final dough runs about 75 h in all. Mix the biga on Wednesday
+at 16:00 to bake on Saturday at 19:00. At 80 % the biga alone carries the
+final dough (no added yeast), and the page suggests 2 h at room temperature
+instead of 3.
+
+---
+
+## 10. Search: one page per method
 
 Each method is a search term in its own right ("biga calculator", "poolish
 pizza dough", "Sauerteig Pizza Rechner"). Each gets its own prerendered URL,
@@ -343,3 +477,12 @@ means adding a row there and its texts to the locale files.
 * [sourdoughratio.com — Starter feeding ratios](https://sourdoughratio.com/guides/starter-feeding-ratio)
 * [mypizzanight.com — Sourdough pizza calculator guide](https://mypizzanight.com/guides/sourdough-pizza-calculator)
 * [fond.kitchen — Neapolitan pizza dough (AVPN)](https://fond.kitchen/guides/pizza-dough/neapolitan-pizza-dough/)
+* [Farina Petra — Due bighe a confronto: classica o in frigorifero](https://www.farinapetra.it/news/post/?page=Notizie3&permalink=/due-bighe-a-confronto-fermentazione-classica-o-in-frigorifero)
+* [Mulino Val d'Orcia — La biga](https://www.mulinovaldorcia.it/la-biga-una-marcia-in-piu-per-far-lievitare-il-tuo-pane/)
+* [Cucina con Silvia — Biga a 48 ore](https://cucinaconsilvia.altervista.org/pane-integrale-con-biga-a-48-ore/)
+* [Jordo's — Poolish method](https://jordospizzacalculator.com/methods/poolish/)
+* [Jordo's — Poolish pizza dough](https://jordospizzacalculator.com/guides/poolish-pizza-dough)
+* [My Pizza Corner — Poolish pizza dough](https://mypizzacorner.com/pizza-dough/easy-poolish-pizza-dough-recipe-neapolitan-poolish-pizza/)
+* [Emily Fabulous — Poolish pizza dough](https://emilyfabulous.com/poolish-pizza-dough/)
+* [PizzaBlab — Poolish preferment](https://www.pizzablab.com/the-encyclopizza/poolish-preferment/)
+* [CopyCat Cooking — Vito Iacopelli poolish pizza dough](https://copycatcooking.com/vito-iacopelli-poolish-pizza-dough-recipe/)

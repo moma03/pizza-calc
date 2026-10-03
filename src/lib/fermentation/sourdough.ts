@@ -4,6 +4,7 @@ import type { Range } from '../math';
  * Sourdough: the starter itself leavens the dough, so instead of a yeast weight
  * the schedule sets how much starter goes in, plus when and how to feed it so
  * it peaks at mixing time. See docs/preferments.md §4 and §5.6.
+ * See docs/preferments.md §4 for the ranges.
  */
 export const SOURDOUGH = {
   /** Starter weight in percent of the recipe's total flour (inoculation). */
@@ -46,6 +47,7 @@ const starterRate = (temperatureC: number): number => 2 ** ((temperatureC - 24) 
  * Hours to peak at 24 °C as a function of how far the feed dilutes the seed:
  * `PEAK_OFFSET + PEAK_PER_DOUBLING · log2(dilution)`. Fitted to 1:1:1 ≈ 4.75 h,
  * 1:2:2 ≈ 5.25–7 h and 1:5:5 ≈ 10 h.
+ * See docs/preferments.md §5.6.
  */
 const PEAK_OFFSET_HOURS = 0.3;
 const PEAK_PER_DOUBLING_HOURS = 2.8;
@@ -81,6 +83,7 @@ export interface FeedingPlan {
 /**
  * How to feed the starter so it peaks `hours` after feeding, building the
  * `starterGrams` the dough needs plus a little to keep.
+ * See docs/preferments.md §4.1 and §5.6.
  */
 export const feedingPlan = (
   starterGrams: number,

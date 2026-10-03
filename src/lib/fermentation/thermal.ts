@@ -10,7 +10,7 @@
  */
 
 /** Temperature coefficient used to weight the cooling curve. */
-const Q10 = 2;
+export const Q10 = 2;
 
 /**
  * Newton-cooling time constant fitted to published retarder measurements:
@@ -37,7 +37,7 @@ const MASS_EXPONENT = 0.5;
 const REFERENCE_BATCH_G = 1000;
 
 /** Dough temperature going into the fridge, after kneading and the bulk rise. */
-const DOUGH_ENTRY_TEMP_C = 21;
+export const DOUGH_ENTRY_TEMP_C = 21;
 
 export const coolingTimeConstant = (massG: number): number =>
   TAU_REF_HOURS * (Math.max(massG, 1) / TAU_REF_MASS_G) ** MASS_EXPONENT;
@@ -77,16 +77,22 @@ export const effectiveColdHours = (
  * Multiplier on the nominal cold time, relative to the reference batch the
  * factor tables were fitted around. Above 1 for a big mass that cools slowly,
  * below 1 for small balls that chill quickly.
+ *
+ * `entryTempC` is how warm the dough goes in. The reference always enters at
+ * `DOUGH_ENTRY_TEMP_C`, so a dough mixed warm on purpose — a cold biga closed
+ * at 25 °C (docs/preferments.md §7.1) — banks the extra fermentation it gets
+ * on the way down.
  */
 export const thermalLagFactor = (
   hours: number,
   massG: number,
-  fridgeTempC: number
+  fridgeTempC: number,
+  entryTempC: number = DOUGH_ENTRY_TEMP_C
 ): number => {
   if (hours <= 0) return 1;
 
   const reference = effectiveColdHours(hours, REFERENCE_BATCH_G, fridgeTempC);
   if (reference <= 0) return 1;
 
-  return effectiveColdHours(hours, massG, fridgeTempC) / reference;
+  return effectiveColdHours(hours, massG, fridgeTempC, entryTempC) / reference;
 };

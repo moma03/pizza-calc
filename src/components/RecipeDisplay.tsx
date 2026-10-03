@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
+  CalendarClock,
   ChefHat,
   Clock,
   Droplets,
@@ -10,7 +12,7 @@ import {
   Snowflake,
   type LucideIcon,
 } from 'lucide-react';
-import { SOURDOUGH, roomMinimumsFor, splitRoomFermentation } from '../lib/fermentation';
+import { SOURDOUGH, roomMinimumsFor, splitRoomFermentation, startsCold } from '../lib/fermentation';
 import {
   formatHours,
   formatQuantity,
@@ -25,6 +27,14 @@ interface RecipeDisplayProps {
   unitSystem: UnitSystem;
 }
 
+interface Phase {
+  key: string;
+  label: string;
+  hours: number;
+  tone: Tone;
+  tempC: number;
+}
+
 interface IngredientRow {
   key: string;
   label: string;
@@ -33,11 +43,13 @@ interface IngredientRow {
   color: string;
 }
 
-type Tone = 'preferment' | 'room' | 'cold';
+type Tone = 'preferment' | 'prefermentCold' | 'room' | 'cold';
 
 const TONE_CLASSES: Record<Tone, string> = {
   preferment:
     'bg-gradient-to-r from-amber-300 to-amber-400 dark:from-amber-500 dark:to-amber-600',
+  prefermentCold:
+    'bg-gradient-to-r from-sky-300 to-sky-400 dark:from-sky-500 dark:to-sky-600',
   room: 'bg-gradient-to-r from-orange-400 to-orange-500 dark:from-orange-500 dark:to-orange-600',
   cold: 'bg-gradient-to-r from-blue-400 to-blue-500 dark:from-blue-500 dark:to-blue-600',
 };
@@ -68,7 +80,7 @@ function IngredientList({ rows, compact = false }: { rows: IngredientRow[]; comp
 }
 
 export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { preferment, starter } = recipe;
   /** Whatever is built ahead of the final dough: a preferment or the fed starter. */
   const hasStage = preferment !== undefined || starter !== undefined;
@@ -141,13 +153,31 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
     roomMinimumsFor(recipe.method)
   );
 
+  // A preferment's own room and fridge phases, in the order it goes through them.
+  const stageName = methodText('ingredient');
+  let prefermentPhases: Phase[] = [];
+  if (preferment) {
+    const { schedule } = preferment;
+    const room: Phase = { key: 'prefermentRoom', label: stageName, hours: schedule.roomHours, tone: 'preferment', tempC: schedule.roomTempC };
+    const cold: Phase = { key: 'prefermentCold', label: t('results.phases.stageCold', { name: stageName }), hours: schedule.coldHours, tone: 'prefermentCold', tempC: schedule.coldTempC };
+    prefermentPhases = (startsCold(schedule) ? [cold, room] : [room, cold]).filter(({ hours }) => hours > 0);
+  }
+
+  /** "17 h at 18 °C" or "24 h in the fridge at 4 °C, then 24 h at 18 °C". */
+  const scheduleText = prefermentPhases
+    .map(({ tone, hours, tempC }) =>
+      t(tone === 'prefermentCold' ? 'results.schedule.cold' : 'results.schedule.room', {
+        hours: formatHours(hours),
+        temp: temperature(tempC),
+      })
+    )
+    .join(t('results.schedule.then'));
+
   // Shown in the order the dough actually goes through them.
-  const timeline: { key: string; label: string; hours: number; tone: Tone; tempC: number }[] = [
-    ...(preferment
-      ? [{ key: 'preferment', label: methodText('ingredient'), hours: preferment.timeHours, tone: 'preferment' as const, tempC: preferment.tempC }]
-      : []),
+  const timeline: Phase[] = [
+    ...prefermentPhases,
     ...(starter
-      ? [{ key: 'preferment', label: methodText('ingredient'), hours: starter.feedHours, tone: 'preferment' as const, tempC: starter.feedTempC }]
+      ? [{ key: 'starter', label: stageName, hours: starter.feedHours, tone: 'preferment' as const, tempC: starter.feedTempC }]
       : []),
     ...(recipe.coldFermentTime > 0
       ? [
@@ -190,7 +220,14 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
   const middle =
     recipe.ballingPoint === 'beforeCold' ? [ballStep, coldStep] : [coldStep, ballStep];
 
-  const steps = [
+  // Hours from the first step at which each later one starts, for the planner.
+  const stageHours = preferment?.timeHours ?? starter?.feedHours ?? 0;
+  const coldStart = stageHours + bulkHours;
+  const proofStart = coldStart + recipe.coldFermentTime;
+  const middleOffsets =
+    recipe.ballingPoint === 'beforeCold' ? [coldStart, coldStart] : [coldStart, proofStart];
+
+  const stepTexts = [
     starter &&
       methodText('step', {
         hours: formatHours(starter.feedHours),
@@ -200,13 +237,20 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
         water: weight(starter.feed.water),
       }),
     preferment &&
-      methodText('step', {
-        hours: formatHours(preferment.timeHours),
-        temp: temperature(preferment.tempC),
-        flour: weight(preferment.flour),
-        water: weight(preferment.water),
-        yeast: weight(preferment.yeast, 2),
-      }),
+      [
+        methodText('stepIntro', { hours: formatHours(preferment.timeHours) }),
+        methodText('mix', {
+          flour: weight(preferment.flour),
+          water: weight(preferment.water),
+          yeast: weight(preferment.yeast, 2),
+          waterTemp:
+            preferment.waterTempC === undefined
+              ? ''
+              : t('results.steps.waterAt', { temp: temperature(preferment.waterTempC) }),
+        }),
+        t('results.steps.ripen', { schedule: scheduleText }),
+        methodText('ripe'),
+      ].join(' '),
     hasStage
       ? methodText('knead', { yeast: recipe.yeast > 0 ? t('results.steps.andYeast') : '' })
       : t('results.steps.knead'),
@@ -225,7 +269,35 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
       pizzaOven: formatTemperatureRange(BAKE_TEMPS.pizzaOven.min, BAKE_TEMPS.pizzaOven.max, unitSystem),
       homeOven: formatTemperatureRange(BAKE_TEMPS.homeOven.min, BAKE_TEMPS.homeOven.max, unitSystem),
     }),
-  ].filter((step): step is string => typeof step === 'string');
+  ];
+  const stepOffsets = [
+    starter ? 0 : undefined,
+    preferment ? 0 : undefined,
+    stageHours, // mix the final dough
+    stageHours, // bulk
+    ...middleOffsets,
+    proofStart,
+    proofStart + ballProofHours + extraHours, // bake
+  ];
+  const steps = stepTexts.flatMap((text, index) =>
+    typeof text === 'string' ? [{ text, at: stepOffsets[index] ?? 0 }] : []
+  );
+
+  // Optional planner: with a bake time set, every step gets its clock time.
+  const [bakeAt, setBakeAt] = useState('');
+  const bakeTime = bakeAt ? new Date(bakeAt) : undefined;
+  const planTotal = proofStart + ballProofHours + extraHours;
+  const clockFormat = new Intl.DateTimeFormat(i18n.language, {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  const clockAt = (offsetHours: number) =>
+    bakeTime && !Number.isNaN(bakeTime.getTime())
+      ? clockFormat.format(new Date(bakeTime.getTime() - (planTotal - offsetHours) * 3_600_000))
+      : undefined;
 
   const surplus = recipe.prefermentSurplus;
   const yeastLabel = t(`calculator.yeastTypes.${recipe.yeastType}.label`);
@@ -243,8 +315,13 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
           <p className="mb-4 mt-1 text-sm text-gray-600 dark:text-gray-300">
             {t('results.prefermentTiming', {
               hours: formatHours(preferment.timeHours),
-              temp: temperature(preferment.tempC),
+              schedule: scheduleText,
             })}
+            {preferment.schedule.coldHours > 0 &&
+              ` ${t('results.prefermentEquivalent', {
+                hours: formatHours(preferment.equivalentRoomHours),
+                temp: temperature(preferment.schedule.roomTempC),
+              })}`}
           </p>
           <IngredientList rows={stageRows} compact />
           <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
@@ -419,11 +496,31 @@ export function RecipeDisplay({ recipe, unitSystem }: RecipeDisplayProps) {
 
       <div className="mt-8 rounded-xl border border-orange-100 bg-gradient-to-br from-orange-50 to-amber-50 p-6 dark:border-orange-800 dark:from-orange-900/20 dark:to-amber-900/20">
         <h3 className="mb-3 font-bold text-gray-900 dark:text-white">{t('results.instructions')}</h3>
+        <label className="mb-4 flex flex-wrap items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+          <CalendarClock className="h-4 w-4 text-orange-600 dark:text-orange-400" aria-hidden="true" />
+          <span className="font-medium">{t('results.planner.label')}</span>
+          <input
+            type="datetime-local"
+            value={bakeAt}
+            onChange={(event) => setBakeAt(event.target.value)}
+            className="rounded-lg border border-gray-300 bg-white px-2 py-1 text-sm text-gray-900 focus:border-orange-500 focus:ring-2 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+          />
+        </label>
+        {clockAt(0) && (
+          <p className="mb-4 text-sm font-semibold text-orange-700 dark:text-orange-300">
+            {t('results.planner.start', { time: clockAt(0) })}
+          </p>
+        )}
         <ol className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-          {steps.map((step, index) => (
+          {steps.map(({ text, at }, index) => (
             <li key={index} className="flex gap-2">
               <span className="font-semibold text-orange-600 dark:text-orange-400">{index + 1}.</span>
-              <span>{step}</span>
+              <span>
+                {clockAt(at) && (
+                  <span className="mr-1 font-semibold text-gray-900 dark:text-white">{clockAt(at)} ·</span>
+                )}
+                {text}
+              </span>
             </li>
           ))}
         </ol>

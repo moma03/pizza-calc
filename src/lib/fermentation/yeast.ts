@@ -15,6 +15,7 @@ export const YEAST_TYPES: readonly YeastType[] = ['fresh', 'instant', 'active'];
  * Dry-matter conversion relative to fresh (cake) yeast, which is the model's
  * reference. Fresh yeast is roughly 70 % water, so the dried forms are used in
  * much smaller amounts for the same leavening power.
+ * See docs/fermentation-model.md §2.4.
  */
 export const YEAST_CONVERSION: Record<YeastType, number> = {
   fresh: 1,
@@ -32,6 +33,7 @@ export const DEFAULT_YEAST_PERCENT: Record<YeastType, number> = {
 /**
  * Yeast demand of the room-temperature phase alone: a power law in time,
  * scaled by a temperature coefficient.
+ * See docs/fermentation-model.md §2.1.
  */
 export const roomActivity = (temperatureC: number, timeHours: number): number => {
   if (timeHours <= 0) return 0;
@@ -41,6 +43,7 @@ export const roomActivity = (temperatureC: number, timeHours: number): number =>
 /**
  * Yeast demand of the cold phase alone: a saturating (Hill-type) curve, so
  * doubling an already-long fridge rest buys progressively less.
+ * See docs/fermentation-model.md §2.2.
  */
 export const coldActivity = (temperatureC: number, timeHours: number): number => {
   if (timeHours <= 0) return 0;
@@ -52,6 +55,7 @@ export const coldActivity = (temperatureC: number, timeHours: number): number =>
 /**
  * Empirical correction applied when both phases run. The multiplier rises as
  * the fridge rest lengthens, then flattens off once the dough is fully cold.
+ * See docs/fermentation-model.md §2.3.
  */
 const combinedCorrection = (coldTimeHours: number): number => {
   if (coldTimeHours < 5) return 1.2;
@@ -78,23 +82,30 @@ export interface FermentationSchedule {
    * skips the thermal-lag correction.
    */
   coldMassG?: number;
+  /**
+   * Temperature the dough goes into the fridge at; defaults to a freshly
+   * kneaded dough's. Only used with `coldMassG`.
+   */
+  coldEntryTempC?: number;
 }
 
 /**
  * Hours the cold phase is actually worth once the dough's cooling-down time is
  * taken into account. A large mass coasts down slowly and banks extra
  * fermentation; small balls chill fast and bank less.
+ * See docs/fermentation-model.md §6.5.
  */
 export const effectiveColdTime = (schedule: FermentationSchedule): number => {
-  const { coldTimeHours, coldTempC, coldMassG } = schedule;
+  const { coldTimeHours, coldTempC, coldMassG, coldEntryTempC } = schedule;
   if (coldMassG === undefined || coldTimeHours <= 0) return coldTimeHours;
 
-  return coldTimeHours * thermalLagFactor(coldTimeHours, coldMassG, coldTempC);
+  return coldTimeHours * thermalLagFactor(coldTimeHours, coldMassG, coldTempC, coldEntryTempC);
 };
 
 /**
  * Fresh-yeast fraction of the flour weight (0-1) for the given schedule.
  * See `docs/fermentation-model.md` for the derivation of each term.
+ * See docs/calculation-pipeline.md §2 for the decision flow.
  */
 export const freshYeastFraction = (schedule: FermentationSchedule): number => {
   const { coldTempC, roomTempC, roomTimeHours, coldTimeHours } = schedule;

@@ -4,7 +4,7 @@ import { METHODS, type Method } from './lib/fermentation';
 /**
  * Every leavening method gets its own page per language, so each can rank for
  * its own searches ("poolish pizza dough", "Biga Rechner"); see
- * docs/preferments.md §6.
+ * docs/preferments.md §10.
  */
 export type { Method };
 

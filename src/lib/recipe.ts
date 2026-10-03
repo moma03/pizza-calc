@@ -7,7 +7,11 @@ import {
   YEAST_CONVERSION,
   bulkHoursRange,
   effectiveColdTime,
+  equivalentRoomHours,
   feedingPlan,
+  matchVariant,
+  prefermentWaterTemp,
+  totalHours,
   isPrefermentMethod,
   minRoomHours,
   prefermentYeastPercent,
@@ -18,6 +22,8 @@ import {
   type FermentationSchedule,
   type Method,
   type PrefermentMethod,
+  type PrefermentSchedule,
+  type PrefermentVariant,
   type YeastType,
 } from './fermentation';
 import { clampToRange, type Range } from './math';
@@ -68,6 +74,7 @@ export const yeastPercentLimits = (method: Method): Range =>
 /**
  * Largest preferment share the total hydration allows: the preferment's water
  * cannot exceed the water of the whole recipe.
+ * See docs/preferments.md §8.
  */
 export const prefermentShareLimits = (
   method: PrefermentMethod,
@@ -140,8 +147,15 @@ export interface RecipeInput {
    */
   prefermentShare: number;
   prefermentHydration: number;
+  /** Preferment hours at room temperature; for sourdough, hours from feeding to mixing. */
   prefermentTime: number;
+  /** Preferment room temperature; for sourdough, the temperature it is fed at. */
   prefermentTemp: number;
+  /** Preferment hours in the fridge (docs/preferments.md §7). */
+  prefermentColdTime: number;
+  prefermentColdTemp: number;
+  /** The preferment goes into the fridge straight after mixing, before its room phase. */
+  prefermentColdFirst: boolean;
   /**
    * Sourdough starter in percent of the total flour, used verbatim when
    * `autoCalculateYeast` is off.
@@ -176,8 +190,15 @@ export interface Preferment {
   /** Preferment flour in percent of the total flour. */
   share: number;
   hydration: number;
+  schedule: PrefermentSchedule;
+  /** Room plus fridge hours, from mixing the preferment to mixing the final dough. */
   timeHours: number;
-  tempC: number;
+  /** Hours at its room temperature the whole schedule is worth (docs/preferments.md §7.2). */
+  equivalentRoomHours: number;
+  /** Water temperature to mix it with, where the method gives one (docs/preferments.md §7.4). */
+  waterTempC?: number;
+  /** The sub-option the schedule matches; undefined for a custom one. */
+  variant?: string;
 }
 
 export interface Recipe {
@@ -246,6 +267,9 @@ type StylePreset = Omit<
   | 'prefermentHydration'
   | 'prefermentTime'
   | 'prefermentTemp'
+  | 'prefermentColdTime'
+  | 'prefermentColdTemp'
+  | 'prefermentColdFirst'
   | 'starterPercent'
 >;
 
@@ -308,35 +332,73 @@ export const STYLE_PRESETS: Record<PizzaStyle, StylePreset> = {
   },
 };
 
-/** A method's preferment settings at their defaults; the poolish's for `direct`, which ignores them. */
-export const prefermentDefaults = (
-  method: Method
+type PrefermentFields =
+  | 'prefermentShare'
+  | 'prefermentHydration'
+  | 'prefermentTime'
+  | 'prefermentTemp'
+  | 'prefermentColdTime'
+  | 'prefermentColdTemp'
+  | 'prefermentColdFirst'
+  | 'starterPercent';
+
+/** The input fields a preferment variant sets: its schedule, and its hydration if it has one. */
+export const variantFields = (
+  method: PrefermentMethod,
+  variant: PrefermentVariant
 ): Pick<
   RecipeInput,
-  'prefermentShare' | 'prefermentHydration' | 'prefermentTime' | 'prefermentTemp' | 'starterPercent'
-> => {
+  | 'prefermentHydration'
+  | 'prefermentTime'
+  | 'prefermentTemp'
+  | 'prefermentColdTime'
+  | 'prefermentColdTemp'
+  | 'prefermentColdFirst'
+> => ({
+  prefermentHydration: variant.hydration ?? PREFERMENTS[method].hydration.default,
+  prefermentTime: variant.schedule.roomHours,
+  prefermentTemp: variant.schedule.roomTempC,
+  prefermentColdTime: variant.schedule.coldHours,
+  prefermentColdTemp: variant.schedule.coldTempC,
+  prefermentColdFirst: variant.schedule.coldFirst,
+});
+
+/** A method's preferment settings at their defaults; the poolish's for `direct`, which ignores them. */
+export const prefermentDefaults = (method: Method): Pick<RecipeInput, PrefermentFields> => {
   if (method === 'sourdough') {
     return {
       prefermentShare: PREFERMENTS.poolish.share.default,
       prefermentHydration: SOURDOUGH.hydration.default,
       prefermentTime: SOURDOUGH.feedHours.default,
       prefermentTemp: SOURDOUGH.feedTemp.default,
+      prefermentColdTime: 0,
+      prefermentColdTemp: 4,
+      prefermentColdFirst: false,
       starterPercent: SOURDOUGH.starterPercent.default,
     };
   }
-  const profile = PREFERMENTS[isPrefermentMethod(method) ? method : 'poolish'];
+  const prefermentMethod = isPrefermentMethod(method) ? method : 'poolish';
+  const profile = PREFERMENTS[prefermentMethod];
   return {
     starterPercent: SOURDOUGH.starterPercent.default,
     prefermentShare: profile.share.default,
-    prefermentHydration: profile.hydration.default,
-    prefermentTime: profile.time.default,
-    prefermentTemp: profile.temperature.default,
+    ...variantFields(prefermentMethod, profile.variants[0]),
   };
 };
+
+/** The preferment's schedule, as the fermentation model takes it. */
+export const prefermentSchedule = (input: RecipeInput): PrefermentSchedule => ({
+  roomHours: input.prefermentTime,
+  roomTempC: input.prefermentTemp,
+  coldHours: input.prefermentColdTime,
+  coldTempC: input.prefermentColdTemp,
+  coldFirst: input.prefermentColdFirst,
+});
 
 /**
  * The final dough's schedule for a method and style: the method's own where it
  * has one (a biga dough rises only briefly), otherwise the style preset's.
+ * See docs/preferments.md §5.5.
  */
 export const scheduleFor = (
   method: Method,
@@ -368,7 +430,10 @@ export const defaultInputFor = (method: Method): RecipeInput => ({
 
 export const DEFAULT_INPUT: RecipeInput = defaultInputFor('direct');
 
-/** Clamp every numeric input into its accepted range. */
+/**
+ * Clamp every numeric input into its accepted range.
+ * See docs/calculation-pipeline.md §1.
+ */
 const sanitize = (input: RecipeInput): RecipeInput => {
   const { method } = input;
   const roomFermentTime = clampToRange(input.roomFermentTime, roomTimeLimits(method));
@@ -419,8 +484,32 @@ const sanitize = (input: RecipeInput): RecipeInput => {
       input.prefermentShare,
       prefermentShareLimits(method, waterPercent, prefermentHydration)
     ),
-    prefermentTime: clampToRange(input.prefermentTime, profile.time.range),
-    prefermentTemp: clampToRange(input.prefermentTemp, profile.temperature.range),
+    ...clampPrefermentSchedule(method, input),
+  };
+};
+
+/**
+ * Clamp the preferment's room and fridge phases, then make sure together they
+ * reach the method's shortest ripening time — topping up whichever phase the
+ * preferment spends its time in.
+ */
+const clampPrefermentSchedule = (
+  method: PrefermentMethod,
+  input: RecipeInput
+): Pick<RecipeInput, 'prefermentTime' | 'prefermentTemp' | 'prefermentColdTime' | 'prefermentColdTemp'> => {
+  const profile = PREFERMENTS[method];
+  let roomHours = clampToRange(input.prefermentTime, profile.roomHours);
+  let coldHours = clampToRange(input.prefermentColdTime, profile.coldHours);
+  const shortfall = profile.minTotalHours - (roomHours + coldHours);
+  if (shortfall > 0) {
+    if (coldHours > 0 && roomHours <= 0) coldHours += shortfall;
+    else roomHours += shortfall;
+  }
+  return {
+    prefermentTime: roomHours,
+    prefermentTemp: clampToRange(input.prefermentTemp, profile.roomTemp),
+    prefermentColdTime: coldHours,
+    prefermentColdTemp: clampToRange(input.prefermentColdTemp, profile.coldTemp),
   };
 };
 
@@ -447,13 +536,17 @@ export const toSchedule = (input: RecipeInput): FermentationSchedule => ({
 /**
  * Fresh yeast, in percent of the total flour, that the ripe preferment brings
  * into the final dough. Zero for the direct method.
+ * See docs/preferments.md §5.5.
  */
 const prefermentLeavening = (input: RecipeInput): number =>
   isPrefermentMethod(input.method)
     ? (input.prefermentShare / 100) * PREFERMENTS[input.method].ripeYeastEquivalent
     : 0;
 
-/** Fresh yeast, in percent of the total flour, the final dough's schedule asks for in all. */
+/**
+ * Fresh yeast, in percent of the total flour, the final dough's schedule asks for in all.
+ * See docs/fermentation-model.md §2 and docs/calculation-pipeline.md §2.
+ */
 const scheduleDemand = (input: RecipeInput): number =>
   yeastPercentFor('fresh', toSchedule(input));
 
@@ -461,6 +554,7 @@ const scheduleDemand = (input: RecipeInput): number =>
  * The yeast percentage the final mix will actually use, of the selected type
  * and relative to the total flour: whatever the schedule asks for beyond what
  * a preferment already brings.
+ * See docs/calculation-pipeline.md §3.
  */
 export const resolveYeastPercent = (input: RecipeInput): number => {
   const { autoCalculateYeast, yeastType, coldFermentTime, roomFermentTime } = input;
@@ -477,6 +571,7 @@ export const resolveYeastPercent = (input: RecipeInput): number => {
  * The sourdough starter the recipe will use, in percent of the total flour:
  * derived from the schedule, or as entered. `limited` is set when the derived
  * figure falls outside the accepted range and had to be clamped.
+ * See docs/preferments.md §5.6 and docs/calculation-pipeline.md §4.
  */
 export const resolveStarterPercent = (
   input: RecipeInput
@@ -490,7 +585,10 @@ export const resolveStarterPercent = (
   return { percent: derived };
 };
 
-/** How far past the schedule's demand a preferment may go before it is flagged. */
+/**
+ * How far past the schedule's demand a preferment may go before it is flagged.
+ * See docs/preferments.md §5.5.
+ */
 const SURPLUS_TOLERANCE = 1.15;
 
 /**
@@ -518,11 +616,25 @@ const prefermentSurplus = (input: RecipeInput): Recipe['prefermentSurplus'] => {
 };
 
 /**
+ * The preferment's weight, for its cooling curve in the fridge. Estimated from
+ * the dough weight without the yeast — which is what is being solved for, and
+ * moves the result by well under a percent.
+ * See docs/preferments.md §7.2.
+ */
+const prefermentMassEstimate = (input: RecipeInput, totalDough: number): number => {
+  const flour =
+    (totalDough * 100) /
+    (100 + input.waterPercent + input.saltPercent + input.oilPercent + input.sugarPercent);
+  return flour * (input.prefermentShare / 100) * (1 + input.prefermentHydration / 100);
+};
+
+/**
  * Turn baker's percentages into absolute weights.
  *
  * Flour is 100 % by definition, so the sum of all percentages maps the target
  * dough weight onto one "percentage point" of flour:
  *   `flour = totalDough / (100 + water% + salt% + yeast% + oil% + sugar%) * 100`
+ * See docs/fermentation-model.md §1 and docs/calculation-pipeline.md §1.
  */
 export const calculateRecipe = (rawInput: RecipeInput): Recipe => {
   const input = sanitize(rawInput);
@@ -530,8 +642,14 @@ export const calculateRecipe = (rawInput: RecipeInput): Recipe => {
   const yeastPercent = resolveYeastPercent(input);
 
   const prefermentMethod = isPrefermentMethod(input.method) ? input.method : undefined;
+  const schedule = prefermentSchedule(input);
   const prefermentYeast = prefermentMethod
-    ? prefermentYeastPercent(prefermentMethod, input.yeastType, input.prefermentTemp, input.prefermentTime)
+    ? prefermentYeastPercent(
+        prefermentMethod,
+        input.yeastType,
+        schedule,
+        prefermentMassEstimate(input, totalDough)
+      )
     : 0;
   // The preferment's yeast, as a share of the total flour.
   const prefermentYeastOfTotal = prefermentMethod ? (input.prefermentShare / 100) * prefermentYeast : 0;
@@ -555,8 +673,15 @@ export const calculateRecipe = (rawInput: RecipeInput): Recipe => {
     yeastPercent: prefermentYeast,
     share: input.prefermentShare,
     hydration: input.prefermentHydration,
-    timeHours: input.prefermentTime,
-    tempC: input.prefermentTemp,
+    schedule,
+    timeHours: totalHours(schedule),
+    equivalentRoomHours: equivalentRoomHours(
+      prefermentMethod,
+      schedule,
+      prefermentMassEstimate(input, totalDough)
+    ),
+    waterTempC: prefermentWaterTemp(prefermentMethod, schedule, input.roomFermentTemp),
+    variant: matchVariant(prefermentMethod, schedule, input.prefermentHydration)?.id,
   };
 
   let starter: Starter | undefined;
