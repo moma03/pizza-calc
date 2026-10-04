@@ -124,6 +124,16 @@ export function PrefermentFields({ method, input, onChange, unitSystem }: Prefer
         <div className="grid grid-cols-2 gap-4">
           <NumberField
             compact
+            label={t('calculator.fermentation.temperature')}
+            value={input.prefermentTemp}
+            onChange={(value) => onChange({ prefermentTemp: value })}
+            limits={profile.roomTemp}
+            quantity="temperature"
+            unitSystem={unitSystem}
+            step={1}
+          />
+          <NumberField
+            compact
             slider
             label={t('calculator.fermentation.time')}
             tooltip={t(`methods.${method}.timeTooltip`)}
@@ -133,18 +143,6 @@ export function PrefermentFields({ method, input, onChange, unitSystem }: Prefer
             quantity="hours"
             step={1}
           />
-          {schedule.roomHours > 0 && (
-            <NumberField
-              compact
-              label={t('calculator.fermentation.temperature')}
-              value={input.prefermentTemp}
-              onChange={(value) => onChange({ prefermentTemp: value })}
-              limits={profile.roomTemp}
-              quantity="temperature"
-              unitSystem={unitSystem}
-              step={1}
-            />
-          )}
         </div>
       </div>
 
@@ -156,6 +154,16 @@ export function PrefermentFields({ method, input, onChange, unitSystem }: Prefer
         <div className="grid grid-cols-2 gap-4">
           <NumberField
             compact
+            label={t('calculator.fermentation.temperature')}
+            value={input.prefermentColdTemp}
+            onChange={(value) => onChange({ prefermentColdTemp: value })}
+            limits={profile.coldTemp}
+            quantity="temperature"
+            unitSystem={unitSystem}
+            step={1}
+          />
+          <NumberField
+            compact
             slider
             label={t('calculator.fermentation.time')}
             tooltip={t('calculator.preferment.coldTooltip')}
@@ -165,18 +173,6 @@ export function PrefermentFields({ method, input, onChange, unitSystem }: Prefer
             quantity="hours"
             step={1}
           />
-          {schedule.coldHours > 0 && (
-            <NumberField
-              compact
-              label={t('calculator.fermentation.temperature')}
-              value={input.prefermentColdTemp}
-              onChange={(value) => onChange({ prefermentColdTemp: value })}
-              limits={profile.coldTemp}
-              quantity="temperature"
-              unitSystem={unitSystem}
-              step={1}
-            />
-          )}
         </div>
       </div>
 

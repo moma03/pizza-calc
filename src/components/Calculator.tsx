@@ -301,6 +301,9 @@ export function Calculator({
                   quantity="percent"
                   step={5}
                 />
+              </div>
+              {/* Temperature left, time right, like every other phase. */}
+              <div className="grid grid-cols-2 gap-4">
                 <NumberField
                   compact
                   label={t('calculator.starter.feedTemp')}
