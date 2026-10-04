@@ -14,7 +14,8 @@ import {
   type Recipe,
   type RecipeInput,
 } from './lib/recipe';
-import { encodeShare, type SharedState } from './lib/share';
+import { encodeShare, type LinkNotice as Notice, type SharedState } from './lib/share';
+import { LinkNotice } from './components/LinkNotice';
 import type { Method } from './lib/fermentation';
 import { pageHref } from './navigation';
 import type { UnitSystem } from './lib/units';
@@ -62,7 +63,7 @@ const serverUnitSystem = (): UnitSystem => 'metric';
 interface AppProps {
   route: Route;
   /** Settings from a recipe link; the page's defaults when absent. */
-  initialState?: SharedState;
+  initialState?: SharedState & { notice?: Notice };
 }
 
 export default function App({ route: initialRoute, initialState }: AppProps) {
@@ -122,6 +123,7 @@ export default function App({ route: initialRoute, initialState }: AppProps) {
         </div>
       </div>
       <main className="container mx-auto w-full max-w-7xl flex-1 px-4 py-8 print:max-w-none print:p-0">
+        <LinkNotice notice={initialState?.notice} />
         <div className="grid gap-8 lg:grid-cols-2 print:block">
           <Calculator
             initialInput={initial.input}

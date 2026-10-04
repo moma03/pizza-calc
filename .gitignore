@@ -24,3 +24,5 @@ dist-ssr
 
 
 temp/
+# TypeScript incremental build state
+*.tsbuildinfo

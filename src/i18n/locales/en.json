@@ -467,8 +467,21 @@
       ]
     }
   },
+  "linkNotice": {
+    "olderModel": {
+      "title": "This recipe link is from an earlier version of the calculator",
+      "body": "The fermentation model has been updated since this link was made, so some amounts may differ from what you saw then. If you have already mixed the preferment or fed the starter, check the final dough against your printout or calendar entry before you go on."
+    },
+    "newerVersion": {
+      "title": "This recipe link is from a newer version of the calculator",
+      "body": "This page is out of date, so the link may not come out exactly as it was made. Reload the page to get the latest version."
+    },
+    "dismiss": "Dismiss"
+  },
   "footer": {
     "source": "Source on GitHub",
+    "sources": "Method & sources",
+    "feedback": "Feedback & ideas",
     "license": "MIT licence",
     "privacy": "No cookies, no tracking, no analytics, and no external fonts or scripts. The calculator runs entirely in your browser — nothing you enter is ever sent to a server. Your settings live in the page address after the “#”, which browsers never send to a server, so a recipe link only shares them with whoever you give it to; the calendar file and the PDF are made in your browser too. The only thing kept is your chosen language and unit system, saved in this browser so the page remembers them; clearing your site data removes them again."
   },

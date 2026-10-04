@@ -95,6 +95,15 @@ npm run dev
 | `npm run typecheck` | `tsc`, including the translation completeness check |
 | `npm run lint` | eslint |
 
+### Changing defaults or the model
+
+Recipe links store only what differs from the defaults, and their amounts
+come from the model, so both are versioned. If you change a default or a
+calibration, `npm run build` stops and prints exactly what to update in
+[`src/lib/share.ts`](src/lib/share.ts) or
+[`src/lib/modelVersion.ts`](src/lib/modelVersion.ts).
+See [docs/calculation-pipeline.md §7](docs/calculation-pipeline.md#7-keeping-old-links-working).
+
 ### Translations are type-checked
 
 `src/i18n/locales/en.json` is the reference key set, and `de.json` is checked

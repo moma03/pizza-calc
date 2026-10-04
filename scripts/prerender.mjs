@@ -13,9 +13,14 @@ import { pathToFileURL } from 'node:url';
 const DIST = resolve('dist');
 const SSR_DIST = resolve('dist-ssr');
 
-const { ROUTES, renderPage, renderSitemap, routePath } = await import(
+const { ROUTES, renderPage, renderSitemap, routePath, verifyVersions } = await import(
   pathToFileURL(join(SSR_DIST, 'entry-server.js')).href
 );
+
+// Fails the build when recipe-link defaults or the model's results changed
+// without a version bump; the error says what to record (src/lib/share.ts,
+// src/lib/modelVersion.ts).
+verifyVersions();
 
 const siteUrl = process.env.SITE_URL?.trim().replace(/\/+$/, '') || undefined;
 const template = await readFile(join(DIST, 'index.html'), 'utf8');

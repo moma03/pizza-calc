@@ -9,9 +9,20 @@ import { renderToString } from 'react-dom/server';
 import App from './App';
 import i18n from './i18n';
 import { guideContent } from './guideContent';
+import { checkLinkDefaults } from './lib/share';
+import { checkModelFingerprint } from './lib/modelVersion';
 import { DEFAULT_LANGUAGE, ROUTES, routePath, type Route } from './routes';
 
 export { ROUTES, routePath };
+
+/**
+ * Build-time guards for recipe links: the defaults and the model's results
+ * must match what the current link and model versions recorded.
+ */
+export const verifyVersions = () => {
+  checkLinkDefaults();
+  checkModelFingerprint();
+};
 
 const OG_LOCALES: Record<Route['lang'], string> = { en: 'en_US', de: 'de_DE' };
 

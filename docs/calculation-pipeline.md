@@ -305,6 +305,8 @@ flowchart LR
   without a key does not compile. A link with settings renders afresh instead
   of hydrating the prerendered defaults. Opening a different link on the same
   page triggers a reload.
+* **Versions.** Every link starts with `v=` (link format) and `m=` (model).
+  See §7.
 * **Calendar** ([`calendar.ts`](../src/lib/calendar.ts)) is plain RFC 5545,
   written in the browser. The steps that need weighing carry their ingredient
   list, and every event links back to the recipe.
@@ -312,3 +314,52 @@ flowchart LR
   hidden, the colours are forced to black on white (the timeline keeps its
   colours), and a header with the bake time and link is added. "Save as PDF"
   in the print dialog gives the PDF, with no PDF library in the bundle.
+
+---
+
+## 7. Keeping old links working
+
+A link may be opened days or months after it was made, possibly mid-ferment,
+with part of the recipe already in the bowl. Two version numbers travel with
+it.
+
+**`v`: link format** ([`share.ts`](../src/lib/share.ts)). A link only carries
+what differed from the page's defaults *at the time*. If a default changed
+later, say the biga share from 50 to 40 %, an old link without `ps` would
+silently turn into a 40 % biga. So each version keeps a snapshot of every
+default (`LINK_DEFAULTS`). A link is read on top of the snapshot of its own
+version, then run through `MIGRATIONS` up to today:
+
+```
+old link values ─┐
+                 ├─► complete v1 set ─► migrate v1→v2 ─► … ─► current keys ─► form
+v1 snapshot ─────┘
+```
+
+A link without `v` counts as version 1. A link from a newer version, opened
+on an old copy of the page, is read best effort with a "reload" notice.
+
+**`m`: fermentation model** ([`modelVersion.ts`](../src/lib/modelVersion.ts)).
+The inputs survive any model change, but the amounts are recalculated. If the
+model has changed since the link was made, a notice asks you to check the
+final dough against your printout or calendar entry. Those keep the amounts
+as they were when exported.
+
+**The build enforces both.** `scripts/prerender.mjs` runs
+`checkLinkDefaults()` and `checkModelFingerprint()` before rendering any
+page:
+
+| What changed | What the build says | What to do |
+|---|---|---|
+| A default, a preset or a variant | "Recipe-link defaults changed" plus the new snapshot | Bump `LINK_VERSION` and paste the snapshot into `LINK_DEFAULTS` |
+| A key renamed, or a value's meaning | (also caught as a snapshot change) | Also add a `MIGRATIONS[old]` that rewrites the parameters |
+| Any amount the model produces | "The fermentation model's results changed" plus the new fingerprint, listing which reference recipes moved | Bump `MODEL_VERSION` and paste the fingerprint |
+
+The fingerprint covers 21 reference recipes: every method at its defaults,
+same-day and 72 h schedules, balls retarded before the fridge, and every
+preferment variant. It records the final yeast, preferment yeast, starter %,
+feed ratio, suggested room time and effective fridge hours, rounded so that
+floating-point noise does not count as a change. Besides versioning, this
+doubles as a regression test: an unintended change to a formula fails the
+build in CI before it can deploy.
+

@@ -1,8 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { ExternalLink, ShieldCheck } from 'lucide-react';
+import { ExternalLink, MessageSquare, ShieldCheck } from 'lucide-react';
 
 const REPO_URL = 'https://github.com/moma03/pizza-calc';
+/** Write-up of the model, with the recipes and papers it is calibrated against. */
+const DOCS_URL = `${REPO_URL}/blob/main/docs/README.md`;
 const AUTHOR_URL = 'https://moritz-manegold.de';
+/**
+ * GitHub's template chooser: a short feedback form for issues, plus a pointer
+ * to Discussions for questions and ideas (.github/ISSUE_TEMPLATE/).
+ */
+const FEEDBACK_URL = `${REPO_URL}/issues/new/choose`;
 
 const linkClass =
   'inline-flex items-center gap-1 rounded underline decoration-dotted underline-offset-2 transition-colors hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:hover:text-orange-400';
@@ -37,6 +44,19 @@ export function Footer() {
           <a href={REPO_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
             <GitHubMark />
             {t('footer.source')}
+          </a>
+          <span aria-hidden="true" className="text-gray-300 dark:text-gray-600">
+            ·
+          </span>
+          <a href={DOCS_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
+            {t('footer.sources')}
+          </a>
+          <span aria-hidden="true" className="text-gray-300 dark:text-gray-600">
+            ·
+          </span>
+          <a href={FEEDBACK_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
+            <MessageSquare className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            {t('footer.feedback')}
           </a>
           <span aria-hidden="true" className="text-gray-300 dark:text-gray-600">
             ·

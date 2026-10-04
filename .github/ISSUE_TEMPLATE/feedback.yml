@@ -1,0 +1,41 @@
+name: Feedback
+description: Something off, unclear, or missing? Tell us — a sentence is enough.
+labels: [feedback]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time! Only the first box is needed; anything else helps.
+        Deutsch ist genauso willkommen wie Englisch.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, or what would you like?
+      description: A result that looked wrong, a dough that did not behave as planned, an idea, a typo …
+    validations:
+      required: true
+  - type: input
+    id: link
+    attributes:
+      label: Recipe link (optional)
+      description: >
+        Copy it with "Copy recipe link" on the page — it holds all your settings, so
+        the exact recipe can be reproduced. It will be public in this issue.
+      placeholder: https://…/biga/#v=1&m=1&ps=80…
+  - type: dropdown
+    id: method
+    attributes:
+      label: Dough method
+      options:
+        - Direct (yeast only)
+        - Poolish
+        - Biga
+        - Sourdough
+        - Not about a specific method
+    validations:
+      required: false
+  - type: textarea
+    id: outcome
+    attributes:
+      label: How did the dough turn out? (optional)
+      description: Kitchen and fridge temperature, flour, how much it rose — whatever you noticed.

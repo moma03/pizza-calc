@@ -22,3 +22,4 @@ wherever a function is written the way it is for a reason explained below.
 | Cold biga, fridge poolish, the 48 h biga | [preferments §7](preferments.md#7-cold-and-long-preferments) |
 | Sourdough starter amount and feeding | [preferments §5.6](preferments.md#56-sourdough-as-implemented) |
 | One page per method and language | [preferments §10](preferments.md#10-search-one-page-per-method) |
+| How recipe links survive changes to defaults or the model | [calculation-pipeline §7](calculation-pipeline.md#7-keeping-old-links-working) |

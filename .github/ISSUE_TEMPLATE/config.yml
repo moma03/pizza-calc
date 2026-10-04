@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions & ideas
+    url: https://github.com/moma03/pizza-calc/discussions
+    about: Not sure something is a problem, or want to talk dough? Start a discussion.
