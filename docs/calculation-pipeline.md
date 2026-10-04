@@ -251,9 +251,64 @@ flowchart TD
 
 ## 5. Timeline and planner
 
-[`RecipeDisplay.tsx`](../src/components/RecipeDisplay.tsx) lays the phases end
-to end. In order, they are the preferment's room and fridge phases (in its
-chosen order) or the starter feed, then the bulk rise, the fridge, and the
-ball proof. With a bake time entered, each step's clock time is the bake time
-minus the hours still to go after that step starts. Nothing is stored; the bake
-time lives only in the page.
+`buildPlan()` in [`plan.ts`](../src/plan.ts) turns a recipe into ingredient
+lines, the timeline and the steps, each step with the hour it starts at. In
+order, the phases are the preferment's room and fridge phases (in its chosen
+order) or the starter feed, then the bulk rise, the fridge, and the ball proof.
+With a bake time entered, `stepStart()` gives each step's clock time: the bake
+time minus the hours still to go after that step starts. The page, the
+calendar file and the printout all read the same plan.
+
+---
+
+## 6. Link, calendar and print
+
+```mermaid
+flowchart LR
+  classDef setting fill:#fff7ed,stroke:#ea580c,color:#7c2d12
+  classDef calc fill:#eff6ff,stroke:#2563eb,color:#1e3a8a
+  classDef result fill:#ecfdf5,stroke:#059669,color:#064e3b
+
+  form[/"Form inputs + style preset"/]:::setting
+  bake[/"Bake time"/]:::setting
+  page[/"Method's page: /biga/, /de/sauerteig/ …"/]:::setting
+
+  encode["encodeShare()<br/>only what differs from the<br/>page's defaults, after the #"]:::calc
+  decode["decodeShare()<br/>on load: defaults + link values,<br/>bad values dropped"]:::calc
+  plan["buildPlan() + stepStart()"]:::calc
+  ics["buildCalendar()<br/>one event per step, reminder at<br/>its start, UTC times, 75-byte folding"]:::calc
+
+  url(["Address bar = recipe link"]):::result
+  file(["pizza-biga-2026-10-10.ics"]):::result
+  pdf(["Print layout → save as PDF"]):::result
+
+  form --> encode
+  bake --> encode
+  page --> encode
+  encode -->|replaceState| url
+  url -->|"open later / on the phone"| decode
+  decode -->|"initial state"| form
+  form --> plan
+  bake --> plan
+  plan --> ics
+  url -->|"link in every event"| ics
+  ics --> file
+  plan --> pdf
+  url -->|"printed link"| pdf
+```
+
+* **Link** ([`share.ts`](../src/lib/share.ts)). The settings go after the
+  `#`, which browsers never send to the server, so the privacy promise in the
+  footer still holds and search engines do not see extra pages. Only values
+  that differ from the page's defaults are written, so a fresh page has no
+  fragment. Every input has a short key in a typed table, and an input added
+  without a key does not compile. A link with settings renders afresh instead
+  of hydrating the prerendered defaults. Opening a different link on the same
+  page triggers a reload.
+* **Calendar** ([`calendar.ts`](../src/lib/calendar.ts)) is plain RFC 5545,
+  written in the browser. The steps that need weighing carry their ingredient
+  list, and every event links back to the recipe.
+* **Print** is the page's own print styles: the form, guide and footer are
+  hidden, the colours are forced to black on white (the timeline keeps its
+  colours), and a header with the bake time and link is added. "Save as PDF"
+  in the print dialog gives the PDF, with no PDF library in the bundle.

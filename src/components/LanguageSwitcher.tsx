@@ -29,7 +29,8 @@ export function LanguageSwitcher({ route }: LanguageSwitcherProps) {
       onChange={(lang) => {
         if (lang === route.lang) return;
         storeLanguage(lang);
-        window.location.assign(pageHref({ ...route, lang }));
+        // The fragment holds the recipe's settings; take them along.
+        window.location.assign(`${pageHref({ ...route, lang })}${window.location.hash}`);
       }}
     />
   );

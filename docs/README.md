@@ -6,7 +6,7 @@ wherever a function is written the way it is for a reason explained below.
 
 | Page | What it covers |
 |---|---|
-| [calculation-pipeline.md](calculation-pipeline.md) | **Start here.** Diagrams of the whole calculation: settings, decisions and calculations as nodes, the data passed between them as edges. |
+| [calculation-pipeline.md](calculation-pipeline.md) | **Start here.** Diagrams of the whole calculation: settings, decisions and calculations as nodes, the data passed between them as edges. Also the recipe link, calendar and print export. |
 | [fermentation-model.md](fermentation-model.md) | The yeast model for the final dough: room power law, cold Hill curve, combined factors, thermal lag of the fridge phase, cross-checks against Q10 and Arrhenius. |
 | [preferments.md](preferments.md) | Biga, poolish and sourdough: the research, schedules and recipes from the sources, and how each was calibrated onto the model — including cold and long preferments, water temperature, share presets and the bake-time planner. |
 

@@ -385,6 +385,28 @@
     "planner": {
       "label": "Ready to bake at",
       "start": "Start: {{time}}"
+    },
+    "export": {
+      "heading": "Save & share",
+      "linkNote": "The page address always holds all your settings — bookmark it or send it to your phone, and opening it brings this exact recipe back, even days later.",
+      "copyLink": "Copy recipe link",
+      "copied": "Link copied",
+      "calendar": "Add to calendar",
+      "calendarHint": "Set a bake time above to put every step in your calendar, each with a reminder.",
+      "print": "Print / save as PDF",
+      "recipeLink": "Recipe with all settings:",
+      "finalDough": "Final dough",
+      "printBake": "Bake at {{time}}"
+    },
+    "stepTitles": {
+      "feed": "Feed the starter",
+      "preferment": "Mix the {{nameLower}}",
+      "knead": "Mix the final dough",
+      "bulk": "Bulk rise",
+      "cold": "Dough into the fridge",
+      "ball": "Shape the dough balls",
+      "proof": "Final proof",
+      "bake": "Bake the pizzas"
     }
   },
   "guide": {
@@ -448,7 +470,7 @@
   "footer": {
     "source": "Source on GitHub",
     "license": "MIT licence",
-    "privacy": "No cookies, no tracking, no analytics, and no external fonts or scripts. The calculator runs entirely in your browser — nothing you enter is ever sent to a server. The only thing kept is your chosen language and unit system, saved in this browser so the page remembers them; clearing your site data removes them again."
+    "privacy": "No cookies, no tracking, no analytics, and no external fonts or scripts. The calculator runs entirely in your browser — nothing you enter is ever sent to a server. Your settings live in the page address after the “#”, which browsers never send to a server, so a recipe link only shares them with whoever you give it to; the calendar file and the PDF are made in your browser too. The only thing kept is your chosen language and unit system, saved in this browser so the page remembers them; clearing your site data removes them again."
   },
   "noscript": "This pizza dough calculator needs JavaScript to recalculate. It works out flour, water, salt and yeast in grams from the number of pizzas and the fermentation time and temperature you give it."
 }

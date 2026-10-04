@@ -12,7 +12,6 @@ import {
   PIZZA_STYLES,
   STYLE_PRESETS,
   calculateRecipe,
-  defaultInputFor,
   prefermentDefaults,
   resolveStarterPercent,
   resolveYeastPercent,
@@ -39,22 +38,27 @@ import { round } from '../lib/math';
 import { formatQuantity, type UnitSystem } from '../lib/units';
 
 interface CalculatorProps {
-  /** The method of the page the calculator sits on; it opens with that one. */
-  initialMethod: Method;
+  /** What the form opens with: the page's defaults, or a recipe link's settings. */
+  initialInput: RecipeInput;
+  initialStyle: PizzaStyle;
   onRecipeChange: (recipe: Recipe) => void;
+  /** Every change to the form, for the shareable link. */
+  onInputChange: (input: RecipeInput, style: PizzaStyle) => void;
   onMethodChange: (method: Method) => void;
   unitSystem: UnitSystem;
 }
 
 export function Calculator({
-  initialMethod,
+  initialInput,
+  initialStyle,
   onRecipeChange,
+  onInputChange,
   onMethodChange,
   unitSystem,
 }: CalculatorProps) {
   const { t } = useTranslation();
-  const [pizzaStyle, setPizzaStyle] = useState<PizzaStyle>('neapolitan');
-  const [input, setInput] = useState<RecipeInput>(() => defaultInputFor(initialMethod));
+  const [pizzaStyle, setPizzaStyle] = useState<PizzaStyle>(initialStyle);
+  const [input, setInput] = useState<RecipeInput>(initialInput);
   const { method } = input;
   const roomMinimums = roomMinimumsFor(method);
   const preferment = isPrefermentMethod(method) ? PREFERMENTS[method] : undefined;
@@ -92,6 +96,10 @@ export function Calculator({
     onRecipeChange(calculateRecipe(input));
   }, [input, onRecipeChange]);
 
+  useEffect(() => {
+    onInputChange(input, pizzaStyle);
+  }, [input, pizzaStyle, onInputChange]);
+
   const methodOptions = METHODS.map((value) => ({
     value,
     label: t(`methods.${value}.label`),
@@ -113,7 +121,7 @@ export function Calculator({
   }));
 
   return (
-    <div className="rounded-2xl border border-orange-100 bg-white p-8 shadow-xl transition-colors duration-300 dark:border-gray-700 dark:bg-gray-800">
+    <div className="rounded-2xl border border-orange-100 bg-white p-8 shadow-xl transition-colors duration-300 dark:border-gray-700 dark:bg-gray-800 print:hidden">
       <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">
         {t('calculator.recipeSettings')}
       </h2>

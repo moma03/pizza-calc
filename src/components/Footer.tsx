@@ -20,7 +20,7 @@ export function Footer() {
   const { t } = useTranslation();
 
   return (
-    <footer className="mt-12 border-t border-orange-100 dark:border-gray-700">
+    <footer className="mt-12 border-t border-orange-100 dark:border-gray-700 print:hidden">
       <div className="container mx-auto max-w-7xl space-y-3 px-4 py-8 text-center text-xs text-gray-500 dark:text-gray-400">
         <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
           <span>© {new Date().getFullYear()} Moritz Manegold</span>

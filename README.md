@@ -36,6 +36,7 @@ into them.
 | 🧪 **Four dough methods** | Direct, poolish, biga and sourdough — preferment and starter amounts, timings and feeding worked out too ([research and calibration](docs/preferments.md)) |
 | ❄️ **Cold and long preferments** | Fridge poolish, cold biga and the 48 h biga as variants, or any mix of room and fridge hours with sliders, and one-click shares from 20 to 100 % |
 | 🗓️ **Bake-time planner** | Enter when you want to bake and every step gets its clock time — a 72 h biga pizza included |
+| 🔗 **Recipe link, calendar, PDF** | The address bar always holds every setting, so a bookmark brings the recipe back days later; export the steps as calendar reminders (.ics) or print / save as PDF |
 | ⏱️ **Your own timings** | A slider splits the room-temperature time either side of the fridge |
 | 🌍 **Bilingual** | German and English, each on its own URL — metric and imperial, everything converts |
 | 🔎 **Prerendered** | Every page ships as static HTML with its text, a worked recipe, structured data and `hreflang` — see [below](#-search-engines) |

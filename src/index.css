@@ -1,3 +1,32 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*
+ * Printing / "save as PDF": black on white whatever the screen theme, so a
+ * dark-mode visitor does not print a dark page. The timeline keeps its
+ * colours (`data-print-keep`), which carry meaning.
+ */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  *:not([data-print-keep]) {
+    color: #111 !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+  }
+
+  [data-print-keep] {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

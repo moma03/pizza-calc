@@ -155,7 +155,7 @@ export function Guide({ method, unitSystem }: GuideProps) {
       : [t('guide.yeastTable.fresh'), t('guide.yeastTable.instant')];
 
   return (
-    <article className="mt-12 rounded-2xl border border-orange-100 bg-white p-8 shadow-xl transition-colors duration-300 dark:border-gray-700 dark:bg-gray-800">
+    <article className="mt-12 print:hidden rounded-2xl border border-orange-100 bg-white p-8 shadow-xl transition-colors duration-300 dark:border-gray-700 dark:bg-gray-800">
       <h2 className="mb-4 flex items-center gap-2 text-2xl font-bold text-gray-900 dark:text-white">
         <BookOpen className="h-6 w-6 shrink-0 text-orange-600 dark:text-orange-400" aria-hidden="true" />
         {content.title}

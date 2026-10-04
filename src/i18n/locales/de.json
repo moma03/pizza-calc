@@ -385,6 +385,28 @@
     "planner": {
       "label": "Backen am",
       "start": "Beginn: {{time}}"
+    },
+    "export": {
+      "heading": "Speichern & teilen",
+      "linkNote": "Die Adresse der Seite enthält immer alle deine Einstellungen – setz ein Lesezeichen oder schick sie dir aufs Handy, und beim Öffnen ist genau dieses Rezept wieder da, auch Tage später.",
+      "copyLink": "Rezept-Link kopieren",
+      "copied": "Link kopiert",
+      "calendar": "In den Kalender",
+      "calendarHint": "Lege oben einen Backzeitpunkt fest, um jeden Schritt mit Erinnerung in deinen Kalender zu übernehmen.",
+      "print": "Drucken / als PDF speichern",
+      "recipeLink": "Rezept mit allen Einstellungen:",
+      "finalDough": "Hauptteig",
+      "printBake": "Backen: {{time}}"
+    },
+    "stepTitles": {
+      "feed": "Starter füttern",
+      "preferment": "{{name}} ansetzen",
+      "knead": "Hauptteig kneten",
+      "bulk": "Stockgare",
+      "cold": "Teig in den Kühlschrank",
+      "ball": "Teigkugeln formen",
+      "proof": "Stückgare",
+      "bake": "Pizza backen"
     }
   },
   "guide": {
@@ -448,7 +470,7 @@
   "footer": {
     "source": "Quellcode auf GitHub",
     "license": "MIT-Lizenz",
-    "privacy": "Keine Cookies, kein Tracking, keine Analyse und keine externen Schriften oder Skripte. Der Rechner läuft vollständig in deinem Browser – nichts, was du eingibst, wird an einen Server gesendet. Gespeichert wird ausschließlich deine gewählte Sprache und das Einheitensystem, lokal in diesem Browser, damit die Seite sie sich merkt; beim Löschen der Website-Daten verschwinden sie wieder."
+    "privacy": "Keine Cookies, kein Tracking, keine Analyse und keine externen Schriften oder Skripte. Der Rechner läuft vollständig in deinem Browser – nichts, was du eingibst, wird an einen Server gesendet. Deine Einstellungen stehen in der Adresse hinter dem „#“, den Browser nie an einen Server schicken; ein Rezept-Link teilt sie also nur mit dem, dem du ihn gibst. Auch Kalenderdatei und PDF entstehen in deinem Browser. Gespeichert werden nur deine gewählte Sprache und das Einheitensystem, in diesem Browser, damit die Seite sie sich merkt; wenn du die Websitedaten löschst, sind sie wieder weg."
   },
   "noscript": "Dieser Pizzateig-Rechner braucht JavaScript zum Rechnen. Er berechnet Mehl, Wasser, Salz und Hefe in Gramm aus der Anzahl der Pizzen sowie Gärzeit und Temperatur."
 }
